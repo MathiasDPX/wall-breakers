@@ -1,0 +1,1 @@
+from .leparisien import LeParisienArticle
