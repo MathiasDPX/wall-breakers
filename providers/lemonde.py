@@ -25,29 +25,47 @@ class LeMondeArticle(Article):
         for container in soup.select("div.see-also-container, div.inread-container, div.pubstack-container"):
             container.decompose()
 
-        for tag in soup.find_all():
-            # Remove unwanted attributes
-            tag.attrs.pop('style', None)
-            tag.attrs.pop('data-read-progression', None)
-            tag.attrs.pop('id', None)
-            tag.attrs.pop('class', None)
-            tag.attrs.pop('onload', None)
-            tag.attrs.pop('onerror', None)
-            tag.attrs.pop('"', None)
-
-            # Remove empty tags
-            if not tag.get_text(strip=True) and not tag.find() and tag.name not in ["img", "br", "hr", "input"]:
-                tag.decompose()
-
-        for img in soup.find_all("a", href=True):
-            url = img["href"].replace("lmfr://illustration?url=", "")
-            img["href"] = unquote(url)
-
+        # Remove random link in figure
         for a in soup.find_all("a", role="button"):
             a.unwrap()
 
-        for div in soup.select("figure > div"):
-            div.unwrap()
+        for tag in soup.find_all():
+            # Obliterate script and style
+            if tag.name in ("script", "style"):
+                tag.decompose()
+                continue
+
+            # Keep only allowed tags
+            if tag.name not in ("figure", "figcaption", "p", "em", "a", "img", "h1", "h2", "h3", "h4", "h5", "h6", "b", "ul", "li"):
+                tag.unwrap()
+                continue
+
+            # Keep only allowed attributes
+            tag.attrs = {
+                key: value
+                for key, value in tag.attrs.items()
+                if key in ("href", "src", "srcset", "fetchpriority", "alt", "aria-label",)
+            }
+
+        # Remove empty tags
+        for tag in soup.find_all():
+            if (
+                not tag.get_text(strip=True)
+                and not tag.find()
+                and tag.name not in ["img", "br", "hr", "input"]
+            ):
+                tag.decompose()
+
+        
+        for a in soup.find_all("a", href=True):
+            # Decode illustration URLs
+            a["href"] = unquote(a["href"].replace("lmfr://illustration?url=", ""))
+            
+            # Decode article URLs
+            if "lmfr://element/article" in a["href"]:
+                a["href"] = a["href"].replace("lmfr://element/article/", "")
+                a["href"] = a["href"].replace("?source=article_inline_link", "")
+                a["target"] = "_blank"
 
         content = soup.decode_contents()
 
@@ -69,8 +87,6 @@ class LeMondeArticle(Article):
 
 
 if __name__ == "__main__":
-    article = LeMondeArticle.get_from_url(
-        "https://www.lemonde.fr/international/article/2026/07/17/pourquoi-la-guerre-hybride-menee-par-la-russie-pousse-la-france-a-hausser-le-ton_6724233_3210.html"
-    )
+    article = LeMondeArticle.get_from_url("https://www.lemonde.fr/international/article/2026/07/17/pourquoi-la-guerre-hybride-menee-par-la-russie-pousse-la-france-a-hausser-le-ton_6724233_3210.html")
 
     print(article)

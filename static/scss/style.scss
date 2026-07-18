@@ -50,14 +50,15 @@ figure {
     img {
         width: 100%;
         padding-bottom: 0.1em;
+        border-radius: 5px;
     }
 
     figcaption {
         display: flex;
         flex-direction: column;
 
-        max-width: 100%;
-        margin: auto;
+        max-width: 97.5%;
+        padding-left: calc(calc(100% - 97.5%) / 2);
 
         color: $muted-color;
         font-family: $font-heading;
