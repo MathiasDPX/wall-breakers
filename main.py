@@ -1,6 +1,16 @@
+from flask import Flask, render_template
+import sass
 from providers import *
 
+app = Flask(__name__)
+
+sass.compile(dirname=('./static/scss/', './static/css'))
+
+
+@app.route("/lm/<id>")
+def lemonde_route(id):
+    article = LeMondeArticle(id)
+    return render_template("article.html", article=article)
 
 if __name__ == "__main__":
-    lp_article = LeParisienArticle.get_from_url("https://www.leparisien.fr/sports/football/coupe-du-monde/france-angleterre-la-composition-probable-des-bleus-avec-zaire-emery-cherki-olise-et-mbappe-18-07-2026-ZMLNSNIHBVGEPALOLJ3KGMBQAI.php")
-    print(lp_article)
+    app.run()

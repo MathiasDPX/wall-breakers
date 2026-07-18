@@ -1,0 +1,65 @@
+$bg-color: #0f0f0f;
+$text-color: #e8e8e8;
+$muted-color: #a0a0a0;
+$link-color: #60a5fa;
+
+$font-body: "Antiqua B", Georgia, "Droid Serif", serif;
+$font-heading: "Inter", -apple-system, BlinkMacSystemFont, sans-serif;
+
+body {
+    background-color: $bg-color;
+    color: $text-color;
+}
+
+a {
+    color: $link-color;
+}
+
+article {
+    display: flex;
+    flex-direction: column;
+
+    max-width: 70ch;
+    margin: auto;
+
+    font-family: $font-body;
+    text-align: justify;
+}
+
+h1,
+h2 {
+    font-family: $font-heading;
+}
+
+h2 {
+    margin-bottom: 0;
+}
+
+header {
+    padding-bottom: 1em;
+
+    p {
+        color: $muted-color;
+    }
+}
+
+figure {
+    margin: 0;
+    padding: 0 0 1em;
+
+    img {
+        width: 100%;
+        padding-bottom: 0.1em;
+    }
+
+    figcaption {
+        display: flex;
+        flex-direction: column;
+
+        max-width: 100%;
+        margin: auto;
+
+        color: $muted-color;
+        font-family: $font-heading;
+    }
+}

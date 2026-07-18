@@ -1,4 +1,4 @@
-from common import Article
+from .common import Article
 from bs4 import BeautifulSoup
 from urllib.parse import unquote
 import re
