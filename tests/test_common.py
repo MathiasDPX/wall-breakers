@@ -1,4 +1,5 @@
 from providers import LeMondeArticle, LeParisienArticle
+from unittest.mock import Mock
 
 def test_leparisien_regex():
     lp_link = "https://www.leparisien.fr/sports/football/coupe-du-monde/france-angleterre-la-composition-probable-des-bleus-avec-zaire-emery-cherki-olise-et-mbappe-18-07-2026-ZMLNSNIHBVGEPALOLJ3KGMBQAI.php"

@@ -18,23 +18,24 @@ class LeMondeArticle(Article):
         r.raise_for_status()
         data = r.json()
 
-        soup = BeautifulSoup(data["template_vars"]["content"], features="html.parser").find_all(
-            "div", attrs={"class": "article_content"})[0]
+        soup = BeautifulSoup(data["template_vars"]["content"], features="html.parser")
+        if soup.find_all("div", attrs={"class": "article_content"}):
+            soup = soup.find_all("div", attrs={"class": "article_content"})[0]
 
         # Remove See Also, Inread, Video container and PubStack containers
-        for container in soup.select("div.see-also-container, div.inread-container, div.video-container, div.pubstack-container"):
+        for container in soup.select("div.see-also-container, div.inread-container, div.video-container, div.pubstack-container, div.masthead, div.sections"):
             container.decompose()
 
         # Remove random link in figure
         for a in soup.find_all("a", role="button"):
             a.unwrap()
 
-        for tag in soup.find_all():
-            # Obliterate script and style
-            if tag.name in ("script", "style"):
+        # Obliterate script, style and aside
+        for tag in soup.select("script, style, aside"):
+            if tag.parent is not None:
                 tag.decompose()
-                continue
 
+        for tag in soup.find_all():
             # Keep only allowed tags
             if tag.name not in ("figure", "figcaption", "p", "em", "a", "img", "h1", "h2", "h3", "h4", "h5", "h6", "b", "ul", "li"):
                 tag.unwrap()
@@ -65,7 +66,7 @@ class LeMondeArticle(Article):
                 a["href"] = a["href"].replace("lmfr://element/article/", "")
                 a["href"] = a["href"].replace("?source=article_inline_link", "")
 
-        image = url_for("images/thumbnail.jpg")
+        image = "static/images/thumbnail.jpg"
         figure = soup.find('figure')
         if figure:
             img = figure.find('img')
