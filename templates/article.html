@@ -1,5 +1,13 @@
 {% extends "base.html" %}
 
+{% block head %}
+<meta property="og:type" content="article">
+<meta property="og:title" content="{{ article.headline }}">
+<meta property="og:description" content="{{ article.subheadline }}">
+<meta name="twitter:card" content="summary_large_image">
+<meta property="og:image" content="{{ article.image }}">
+{% endblock %}
+
 {% block content %}
 <article>
     <header>

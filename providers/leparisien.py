@@ -65,7 +65,8 @@ class LeParisienArticle(Article):
             headline=data["headlines"]["basic"],
             subheadline=data["subheadlines"]["basic"],
             content=content,
-            url="https://www.leparisien.fr"+data["canonical_url"]
+            url="https://www.leparisien.fr"+data["canonical_url"],
+            image=data["promo_items"]["basic"]["url"]
         )
     
     def get_id_from_url(url: str):

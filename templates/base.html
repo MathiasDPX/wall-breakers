@@ -6,6 +6,8 @@
     <title>Wall Breakers</title>
     <link href="{{ url_for('static', filename='css/style.css') }}" rel="stylesheet">
     <link rel="icon" href="{{ url_for('static', filename='images/favicon.svg') }}" sizes="any" type="image/svg+xml">
+
+    {% block head %}{% endblock %}
 </head>
 <body>
     <nav><a href="/">Wall Breakers</a></nav>

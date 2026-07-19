@@ -1,5 +1,6 @@
 from .common import Article
 from bs4 import BeautifulSoup
+from flask import url_for
 import re
 import requests
 
@@ -64,6 +65,13 @@ class LeMondeArticle(Article):
                 a["href"] = a["href"].replace("lmfr://element/article/", "")
                 a["href"] = a["href"].replace("?source=article_inline_link", "")
 
+        image = url_for("images/thumbnail.jpg")
+        figure = soup.find('figure')
+        if figure:
+            img = figure.find('img')
+            if img:
+                image = img.get('src')
+        
         content = soup.decode_contents()
 
         super().__init__(
@@ -71,7 +79,8 @@ class LeMondeArticle(Article):
             headline=data["template_vars"]["seo_title"],
             subheadline=data["template_vars"]["share_kicker"],
             content=content,
-            url=data["element"]["url"]
+            url=data["element"]["url"],
+            image=image
         )
     
     def get_id_from_url(url: str):

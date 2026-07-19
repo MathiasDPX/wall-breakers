@@ -8,6 +8,7 @@ class Article(ABC):
     subheadline: str
     content: list
     url: str
+    image: str
 
     @classmethod
     def get_from_url(cls, url: str):
