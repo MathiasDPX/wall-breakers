@@ -1,6 +1,5 @@
-from .common import Article
+from .common import Article, add_figure
 from bs4 import BeautifulSoup
-from flask import url_for
 import re
 import requests
 
@@ -73,13 +72,21 @@ class LeTelegrammeArticle(Article):
 
         content = soup.decode_contents()
 
+        image = "static/images/thumbnail.jpg"
+        for addon in data["addons"]:
+            if addon["type"] != "MED:IMG:":
+                continue
+                
+            image = f"https://media.letelegramme.fr/api/v1/images/view/{addon['idImg']}/web_golden_xxl/{addon['idImg']}.1"
+            content = add_figure(image, f"{addon['title']} -- {addon['credits']}") + content
+
         super().__init__(
             id="letelegramme:" + article_id,
             headline=data["title"],
             subheadline=data["lead"],
             content=content,
             url="https://www.letelegramme.fr" + data["url"],
-            image="static/images/thumbnail.jpg",  # TODO
+            image=image,
         )
 
     def get_id_from_url(url: str):

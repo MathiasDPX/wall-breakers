@@ -25,3 +25,7 @@ class Article(ABC):
 
     def __repr__(self):
         return f"{self.__class__.__name__}(headline='{self.headline}')"
+    
+    
+def add_figure(url, caption):
+    return f'<figure><img src="{url}"><figcaption>{caption}</figcaption></figure>'

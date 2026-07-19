@@ -1,4 +1,4 @@
-from .common import Article
+from .common import Article, add_figure
 from bs4 import BeautifulSoup
 import re
 import requests
@@ -57,7 +57,7 @@ class LeParisienArticle(Article):
         content = soup.decode_contents()
 
         # Add image
-        content = f'<figure><img src="{data["promo_items"]["basic"]["url"]}"><figcaption>{data["promo_items"]["basic"]["caption"]}</figcaption></figure>' + content
+        content = add_figure(data["promo_items"]["basic"]["url"], data["promo_items"]["basic"]["caption"]) + content
 
 
         super().__init__(
