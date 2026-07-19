@@ -50,7 +50,7 @@ class LeParisienArticle(Article):
             
                 # Decode article URLs
                 if "https://www.leparisien.fr/" in a["href"]:
-                    id = self.get_id_from_url(a["href"])
+                    id = LeParisienArticle.get_id_from_url(a["href"])
                     if id != None:
                         a["href"] = f"/lp/{id}"
             

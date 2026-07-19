@@ -1,32 +1,41 @@
 @import url('https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&family=Newsreader:ital,opsz,wght@0,6..72,200..800;1,6..72,200..800&display=swap');
 
+// Colors
 $bg-color: #0f0f0f;
 $text-color: #e8e8e8;
 $muted-color: #a0a0a0;
-$link-color: #60a5fa;
+$accent: #60a5fa;
+$success-color: #09b43a;
+$error-color: #ff6a69;
+$border-color: #2a2a2a;
 
+// Fonts
 $font-body: "Antiqua B", Georgia, "Droid Serif", serif;
 $font-heading: "Inter", -apple-system, BlinkMacSystemFont, sans-serif;
+$font-display: 'Newsreader', serif;
+
+@mixin heading-font {
+    font-family: $font-heading;
+}
 
 body {
     background-color: $bg-color;
     color: $text-color;
+    padding: 20px;
 }
 
 article {
-    a {
-        color: $link-color;
-    }
-
     display: flex;
     flex-direction: column;
-
     max-width: 70ch;
     margin: auto;
-
     font-family: $font-body;
     text-align: justify;
-     
+
+    a {
+        color: $accent;
+    }
+
     figcaption {
         line-height: 1.25em;
     }
@@ -36,9 +45,8 @@ article {
     }
 }
 
-h1,
-h2 {
-    font-family: $font-heading;
+h1, h2 {
+    @include heading-font;
 }
 
 h2 {
@@ -66,32 +74,26 @@ figure {
     figcaption {
         display: flex;
         flex-direction: column;
-
         max-width: 97.5%;
-        padding-left: calc(calc(100% - 97.5%) / 2);
-
+        padding-left: calc((100% - 97.5%) / 2);
         color: $muted-color;
-        font-family: $font-heading;
+        @include heading-font;
     }
 }
 
 nav {
-    font-family: 'Newsreader', serif;
+    font-family: $font-display;
     font-size: 300%;
     font-weight: bold;
-
     text-align: center;
-
-    a {
-        color: white;
-        text-decoration: none;
-    }
-
-    padding-top: 0.33em;
     padding-bottom: 0.2em;
     margin-bottom: 0.5em;
+    border-bottom: 1px solid $border-color;
 
-    border-bottom: 1px solid #2a2a2a;
+    a {
+        color: $text-color;
+        text-decoration: none;
+    }
 }
 
 div.main {
@@ -104,33 +106,27 @@ input#searchInput {
     margin: 1em 0;
     width: 100%;
     position: relative;
-
     border-radius: 7.5px;
     background-color: $bg-color;
     color: $text-color;
-    border: 1px solid #2a2a2a;
+    border: 1px solid $border-color;
     outline: none;
 
     &:focus {
-        border-color: $link-color;
-    }
-
-    & > p#feedback {
-        margin-bottom: 0px;
+        border-color: $accent;
     }
 }
 
 p#feedback {
-    font-family: $font-heading;
+    @include heading-font;
     font-size: 1em;
-    margin-top: 0px;
-    margin-bottom: 2em;
+    margin: 0 0 2em;
 
     &.error {
-        color: #FF6A69;
+        color: $error-color;
     }
 
     &.success {
-        color: #09B43A;
+        color: $success-color;
     }
 }

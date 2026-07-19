@@ -18,7 +18,7 @@ class Article(ABC):
         return cls(id)
     
     @abstractmethod
-    def get_id_from_url(cls, url: str):
+    def get_id_from_url(url: str):
         raise NotImplementedError
         
 

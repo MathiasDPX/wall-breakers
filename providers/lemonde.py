@@ -19,9 +19,12 @@ class LeMondeArticle(Article):
 
         soup = BeautifulSoup(data["template_vars"]["content"], features="html.parser").find_all(
             "div", attrs={"class": "article_content"})[0]
+        
+        with open(f"test-{article_id}.html", "w+") as f:
+            f.write(data["template_vars"]["content"])
 
-        # Remove See Also, Inread and PubStack containers
-        for container in soup.select("div.see-also-container, div.inread-container, div.pubstack-container"):
+        # Remove See Also, Inread, Video container and PubStack containers
+        for container in soup.select("div.see-also-container, div.inread-container, div.video-container, div.pubstack-container"):
             container.decompose()
 
         # Remove random link in figure
@@ -83,6 +86,6 @@ class LeMondeArticle(Article):
 
 
 if __name__ == "__main__":
-    article = LeMondeArticle.get_from_url("https://www.lemonde.fr/international/article/2026/07/17/pourquoi-la-guerre-hybride-menee-par-la-russie-pousse-la-france-a-hausser-le-ton_6724233_3210.html")
+    article = LeMondeArticle.get_from_url("https://www.lemonde.fr/planete/article/2026/07/18/au-canada-les-feux-a-repetition-bouleversent-la-foret-boreale_6724998_3244.html")
 
     print(article)
