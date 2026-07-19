@@ -19,9 +19,6 @@ class LeMondeArticle(Article):
 
         soup = BeautifulSoup(data["template_vars"]["content"], features="html.parser").find_all(
             "div", attrs={"class": "article_content"})[0]
-        
-        with open(f"test-{article_id}.html", "w+") as f:
-            f.write(data["template_vars"]["content"])
 
         # Remove See Also, Inread, Video container and PubStack containers
         for container in soup.select("div.see-also-container, div.inread-container, div.video-container, div.pubstack-container"):

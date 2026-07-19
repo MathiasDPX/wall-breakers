@@ -1,4 +1,6 @@
 beautifulsoup4
+pre-commit
 requests
 libsass
+pytest
 Flask
