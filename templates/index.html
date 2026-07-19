@@ -38,6 +38,10 @@ inputNode.addEventListener("keyup", function (event) {
                     window.location.replace(data.url)
                 }
             })
+            .catch(error => {
+                feedbackNode.classList.add('error');
+                feedbackNode.innerText = `Failed to redirect: ${error}`;
+            })
     }
 });
 </script>
