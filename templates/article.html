@@ -3,7 +3,7 @@
 {% block content %}
 <article>
     <header>
-        <h1>{{ article.headline }}</h1>
+        <h1><a href="{{ article.url }}" target="_blank">{{ article.headline }}</a></h1>
         <p>{{ article.subheadline }}</p>
     </header>
 

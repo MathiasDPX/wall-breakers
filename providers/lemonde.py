@@ -71,7 +71,7 @@ class LeMondeArticle(Article):
             headline=data["template_vars"]["seo_title"],
             subheadline=data["template_vars"]["share_kicker"],
             content=content,
-            image=None,
+            url=data["url"]
         )
     
     def get_id_from_url(url: str):

@@ -49,6 +49,11 @@ h1, h2 {
     @include heading-font;
 }
 
+h1 > a {
+    color: $text-color;
+    text-decoration: none;
+}
+
 h2 {
     margin-bottom: 0;
 }
