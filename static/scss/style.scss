@@ -24,6 +24,10 @@ body {
     padding: 20px;
 }
 
+a {
+    color: $accent;
+}
+
 article {
     display: flex;
     flex-direction: column;
@@ -31,10 +35,6 @@ article {
     margin: auto;
     font-family: $font-body;
     text-align: justify;
-
-    a {
-        color: $accent;
-    }
 
     figcaption {
         line-height: 1.25em;
