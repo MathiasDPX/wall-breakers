@@ -1,6 +1,5 @@
 from .common import Article
 from bs4 import BeautifulSoup
-from urllib.parse import unquote
 import re
 import requests
 
@@ -58,14 +57,12 @@ class LeMondeArticle(Article):
 
         
         for a in soup.find_all("a", href=True):
-            # Decode illustration URLs
-            a["href"] = unquote(a["href"].replace("lmfr://illustration?url=", ""))
+            a["target"] = "_blank"
             
             # Decode article URLs
             if "lmfr://element/article" in a["href"]:
                 a["href"] = a["href"].replace("lmfr://element/article/", "")
                 a["href"] = a["href"].replace("?source=article_inline_link", "")
-                a["target"] = "_blank"
 
         content = soup.decode_contents()
 

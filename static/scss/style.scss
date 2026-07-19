@@ -1,3 +1,5 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&family=Newsreader:ital,opsz,wght@0,6..72,200..800;1,6..72,200..800&display=swap');
+
 $bg-color: #0f0f0f;
 $text-color: #e8e8e8;
 $muted-color: #a0a0a0;
@@ -11,11 +13,11 @@ body {
     color: $text-color;
 }
 
-a {
-    color: $link-color;
-}
-
 article {
+    a {
+        color: $link-color;
+    }
+
     display: flex;
     flex-direction: column;
 
@@ -24,6 +26,14 @@ article {
 
     font-family: $font-body;
     text-align: justify;
+     
+    figcaption {
+        line-height: 1.25em;
+    }
+
+    p {
+        line-height: 1.5em;
+    }
 }
 
 h1,
@@ -36,7 +46,7 @@ h2 {
 }
 
 header {
-    padding-bottom: 1em;
+    padding-bottom: 2em;
 
     p {
         color: $muted-color;
@@ -63,4 +73,23 @@ figure {
         color: $muted-color;
         font-family: $font-heading;
     }
+}
+
+nav {
+    font-family: 'Newsreader', serif;
+    font-size: 300%;
+    font-weight: bold;
+
+    text-align: center;
+
+    a {
+        color: white;
+        text-decoration: none;
+    }
+
+    padding-top: 0.33em;
+    padding-bottom: 0.2em;
+    margin-bottom: 0.5em;
+
+    border-bottom: 1px solid #2a2a2a;
 }

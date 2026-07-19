@@ -1,4 +1,5 @@
 from .common import Article
+from bs4 import BeautifulSoup
 import re
 import requests
 
@@ -17,22 +18,68 @@ class LeParisienArticle(Article):
         )
         r.raise_for_status()
         data = r.json()["story"]
+        
+        content = data["bodyContent"]
+        
+        soup = BeautifulSoup(content, features="html.parser")
+        
+        # Remove See Also
+        for container in soup.select("div.article-read-also_container"):
+            container.decompose()
+        
+        for tag in soup.find_all():
+            # Obliterate unwanted tags
+            if tag.name in ("script", "style", "link"):
+                tag.decompose()
+                continue
+            
+            # Keep only allowed tags
+            if tag.name not in ("figure", "figcaption", "p", "em", "a", "img", "h1", "h2", "h3", "h4", "h5", "h6", "b", "ul", "li"):
+                tag.unwrap()
+                continue
+            
+            # Keep only allowed attributes
+            tag.attrs = {
+                key: value
+                for key, value in tag.attrs.items()
+                if key in ("href", "src", "srcset", "fetchpriority", "alt", "aria-label",)
+            }
+            
+            for a in soup.find_all("a", href=True):
+                a["target"] = "_blank"
+            
+                # Decode article URLs
+                if "https://www.leparisien.fr/" in a["href"]:
+                    id = self.get_id_from_url(a["href"])
+                    if id != None:
+                        a["href"] = f"/lp/{id}"
+            
+        content = soup.decode_contents()
+
 
         super().__init__(
             id="leparisien:"+data["_id"],
             headline=data["headlines"]["basic"],
             subheadline=data["subheadlines"]["basic"],
-            content=data["bodyContent"],
+            content=content,
             image=data["promo_items"]["basic"]["resize_url"]
         )
 
     @classmethod
     def get_from_url(cls, url: str):
+        id = cls.get_id_from_url(url)
+        if id == None:
+            return None
+        
+        return cls(id)
+    
+    def get_id_from_url(cls, url: str):
         match = _URL_ID_PATTERN.search(url)
         if match is None:
             return None
-
-        return cls(match.group(1))
+        
+        return match.group(1)
+        
 
 
 if __name__ == "__main__":
