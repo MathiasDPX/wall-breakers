@@ -64,16 +64,8 @@ class LeParisienArticle(Article):
             content=content,
             image=data["promo_items"]["basic"]["resize_url"]
         )
-
-    @classmethod
-    def get_from_url(cls, url: str):
-        id = cls.get_id_from_url(url)
-        if id == None:
-            return None
-        
-        return cls(id)
     
-    def get_id_from_url(cls, url: str):
+    def get_id_from_url(url: str):
         match = _URL_ID_PATTERN.search(url)
         if match is None:
             return None

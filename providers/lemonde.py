@@ -73,14 +73,13 @@ class LeMondeArticle(Article):
             content=content,
             image=None,
         )
-
-    @classmethod
-    def get_from_url(cls, url: str):
+    
+    def get_id_from_url(url: str):
         match = _URL_ID_PATTERN.search(url)
         if match is None:
             return None
 
-        return cls(match.group(1))
+        return match.group(1)
 
 
 if __name__ == "__main__":

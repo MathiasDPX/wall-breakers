@@ -1,0 +1,44 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="main">
+    <p>Blow up paywalls with 💣</p>
+
+    <input id="searchInput" placeholder="Link to the original article" type="text" autofocus>
+    <p id="feedback" class="error"></p>
+
+    <p>Supported sources:</p>
+    <ul>
+        <li>Le Parisien (leparisien.fr)</li>
+        <li>Le Monde (lemonde.fr)</li>
+    </ul>
+</div>
+
+<script>
+const inputNode = document.getElementById("searchInput");
+const feedbackNode = document.getElementById("feedback")
+
+inputNode.addEventListener("keyup", function (event) {
+    if (event.key === "Enter") {
+        const params = new URLSearchParams({
+            'url': inputNode.value
+        });
+        feedbackNode.classList.remove('success');
+        feedbackNode.classList.remove('error');
+
+        fetch(`/api/getId?${params}`)
+            .then(response => response.json())
+            .then(data => {
+                if (data.success === false) {
+                    feedbackNode.classList.add('error');
+                    feedbackNode.innerText = `Failed to redirect: ${data.message}`;
+                } else {
+                    feedbackNode.classList.add('success');
+                    feedbackNode.innerText = `Redirecting to ${data.provider} #${data.id} ...`;
+                    window.location.replace(data.url)
+                }
+            })
+    }
+});
+</script>
+{% endblock %}

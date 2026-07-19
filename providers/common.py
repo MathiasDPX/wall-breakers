@@ -10,9 +10,17 @@ class Article(ABC):
     image: str
 
     @classmethod
-    @abstractmethod
     def get_from_url(cls, url: str):
+        id = cls.get_id_from_url(url)
+        if id is None:
+            return None
+
+        return cls(id)
+    
+    @abstractmethod
+    def get_id_from_url(cls, url: str):
         raise NotImplementedError
+        
 
     def __repr__(self):
         return f"{self.__class__.__name__}(headline='{self.headline}')"

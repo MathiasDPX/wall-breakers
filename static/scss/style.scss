@@ -93,3 +93,44 @@ nav {
 
     border-bottom: 1px solid #2a2a2a;
 }
+
+div.main {
+    margin: 0 auto;
+    width: 480px;
+}
+
+input#searchInput {
+    padding: 16px 20px;
+    margin: 1em 0;
+    width: 100%;
+    position: relative;
+
+    border-radius: 7.5px;
+    background-color: $bg-color;
+    color: $text-color;
+    border: 1px solid #2a2a2a;
+    outline: none;
+
+    &:focus {
+        border-color: $link-color;
+    }
+
+    & > p#feedback {
+        margin-bottom: 0px;
+    }
+}
+
+p#feedback {
+    font-family: $font-heading;
+    font-size: 1em;
+    margin-top: 0px;
+    margin-bottom: 2em;
+
+    &.error {
+        color: #FF6A69;
+    }
+
+    &.success {
+        color: #09B43A;
+    }
+}
