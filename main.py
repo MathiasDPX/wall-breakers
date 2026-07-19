@@ -17,6 +17,10 @@ def lemonde_route(id):
     article = LeMondeArticle(id)
     return render_template("article.html", article=article)
 
+@app.route("/lt/<id>")
+def letelegramme_route(id):
+    article = LeTelegrammeArticle(id)
+    return render_template("article.html", article=article)
 
 @app.route("/lp/<id>")
 def leparisien_route(id):
@@ -34,8 +38,9 @@ def redirection_route():
     
     lp_id = LeParisienArticle.get_id_from_url(url)
     lm_id = LeMondeArticle.get_id_from_url(url)
+    lt_id = LeTelegrammeArticle.get_id_from_url(url)
     
-    if lp_id is None and lm_id is None:
+    if lp_id is None and lm_id is None and lt_id is None:
         return {
             "success": False,
             "message": "No provider found available for this URL"
@@ -53,6 +58,10 @@ def redirection_route():
         provider = "Le Monde"
         article_id = lm_id
         url = "/lm/"+article_id
+    elif lt_id is not None:
+        provider = "Le Télégramme"
+        article_id = lt_id
+        url = "/lt/"+article_id
     
     return {
         "success": True,

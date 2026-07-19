@@ -5,7 +5,7 @@ import requests
 
 
 _URL_ID_PATTERN = re.compile(
-    r".+-\d{2}-\d{2}-\d{4}-([A-Z0-9]{26})\.php"
+    r".+leparisien\.fr\/.+-\d{2}-\d{2}-\d{4}-([A-Z0-9]{26})\.php"
 )
 
 

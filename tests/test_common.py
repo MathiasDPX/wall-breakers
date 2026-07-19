@@ -1,11 +1,11 @@
-from providers import LeMondeArticle, LeParisienArticle
-from unittest.mock import Mock
+from providers import LeMondeArticle, LeParisienArticle, LeTelegrammeArticle
 
 def test_leparisien_regex():
     lp_link = "https://www.leparisien.fr/sports/football/coupe-du-monde/france-angleterre-la-composition-probable-des-bleus-avec-zaire-emery-cherki-olise-et-mbappe-18-07-2026-ZMLNSNIHBVGEPALOLJ3KGMBQAI.php"
 
     assert LeParisienArticle.get_id_from_url(lp_link) == "ZMLNSNIHBVGEPALOLJ3KGMBQAI"
     assert LeMondeArticle.get_id_from_url(lp_link) is None
+    assert LeTelegrammeArticle.get_id_from_url(lp_link) is None
 
 
 def test_lemonde_regex():
@@ -13,3 +13,11 @@ def test_lemonde_regex():
 
     assert LeParisienArticle.get_id_from_url(lm_link) is None
     assert LeMondeArticle.get_id_from_url(lm_link) == "6724998"
+    assert LeTelegrammeArticle.get_id_from_url(lm_link) is None
+    
+def test_letelegramme_regex():
+    lt_link = "https://www.letelegramme.fr/finistere/landerneau-29800/a-landerneau-une-journee-pour-celebrer-la-culture-bretonne-le-25-juillet-avec-fest-e-landerne-7086034.php"
+
+    assert LeParisienArticle.get_id_from_url(lt_link) is None
+    assert LeMondeArticle.get_id_from_url(lt_link) is None
+    assert LeTelegrammeArticle.get_id_from_url(lt_link) == "7086034"

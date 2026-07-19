@@ -1,38 +1,43 @@
 from .common import Article
 from bs4 import BeautifulSoup
+from flask import url_for
 import re
 import requests
 
+_URL_ID_PATTERN = re.compile(r".+letelegramme\.fr\/.+-(\d+)\.php")
 
-_URL_ID_PATTERN = re.compile(
-    r".+lemonde\.fr\/.+_(\d+)_\d+\.html"
-)
+_HEADERS = {"x-tlg-api-key": "Tftd9qndckFJWEvuj5tprjcLtWeQpr1F"}
 
 
-class LeMondeArticle(Article):
+class LeTelegrammeArticle(Article):
     def __init__(self, article_id: str):
         r = requests.get(
-            f"https://apps.lemonde.fr/aec/v1/premium-ios-tablet/article/{article_id}"
+            f"https://api.letelegramme.fr/editorial/www0f/elements/{article_id}?mode=full",
+            headers=_HEADERS,
         )
         r.raise_for_status()
         data = r.json()
 
-        soup = BeautifulSoup(data["template_vars"]["content"], features="html.parser")
+        soup = BeautifulSoup("".join(data["content"]), features="html.parser")
         if soup.find_all("div", attrs={"class": "article_content"}):
             soup = soup.find_all("div", attrs={"class": "article_content"})[0]
-
-        # Remove See Also, Inread, Video container and PubStack containers
-        for container in soup.select("div.see-also-container, div.inread-container, div.video-container, div.pubstack-container, div.masthead, div.sections"):
-            container.decompose()
 
         # Remove random link in figure
         for a in soup.find_all("a", role="button"):
             a.unwrap()
 
+        # Remove See Also, Inread, Video container and PubStack containers
+        for container in soup.select("span.a-lire-aussi, span.lien-rebond-title"):
+            container.decompose()
+
         # Obliterate script, style and aside
         for tag in soup.select("script, style, aside"):
             if tag.parent is not None:
                 tag.decompose()
+
+        # Reformat headings from "1 Heading text" to "1. Heading text"
+        for h2 in soup.find_all("h2", class_="numero"):
+            h2.string = re.sub(r"^(\d+)\s+", r"\1. ", h2.get_text())
 
         for tag in soup.find_all():
             # Keep only allowed tags
@@ -44,7 +49,8 @@ class LeMondeArticle(Article):
             tag.attrs = {
                 key: value
                 for key, value in tag.attrs.items()
-                if key in ("href", "src", "srcset", "fetchpriority", "alt", "aria-label",)
+                if key
+                in ("href", "src", "srcset", "fetchpriority", "alt", "aria-label")
             }
 
         # Remove empty tags
@@ -56,33 +62,26 @@ class LeMondeArticle(Article):
             ):
                 tag.decompose()
 
-        
         for a in soup.find_all("a", href=True):
             a["target"] = "_blank"
             
             # Decode article URLs
-            if "lmfr://element/article" in a["href"]:
-                a["href"] = a["href"].replace("lmfr://element/article/", "")
-                a["href"] = a["href"].replace("?source=article_inline_link", "")
+            if "https://www.letelegramme.fr/" in a["href"]:
+                id = LeTelegrammeArticle.get_id_from_url(a["href"])
+                if id != None:
+                    a["href"] = f"/lt/{id}"
 
-        image = "static/images/thumbnail.jpg"
-        figure = soup.find('figure')
-        if figure:
-            img = figure.find('img')
-            if img:
-                image = img.get('src')
-        
         content = soup.decode_contents()
 
         super().__init__(
-            id="lemonde:"+article_id,
-            headline=data["template_vars"]["seo_title"],
-            subheadline=data["template_vars"]["share_kicker"],
+            id="letelegramme:" + article_id,
+            headline=data["title"],
+            subheadline=data["lead"],
             content=content,
-            url=data["element"]["url"],
-            image=image
+            url="https://www.letelegramme.fr" + data["url"],
+            image="static/images/thumbnail.jpg",  # TODO
         )
-    
+
     def get_id_from_url(url: str):
         match = _URL_ID_PATTERN.search(url)
         if match is None:
@@ -92,6 +91,8 @@ class LeMondeArticle(Article):
 
 
 if __name__ == "__main__":
-    article = LeMondeArticle.get_from_url("https://www.lemonde.fr/planete/article/2026/07/18/au-canada-les-feux-a-repetition-bouleversent-la-foret-boreale_6724998_3244.html")
+    article = LeTelegrammeArticle.get_from_url(
+        "https://www.letelegramme.fr/finistere/landerneau-29800/a-landerneau-une-journee-pour-celebrer-la-culture-bretonne-le-25-juillet-avec-fest-e-landerne-7086034.php"
+    )
 
     print(article)
