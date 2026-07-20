@@ -1,4 +1,4 @@
-from flask import Flask, render_template, send_file, request
+from flask import Flask, render_template, send_file, request, abort
 import sass
 from providers import *
 import os
@@ -7,25 +7,17 @@ app = Flask(__name__)
 
 sass.compile(dirname=('./static/scss/', './static/css'))
 
+ARTICLES = {
+    LeMondeArticle.SLUG: LeMondeArticle,
+    LeTelegrammeArticle.SLUG: LeTelegrammeArticle,
+    LeParisienArticle.SLUG: LeParisienArticle,
+    LesEchosArticle.SLUG: LesEchosArticle
+}
+
 
 @app.route("/favicon.ico")
 def favicon_route():
     return send_file(os.path.join("static", "images", "favicon.ico"))
-
-@app.route("/lm/<id>")
-def lemonde_route(id):
-    article = LeMondeArticle(id)
-    return render_template("article.html", article=article)
-
-@app.route("/lt/<id>")
-def letelegramme_route(id):
-    article = LeTelegrammeArticle(id)
-    return render_template("article.html", article=article)
-
-@app.route("/lp/<id>")
-def leparisien_route(id):
-    article = LeParisienArticle(id)
-    return render_template("article.html", article=article)
 
 @app.route("/api/getId")
 def redirection_route():
@@ -69,6 +61,15 @@ def redirection_route():
         "id": article_id,
         "url": url
     }
+
+@app.route("/<slug>/<id>")
+def article_route(slug, id):
+    article_cls = ARTICLES.get(slug)
+    if article_cls is None:
+        abort(404)
+
+    article = article_cls(id)
+    return render_template("article.html", article=article)
 
 @app.route("/")
 def index_route():

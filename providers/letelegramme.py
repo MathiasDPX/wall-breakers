@@ -9,6 +9,8 @@ _HEADERS = {"x-tlg-api-key": "Tftd9qndckFJWEvuj5tprjcLtWeQpr1F"}
 
 
 class LeTelegrammeArticle(Article):
+    SLUG = "lt"
+    
     def __init__(self, article_id: str):
         r = requests.get(
             f"https://api.letelegramme.fr/editorial/www0f/elements/{article_id}?mode=full",

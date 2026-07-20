@@ -10,6 +10,8 @@ _URL_ID_PATTERN = re.compile(
 
 
 class LeMondeArticle(Article):
+    SLUG = "lm"
+    
     def __init__(self, article_id: str):
         r = requests.get(
             f"https://apps.lemonde.fr/aec/v1/premium-ios-tablet/article/{article_id}"
