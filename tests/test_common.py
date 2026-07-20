@@ -21,6 +21,11 @@ ARTICLES = [
         LesEchosArticle,
         "https://www.lesechos.fr/monde/etats-unis/lespagne-gagne-la-coupe-du-monde-de-foot-et-la-fifa-empoche-un-pactole-2243070",
         "2243070"
+    ),
+    (
+        TheAthleticArticle,
+        "https://www.nytimes.com/athletic/7444334/2026/07/16/gianni-infantino-fifa-president-future/",
+        "7444334"
     )
 ]
 

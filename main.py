@@ -11,7 +11,8 @@ ARTICLES = {
     LeMondeArticle.SLUG: LeMondeArticle,
     LeTelegrammeArticle.SLUG: LeTelegrammeArticle,
     LeParisienArticle.SLUG: LeParisienArticle,
-    LesEchosArticle.SLUG: LesEchosArticle
+    LesEchosArticle.SLUG: LesEchosArticle,
+    TheAthleticArticle.SLUG: TheAthleticArticle
 }
 
 
