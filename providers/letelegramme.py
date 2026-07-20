@@ -10,6 +10,7 @@ _HEADERS = {"x-tlg-api-key": "Tftd9qndckFJWEvuj5tprjcLtWeQpr1F"}
 
 class LeTelegrammeArticle(Article):
     SLUG = "lt"
+    PROVIDER = "Le Télégramme"
     
     def __init__(self, article_id: str):
         r = requests.get(

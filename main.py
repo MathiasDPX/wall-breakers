@@ -28,43 +28,31 @@ def redirection_route():
             "message": "No URL provided"
         }
     
-    lp_id = LeParisienArticle.get_id_from_url(url)
-    lm_id = LeMondeArticle.get_id_from_url(url)
-    lt_id = LeTelegrammeArticle.get_id_from_url(url)
-    le_id = LesEchosArticle.get_id_from_url(url)
-    
-    if lp_id is None and lm_id is None and lt_id is None and le_id is None:
+    providers = [LeParisienArticle, LeMondeArticle, LeTelegrammeArticle, LesEchosArticle]
+
+    provider = None
+    article_id = None
+    article_url = None
+
+    for cls in providers:
+        article_id = cls.get_id_from_url(url)
+        
+        if article_id is not None:
+            provider = cls.PROVIDER
+            article_url = f"/{cls.SLUG}/{article_id}"
+            break
+
+    if article_id is None:
         return {
             "success": False,
             "message": "No provider found available for this URL"
         }
     
-    provider = "unkown"
-    article_id = "unknown"
-    url = "/"
-    
-    if lp_id is not None:
-        provider = "Le Parisien"
-        article_id = lp_id
-        url = "/lp/"+article_id
-    elif lm_id is not None:
-        provider = "Le Monde"
-        article_id = lm_id
-        url = "/lm/"+article_id
-    elif lt_id is not None:
-        provider = "Le Télégramme"
-        article_id = lt_id
-        url = "/lt/"+article_id
-    elif le_id is not None:
-        provider = "Les Echos"
-        article_id = le_id
-        url = "/le/"+article_id
-    
     return {
         "success": True,
         "provider": provider,
         "id": article_id,
-        "url": url
+        "url": article_url
     }
 
 @app.route("/<slug>/<id>")

@@ -11,6 +11,7 @@ _URL_ID_PATTERN = re.compile(
 
 class LeMondeArticle(Article):
     SLUG = "lm"
+    PROVIDER = "Le Monde"
     
     def __init__(self, article_id: str):
         r = requests.get(
