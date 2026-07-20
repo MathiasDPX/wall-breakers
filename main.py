@@ -7,14 +7,6 @@ app = Flask(__name__)
 
 sass.compile(dirname=('./static/scss/', './static/css'))
 
-ARTICLES = {
-    LeMondeArticle.SLUG: LeMondeArticle,
-    LeTelegrammeArticle.SLUG: LeTelegrammeArticle,
-    LeParisienArticle.SLUG: LeParisienArticle,
-    LesEchosArticle.SLUG: LesEchosArticle,
-    TheAthleticArticle.SLUG: TheAthleticArticle
-}
-
 
 @app.route("/favicon.ico")
 def favicon_route():
@@ -28,14 +20,12 @@ def redirection_route():
             "success": False,
             "message": "No URL provided"
         }
-    
-    providers = [LeParisienArticle, LeMondeArticle, LeTelegrammeArticle, LesEchosArticle]
 
     provider = None
     article_id = None
     article_url = None
 
-    for cls in providers:
+    for cls in PROVIDERS:
         article_id = cls.get_id_from_url(url)
         
         if article_id is not None:

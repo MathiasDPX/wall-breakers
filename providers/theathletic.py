@@ -41,7 +41,7 @@ class TheAthleticArticle(Article):
         
         soup = BeautifulSoup(data["props"]["pageProps"]["article"]["article_body_desktop"], features="html.parser")
         
-        for container in soup.select("div#inline-graphic"):
+        for container in soup.select("div#inline-graphic, div.ad-container, hr"):
             container.decompose()
             
         for caption in soup.select("div.wp-caption"):

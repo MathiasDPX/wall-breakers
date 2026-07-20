@@ -30,13 +30,6 @@ ARTICLES = [
 ]
 
 
-PROVIDERS = [
-    LeParisienArticle,
-    LeMondeArticle,
-    LeTelegrammeArticle,
-]
-
-
 @pytest.mark.parametrize("cls,url,expected_id", ARTICLES)
 def test_article_regex(cls, url, expected_id):
     assert cls.get_id_from_url(url) == expected_id

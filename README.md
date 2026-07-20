@@ -13,6 +13,8 @@ Break news paywalls
 - [Le Monde](https://www.lemonde.fr/)
 - [Le Parisien](https://www.leparisien.fr/)
 - [Le Télégramme](https://www.letelegramme.fr/)
+- [Les Echos](https://www.lesechos.fr/)
+- [The Athletic](https://www.nytimes.com/athletic/)
 
 ## Deployment
 
@@ -32,3 +34,12 @@ python main.py
 # Run tests
 pytest
 ```
+
+### Add a media
+
+1. Create a file in `providers/` named after your media (take examples on others medias)
+2. Add your media in `providers/__init__.py`
+3. Add it to the list of supported medias in `templates/index.html`
+4. Write tests in `tests/test_common.py`
+5. Add it to the README
+6. Make a PR!
