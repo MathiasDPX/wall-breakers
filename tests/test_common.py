@@ -1,23 +1,41 @@
-from providers import LeMondeArticle, LeParisienArticle, LeTelegrammeArticle
+from providers import *
+import pytest
 
-def test_leparisien_regex():
-    lp_link = "https://www.leparisien.fr/sports/football/coupe-du-monde/france-angleterre-la-composition-probable-des-bleus-avec-zaire-emery-cherki-olise-et-mbappe-18-07-2026-ZMLNSNIHBVGEPALOLJ3KGMBQAI.php"
+ARTICLES = [
+    (
+        LeParisienArticle,
+        "https://www.leparisien.fr/sports/football/coupe-du-monde/france-angleterre-la-composition-probable-des-bleus-avec-zaire-emery-cherki-olise-et-mbappe-18-07-2026-ZMLNSNIHBVGEPALOLJ3KGMBQAI.php",
+        "ZMLNSNIHBVGEPALOLJ3KGMBQAI",
+    ),
+    (
+        LeMondeArticle,
+        "https://www.lemonde.fr/planete/article/2026/07/18/au-canada-les-feux-a-repetition-bouleversent-la-foret-boreale_6724998_3244.html",
+        "6724998",
+    ),
+    (
+        LeTelegrammeArticle,
+        "https://www.letelegramme.fr/finistere/landerneau-29800/a-landerneau-une-journee-pour-celebrer-la-culture-bretonne-le-25-juillet-avec-fest-e-landerne-7086034.php",
+        "7086034",
+    ),
+    (
+        LesEchosArticle,
+        "https://www.lesechos.fr/monde/etats-unis/lespagne-gagne-la-coupe-du-monde-de-foot-et-la-fifa-empoche-un-pactole-2243070",
+        "2243070"
+    )
+]
 
-    assert LeParisienArticle.get_id_from_url(lp_link) == "ZMLNSNIHBVGEPALOLJ3KGMBQAI"
-    assert LeMondeArticle.get_id_from_url(lp_link) is None
-    assert LeTelegrammeArticle.get_id_from_url(lp_link) is None
+
+PROVIDERS = [
+    LeParisienArticle,
+    LeMondeArticle,
+    LeTelegrammeArticle,
+]
 
 
-def test_lemonde_regex():
-    lm_link = "https://www.lemonde.fr/planete/article/2026/07/18/au-canada-les-feux-a-repetition-bouleversent-la-foret-boreale_6724998_3244.html"
+@pytest.mark.parametrize("cls,url,expected_id", ARTICLES)
+def test_article_regex(cls, url, expected_id):
+    assert cls.get_id_from_url(url) == expected_id
 
-    assert LeParisienArticle.get_id_from_url(lm_link) is None
-    assert LeMondeArticle.get_id_from_url(lm_link) == "6724998"
-    assert LeTelegrammeArticle.get_id_from_url(lm_link) is None
-    
-def test_letelegramme_regex():
-    lt_link = "https://www.letelegramme.fr/finistere/landerneau-29800/a-landerneau-une-journee-pour-celebrer-la-culture-bretonne-le-25-juillet-avec-fest-e-landerne-7086034.php"
-
-    assert LeParisienArticle.get_id_from_url(lt_link) is None
-    assert LeMondeArticle.get_id_from_url(lt_link) is None
-    assert LeTelegrammeArticle.get_id_from_url(lt_link) == "7086034"
+    for other in PROVIDERS:
+        if other != cls:
+            assert other.get_id_from_url(url) is None

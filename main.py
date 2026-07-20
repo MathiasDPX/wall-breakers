@@ -31,8 +31,9 @@ def redirection_route():
     lp_id = LeParisienArticle.get_id_from_url(url)
     lm_id = LeMondeArticle.get_id_from_url(url)
     lt_id = LeTelegrammeArticle.get_id_from_url(url)
+    le_id = LesEchosArticle.get_id_from_url(url)
     
-    if lp_id is None and lm_id is None and lt_id is None:
+    if lp_id is None and lm_id is None and lt_id is None and le_id is None:
         return {
             "success": False,
             "message": "No provider found available for this URL"
@@ -54,6 +55,10 @@ def redirection_route():
         provider = "Le Télégramme"
         article_id = lt_id
         url = "/lt/"+article_id
+    elif le_id is not None:
+        provider = "Les Echos"
+        article_id = le_id
+        url = "/le/"+article_id
     
     return {
         "success": True,
