@@ -3,8 +3,6 @@
 <img src="./static/images/logo.png" alt="Wall Breakers Logo"/>
 <hr>
 
-Break news paywalls 
-
 ![Test workflow status badge](https://img.shields.io/github/actions/workflow/status/MathiasDPX/wall-breakers/tests.yml?label=tests) ![Test workflow status badge](https://img.shields.io/github/actions/workflow/status/MathiasDPX/wall-breakers/docker-image.yml) ![Last commit badge](https://img.shields.io/github/last-commit/MathiasDPX/wall-breakers)
 </div>
 
@@ -12,6 +10,7 @@ Break news paywalls
 
 - [Le Monde](https://www.lemonde.fr/)
 - [Le Parisien](https://www.leparisien.fr/)
+- [New York Times](https://www.nytimes.com/)
 - [Le Télégramme](https://www.letelegramme.fr/)
 - [Les Echos](https://www.lesechos.fr/)
 - [The Athletic](https://www.nytimes.com/athletic/)
@@ -26,7 +25,7 @@ docker run -p 8000:8000 ghcr.io/mathiasdpx/wall-breakers:latest
 
 ## API
 
-API Documentation are in [`static/openapi.yml`](./static/openapi.yml) or [`http://localhost:5000/openapi.yml`](http://localhost:5000/openapi.yml)
+API Documentation is in [`static/openapi.yml`](./static/openapi.yml) or [`http://localhost:5000/openapi.yml`](http://localhost:5000/openapi.yml)
 
 ## Development
 

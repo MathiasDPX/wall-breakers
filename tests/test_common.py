@@ -26,6 +26,11 @@ ARTICLES = [
         TheAthleticArticle,
         "https://www.nytimes.com/athletic/7444334/2026/07/16/gianni-infantino-fifa-president-future/",
         "7444334"
+    ),
+    (
+        NYTimes,
+        "https://www.nytimes.com/2026/07/25/opinion/boy-scouts-girls-gender.html",
+        "LzIwMjYvMDcvMjUvb3Bpbmlvbi9ib3ktc2NvdXRzLWdpcmxzLWdlbmRlci5odG1s"
     )
 ]
 

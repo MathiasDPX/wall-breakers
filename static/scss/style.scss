@@ -45,11 +45,12 @@ article {
     }
 }
 
-h1, h2 {
+h1,
+h2 {
     @include heading-font;
 }
 
-h1 > a {
+h1>a {
     color: $text-color;
     text-decoration: none;
 }
@@ -66,24 +67,47 @@ header {
     }
 }
 
+.gallery {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 20px;
+    list-style: none;
+    padding: 0;
+
+    & img {
+        width: 100%;
+        height: auto;
+        display: block;
+    }
+
+    figcaption {
+        width: 100%;
+        max-width: none;
+        padding-left: 0;
+    }
+}
+
 figure {
     margin: 0;
-    padding: 0 0 1em;
+
+    &:not(.gallery figure) {
+        padding: 0 0 1em;
+    }
 
     img {
         width: 100%;
         padding-bottom: 0.1em;
         border-radius: 5px;
     }
+}
 
-    figcaption {
-        display: flex;
-        flex-direction: column;
-        max-width: 97.5%;
-        padding-left: calc((100% - 97.5%) / 2);
-        color: $muted-color;
-        @include heading-font;
-    }
+figcaption {
+    display: flex;
+    flex-direction: column;
+    max-width: 97.5%;
+    padding-left: calc((100% - 97.5%) / 2);
+    color: $muted-color;
+    @include heading-font;
 }
 
 nav {
