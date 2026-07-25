@@ -1,5 +1,6 @@
 from flask import Flask, render_template, send_file, request, abort
 import sass
+from werkzeug.exceptions import HTTPException
 from providers import *
 import os
 
@@ -7,6 +8,9 @@ app = Flask(__name__)
 
 sass.compile(dirname=('./static/scss/', './static/css'))
 
+@app.errorhandler(HTTPException)
+def handle_exception(e):
+    return render_template("error.html", exception=e)
 
 @app.route("/favicon.ico")
 def favicon_route():
