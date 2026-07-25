@@ -1,5 +1,13 @@
 {% extends "base.html" %}
 
+{% block head %}
+<meta property="og:type" content="website">
+<meta property="og:title" content="Wall Breaekers">
+<meta property="og:description" content="Blow up paywalls with 💣">
+<meta name="twitter:card" content="summary_large_image">
+<meta property="og:image" content="{{ url_for('static', filename='images/thumbnail.jpg') }}">
+{% endblock %}
+
 {% block content %}
 <div class="main">
     <p>Blow up paywalls with 💣 <a href="https://github.com/MathiasdPX/wall-breakers" target="_blank">Opensource</a> on Github</p>
