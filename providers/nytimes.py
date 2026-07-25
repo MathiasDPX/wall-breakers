@@ -1,6 +1,8 @@
 from .common import Article, add_figure
+from flask import abort
 import demjson3
 import base64
+from html import escape
 import re
 import requests
 
@@ -21,6 +23,119 @@ _COOKIES = {
 }
 
 
+def _build_inline(inline):
+    content = escape(inline.get("text", ""))
+
+    for text_format in inline.get("formats", []):
+        typename = text_format["__typename"]
+
+        if typename == "LinkFormat":
+            url = escape(text_format.get("url", ""), quote=True)
+            title = text_format.get("title")
+            title = f' title="{escape(title, quote=True)}"' if title else ""
+            content = f'<a target="_blank" href="{url}"{title}>{content}</a>'
+        elif typename in ("BoldFormat", "StrongFormat"):
+            content = f"<strong>{content}</strong>"
+        elif typename in ("ItalicFormat", "EmphasisFormat"):
+            content = f"<em>{content}</em>"
+        elif typename == "UnderlineFormat":
+            content = f"<u>{content}</u>"
+
+    return content
+
+
+def _build_content(content):
+    return "".join(
+        _build_inline(item)
+        if item.get("__typename") == "TextInline"
+        else _build_block(item)
+        for item in content or []
+    )
+
+
+def _get_image_url(media):
+    crops = media.get("crops") or []
+    renditions = crops[0].get("renditions") if crops else []
+    return renditions[-1].get("url") if renditions else media.get("url")
+
+
+def _build_image(media):
+    if not media:
+        return ""
+
+    url = _get_image_url(media)
+    if not url:
+        return ""
+
+    caption = media.get("caption") or {}
+    if isinstance(caption, dict):
+        caption = caption.get("text", "")
+
+    return add_figure(
+        escape(url, quote=True),
+        caption=escape(media.get("credit", ""), quote=True),
+        title=escape(caption),
+    )
+
+
+def _build_block(block):
+    if not block:
+        return ""
+
+    typename = block["__typename"]
+    
+    if typename == "Heading1Block":
+        return f"<h1>{_build_content(block.get('content'))}</h1>"
+    elif typename == "Heading2Block":
+        return f"<h2>{_build_content(block.get('content'))}</h2>"
+    elif typename in ("ParagraphBlock", "SummaryBlock"):
+        return f"<p>{_build_content(block.get('content'))}</p>"
+    elif typename == "TextOnlyDocumentBlock":
+        return _build_content(block.get("content"))
+    elif typename == "ListItemBlock":
+        return f"<li>{_build_content(block.get('content'))}</li>"
+    elif typename == "ListBlock":
+        style = str(
+            block.get("listType")
+            or block.get("listStyle")
+            or block.get("style")
+            or block.get("type")
+            or ""
+        ).upper()
+        tag = "ul" if "UNORDERED" in style else "ol"
+        items = block.get("items") or block.get("content") or []
+        content = "".join(
+            _build_block(item)
+            if item.get("__typename") == "ListItemBlock"
+            else f"<li>{_build_block(item)}</li>"
+            for item in items
+        )
+        return f"<{tag}>{content}</{tag}>"
+    elif typename == "GridBlock":
+        content = "".join(_build_image(media) for media in block.get("gridMedia", []))
+        caption = block.get("caption") or ""
+        if isinstance(caption, dict):
+            caption = caption.get("text", "")
+        caption = f"<figcaption>{escape(caption)}</figcaption>" if caption else ""
+        return f'<div class="gallery">{content}{caption}</div>'
+    elif typename == "ImageBlock":
+        return _build_image(block.get("media"))
+    elif typename == "InteractiveBlock":
+        interactive = block.get("media") or block
+        html = interactive.get("html") or interactive.get("embedCode")
+        if html:
+            return f'<div class="interactive">{html}</div>'
+
+        url = interactive.get("url")
+        if url:
+            return (
+                '<iframe class="interactive" '
+                f'src="{escape(url, quote=True)}" loading="lazy"></iframe>'
+            )
+
+    return ""
+
+
 class NYTimes(Article):
     SLUG = "nyt"
     PROVIDER = "New York Times"
@@ -34,61 +149,12 @@ class NYTimes(Article):
         data = NYTimes._get_data(r.content.decode())["initialData"]["data"]["article"]
 
         content = ""
-        report = []
-        
-        # TODO:
-        # - ListBlock
-        # - InteractiveBlock
-        # - Support more ParagraphBlock formats
-        # - Recursive function (ListBlock contains ParagraphBlock inside them)
         for block in data["sprinkledBody"]["content"]:
-            typename = block["__typename"]
+            content += _build_block(block)
 
-            if typename == "HeaderBasicBlock":
-                content += f"<h1>{block['label']['content'][0]['text']}</h1>"
-            elif typename == "Heading2Block":
-                content += f"<h2>{block['content'][0]['text']}</h2>"
-            elif typename == "ParagraphBlock":
-                content += "<p>"
-                
-                for subblock in block['content']:
-                    subcontent = subblock['text']
-                    
-                    for format in subblock['formats']:
-                        format_typename = format['__typename']
-                        
-                        if format_typename == "LinkFormat":
-                            title = f' title="{format['title']}"' if format['title'] else ""
-                            subcontent = f'<a href="{format['url']}{title}">{subcontent}</a>'
-                        else:
-                            report.append(f"Unhandled ParagraphBlock format `{format_typename}`")
-                    
-                    content += subcontent
-                
-                content += "</p>"
-            elif typename == "GridBlock":
-                content += '<div class="gallery">'
-                
-                medias = block["gridMedia"]
-                for media in medias:
-                    content += add_figure(
-                        media["crops"][0]["renditions"][-1]["url"],
-                        title=media["caption"]["text"]
-                    )
-                    
-                content += f"<figcaption>{block["caption"]}</figcaption>"
-                content += "</div>"
-            elif typename == "ImageBlock":
-                media = block["media"]
-                content += add_figure(
-                    media["crops"][0]["renditions"][-1]["url"],
-                    media["caption"]["text"]
-                )
-            elif typename not in ["Dropzone", "DetailBlock", "RelatedLinksBlock", "HeaderFullBleedHorizontalBlock"]:
-                report.append(f"Unhandled block `{typename}`")
-
-        if report:
-            content = "<!--\n" + "\n".join(report) + "\n-->" + content
+        image = data["promotionalImage"]["socialMediaRendition"]["rendition"]["url"]
+        caption = " -- ".join(filter(None, [((data["promotionalImage"]["image"].get("caption") or {}).get("text") or "").strip(), (data["promotionalImage"]["image"].get("credit") or "").strip()]))
+        content = add_figure(image, caption) + content
 
         super().__init__(
             id=article_id,
@@ -96,7 +162,7 @@ class NYTimes(Article):
             subheadline=data["summary"],
             content=content,
             url=data["url"],
-            image=data["promotionalImage"]["socialMediaRendition"]["rendition"]["url"],
+            image=image
         )
 
     def get_id_from_url(url: str):

@@ -41,8 +41,8 @@ class Article(ABC):
         }
 
 
-def add_figure(url, caption="", title=""):
+def add_figure(url, caption="", title=""):    
     caption = f"<figcaption>{caption}</figcaption>" if caption else ""
     title = f" title=\"{title}\"" if title else ""
     
-    return f'<figure{title}><img src="{url}">{caption}</figure>'
+    return f'<figure><img src="{url}"{title}>{caption}</figure>'
