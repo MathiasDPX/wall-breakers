@@ -24,6 +24,10 @@ You can run Wall Breakers with Docker and docker-compose.yml
 docker run -p 8000:8000 ghcr.io/mathiasdpx/wall-breakers:latest
 ```
 
+## API
+
+API Documentation are in [`static/openapi.yml`](./static/openapi.yml) or [`http://localhost:5000/openapi.yml`](http://localhost:5000/openapi.yml)
+
 ## Development
 
 ```bash

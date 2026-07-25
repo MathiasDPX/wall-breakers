@@ -1,54 +1,82 @@
 from flask import Flask, render_template, send_file, request, abort
 import sass
 from werkzeug.exceptions import HTTPException
+from requests.exceptions import HTTPError
 from providers import *
+from flask_cors import CORS
 import os
 
 app = Flask(__name__)
+CORS(app)
+sass.compile(dirname=("./static/scss/", "./static/css"))
 
-sass.compile(dirname=('./static/scss/', './static/css'))
 
 @app.errorhandler(HTTPException)
 def handle_exception(e):
-    return render_template("error.html", exception=e)
+    return render_template("error.html", exception=e), e.code
+
+
+@app.errorhandler(HTTPError)
+def handle_api_exception(e):
+    return {"success": False, "message": e.response.reason}, e.response.status_code
+
 
 @app.route("/favicon.ico")
 def favicon_route():
     return send_file(os.path.join("static", "images", "favicon.ico"))
 
+
+@app.route("/openapi.yml")
+def openapi_route():
+    return send_file(
+        os.path.join("static", "openapi.yml"),
+        mimetype="text/plain",
+        as_attachment=False,
+    )
+
+
 @app.route("/api/getId")
-def redirection_route():
+def redirection_api_route():
     url = request.args.get("url")
     if url == None:
-        return {
-            "success": False,
-            "message": "No URL provided"
-        }
+        return {"success": False, "message": "No URL provided"}, 400
 
-    provider = None
+    provider: Article = None
     article_id = None
     article_url = None
 
     for cls in PROVIDERS:
         article_id = cls.get_id_from_url(url)
-        
+
         if article_id is not None:
-            provider = cls.PROVIDER
+            provider = cls
             article_url = f"/{cls.SLUG}/{article_id}"
             break
 
     if article_id is None:
         return {
             "success": False,
-            "message": "No provider found available for this URL"
-        }
-    
+            "message": "No provider found available for this URL",
+        }, 404
+
     return {
         "success": True,
-        "provider": provider,
+        "provider": provider.PROVIDER,
         "id": article_id,
-        "url": article_url
+        "url": article_url,
+        "slug": provider.SLUG,
     }
+
+
+@app.route("/api/article/<slug>:<id>")
+def article_api_route(slug, id):
+    if slug not in ARTICLES.keys():
+        return {"success": False, "message": "Provider not found"}, 400
+
+    article: Article = ARTICLES[slug](id)
+
+    return article.asdict()
+
 
 @app.route("/<slug>/<id>")
 def article_route(slug, id):
@@ -59,9 +87,11 @@ def article_route(slug, id):
     article = article_cls(id)
     return render_template("article.html", article=article)
 
+
 @app.route("/")
 def index_route():
     return render_template("index.html")
+
 
 if __name__ == "__main__":
     app.run(debug=True)

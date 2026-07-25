@@ -78,7 +78,6 @@ class LeMondeArticle(Article):
         content = soup.decode_contents()
 
         super().__init__(
-            id="lemonde:"+article_id,
             headline=data["template_vars"]["seo_title"],
             subheadline=data["template_vars"]["share_kicker"],
             content=content,

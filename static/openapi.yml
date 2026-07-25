@@ -1,0 +1,183 @@
+openapi: 3.2.0
+info:
+  title: Wall Breakers
+  description: |-
+    Wall Breakers API documentation.
+  version: 1.0.0
+servers:
+  - url: https://news.mathiasd.fr/api
+    description: Production server
+  - url: http://localhost:5000/api
+    description: Local server
+
+paths:
+  /getId:
+    get:
+      summary: Get article information
+      description: Return information about an article from an URL
+      operationId: getId
+      parameters:
+        - in: query
+          name: url
+          schema:
+            type: string
+          required: true
+          description: "The URL of the article to resolve"
+      responses:
+        '200':
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ArticleInfo'
+        '400':
+          description: Missing URL parameter
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorMissingUrl'
+        '404':
+          description: Article not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorNotFound'
+
+  /article/{slug}:{id}:
+    get:
+      summary: Get article content and metadata
+      description: Return content and metadata of an article from its provider slug and id
+      operationId: getArticle
+      parameters:
+        - in: path
+          name: slug
+          schema:
+            type: string
+            enum: ["lp", "lm", "le", "lt", "ta"]
+          required: true
+          description: |-
+            Provider slug
+
+            Values:
+              - `lp`: Le Parisien
+              - `lm`: Le Monde
+              - `le`: Les Echos
+              - `lt`: Le Télégramme
+              - `ta`: The Athletic
+        - in: path
+          name: id
+          schema:
+            type: string
+          required: true
+          description: "Article ID"
+      responses:
+        '200':
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ArticleContent'
+        '400':
+          description: Unknown provider slug
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorProviderNotFound'
+        default:
+          description: Any other HTTP error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorHttp'
+
+components:
+  schemas:
+    ArticleInfo:
+      type: object
+      properties:
+        success:
+          type: boolean
+          example: true
+        provider:
+          type: string
+          example: "Le Parisien"
+        slug:
+          type: string
+          example: "lp"
+        id:
+          type: string
+          example: "WKAXKKI5EVA5LER6TTK62VVSSU"
+        url:
+          type: string
+          example: "/lp/WKAXKKI5EVA5LER6TTK62VVSSU"
+
+    ArticleContent:
+      type: object
+      properties:
+        success:
+          type: boolean
+          example: true
+        id:
+          type: string
+          example: "WKAXKKI5EVA5LER6TTK62VVSSU"
+        url:
+          type: string
+          example: "https://www.leparisien.fr/val-d-oise-95/...."
+        image:
+          type: string
+          example: "https://cloudfront-eu-central-1.images.arcpublishing.com/leparisien/UCR37O32VJDXBME7UVOTLNUCFA.jpg"
+        headline:
+          type: string
+          content: "« Guten tag mein Führer » : des professeurs dénoncent des dérives racistes et homophobes dans un lycée privé du Val-d’Oise"
+        subheadline:
+          type: string
+          content: "Des enseignants et une élève du lycée Notre-Dame-de-Bury, à Margency (Val-d’Oise), indiquent avoir alerté la direction après avoir observé ces comportements lors des deux dernières années scolaires. La responsable de l’établissement dément."
+        content:
+          type: string
+          content: "<p>Hello World!</p>"
+          description: "Simplified HTML of the article content"
+
+    ErrorBase:
+      type: object
+      properties:
+        success:
+          type: boolean
+          example: false
+        message:
+          type: string
+
+    ErrorMissingUrl:
+      allOf:
+        - $ref: '#/components/schemas/ErrorBase'
+        - type: object
+          properties:
+            message:
+              type: string
+              example: "No URL provided"
+
+    ErrorProviderNotFound:
+      allOf:
+        - $ref: '#/components/schemas/ErrorBase'
+        - type: object
+          properties:
+            message:
+              type: string
+              example: "Provider not found"
+
+    ErrorNotFound:
+      allOf:
+        - $ref: '#/components/schemas/ErrorBase'
+        - type: object
+          properties:
+            message:
+              type: string
+              example: "No provider found available for this URL"
+
+    ErrorHttp:
+      allOf:
+        - $ref: '#/components/schemas/ErrorBase'
+        - type: object
+          properties:
+            message:
+              type: string
+              example: "Not Found"

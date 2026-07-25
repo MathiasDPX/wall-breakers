@@ -1,5 +1,6 @@
 beautifulsoup4
 pre-commit
+flask-cors
 requests
 libsass
 pytest

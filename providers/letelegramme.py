@@ -84,7 +84,7 @@ class LeTelegrammeArticle(Article):
             content = add_figure(image, f"{addon['title']} -- {addon['credits']}") + content
 
         super().__init__(
-            id="letelegramme:" + article_id,
+            id=article_id,
             headline=data["title"],
             subheadline=data["lead"],
             content=content,

@@ -3,6 +3,7 @@ from .lemonde import LeMondeArticle
 from .letelegramme import LeTelegrammeArticle
 from .lesechos import LesEchosArticle
 from .theathletic import TheAthleticArticle
+from .common import Article
 
 PROVIDERS = [
     LeParisienArticle,
@@ -12,4 +13,4 @@ PROVIDERS = [
     TheAthleticArticle
 ]
 
-ARTICLES = {provider.SLUG: provider for provider in PROVIDERS}
+ARTICLES:dict[str, Article] = {provider.SLUG: provider for provider in PROVIDERS}

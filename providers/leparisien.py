@@ -63,7 +63,7 @@ class LeParisienArticle(Article):
 
 
         super().__init__(
-            id="leparisien:"+data["_id"],
+            id=data["_id"],
             headline=data["headlines"]["basic"],
             subheadline=data["subheadlines"]["basic"],
             content=content,

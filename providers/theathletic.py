@@ -70,7 +70,7 @@ class TheAthleticArticle(Article):
         content = add_figure(image["url"], image["caption"]+" -- "+image['creditText']) + content
 
         super().__init__(
-            id="nytimes:"+article_id,
+            id=article_id,
             headline=metadata["headline"],
             subheadline=metadata["description"],
             content=content,

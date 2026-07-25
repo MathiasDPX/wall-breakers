@@ -43,7 +43,7 @@ class LesEchosArticle(Article):
         content = add_figure(image, f"{data['image']['caption']} -- {data['image']['credits']}") + content
 
         super().__init__(
-            id="lesechos:"+article_id,
+            id=article_id,
             headline=data["title"],
             subheadline=data["lead"],
             content=content,
