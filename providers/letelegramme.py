@@ -1,7 +1,9 @@
-from .common import Article, add_figure
-from bs4 import BeautifulSoup
 import re
+
 import requests
+from bs4 import BeautifulSoup
+
+from .common import Article, add_figure
 
 _URL_ID_PATTERN = re.compile(r".+letelegramme\.fr\/.+-(\d+)\.php")
 

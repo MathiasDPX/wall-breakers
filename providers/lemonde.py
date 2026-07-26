@@ -1,8 +1,9 @@
-from .common import Article
-from bs4 import BeautifulSoup
 import re
-import requests
 
+import requests
+from bs4 import BeautifulSoup
+
+from .common import Article
 
 _URL_ID_PATTERN = re.compile(
     r".+lemonde\.fr\/.+_(\d+)_\d+\.html"

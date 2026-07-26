@@ -1,9 +1,10 @@
-from .common import Article, add_figure
-from bs4 import BeautifulSoup
-import re
 import json
-import requests
+import re
 
+import requests
+from bs4 import BeautifulSoup
+
+from .common import Article, add_figure
 
 _URL_ID_PATTERN = re.compile(
     r".+nytimes\.com\/athletic\/(\d+)(?:\/(?:.+)?)?"
@@ -87,6 +88,6 @@ class TheAthleticArticle(Article):
 
 
 if __name__ == "__main__":
-    article = NYTimesArticle.get_from_url("https://www.lesechos.fr/monde/etats-unis/lespagne-gagne-la-coupe-du-monde-de-foot-et-la-fifa-empoche-un-pactole-2243070")
+    article = TheAthleticArticle.get_from_url("https://www.nytimes.com/athletic/7444334/2026/07/16/gianni-infantino-fifa-president-future/")
 
     print(article)

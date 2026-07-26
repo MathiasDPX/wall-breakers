@@ -1,5 +1,6 @@
-from providers import *
 import pytest
+
+from providers import *
 
 ARTICLES = [
     (
@@ -28,7 +29,7 @@ ARTICLES = [
         "7444334"
     ),
     (
-        NYTimes,
+        NYTimesArticle,
         "https://www.nytimes.com/2026/07/25/opinion/boy-scouts-girls-gender.html",
         "LzIwMjYvMDcvMjUvb3Bpbmlvbi9ib3ktc2NvdXRzLWdpcmxzLWdlbmRlci5odG1s"
     )

@@ -1,8 +1,9 @@
-from bs4 import BeautifulSoup
-from .common import Article, add_figure
 import re
-import requests
 
+import requests
+from bs4 import BeautifulSoup
+
+from .common import Article, add_figure
 
 _URL_ID_PATTERN = re.compile(
     r".+lesechos.fr\/.+-(\d+)"

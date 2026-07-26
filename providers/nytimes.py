@@ -1,10 +1,11 @@
-from .common import Article, add_figure
-from flask import abort
-import demjson3
 import base64
-from html import escape
 import re
+from html import escape
+
+import demjson3
 import requests
+
+from .common import Article, add_figure
 
 _URL_ID_PATTERN = re.compile(r"https:\/\/(?:www\.)?nytimes\.com(\/.+\.html)")
 
@@ -136,7 +137,7 @@ def _build_block(block):
     return ""
 
 
-class NYTimes(Article):
+class NYTimesArticle(Article):
     SLUG = "nyt"
     PROVIDER = "New York Times"
 
@@ -146,7 +147,7 @@ class NYTimes(Article):
             f"https://www.nytimes.com{article_path}", headers=_HEADERS, cookies=_COOKIES
         )
         r.raise_for_status()
-        data = NYTimes._get_data(r.content.decode())["initialData"]["data"]["article"]
+        data = NYTimesArticle._get_data(r.content.decode())["initialData"]["data"]["article"]
 
         content = ""
         for block in data["sprinkledBody"]["content"]:
@@ -181,7 +182,7 @@ class NYTimes(Article):
 
 
 if __name__ == "__main__":
-    article = NYTimes.get_from_url(
+    article = NYTimesArticle.get_from_url(
         "https://www.nytimes.com/2026/07/25/opinion/boy-scouts-girls-gender.html"
     )
 

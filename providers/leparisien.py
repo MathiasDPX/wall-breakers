@@ -1,8 +1,9 @@
-from .common import Article, add_figure
-from bs4 import BeautifulSoup
 import re
-import requests
 
+import requests
+from bs4 import BeautifulSoup
+
+from .common import Article, add_figure
 
 _URL_ID_PATTERN = re.compile(
     r".+leparisien\.fr\/.+-\d{2}-\d{2}-\d{4}-([A-Z0-9]{26})\.php"

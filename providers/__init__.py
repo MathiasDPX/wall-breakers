@@ -1,10 +1,10 @@
-from .leparisien import LeParisienArticle
-from .lemonde import LeMondeArticle
-from .letelegramme import LeTelegrammeArticle
-from .lesechos import LesEchosArticle
-from .theathletic import TheAthleticArticle
-from .nytimes import NYTimes
 from .common import Article
+from .lemonde import LeMondeArticle
+from .leparisien import LeParisienArticle
+from .lesechos import LesEchosArticle
+from .letelegramme import LeTelegrammeArticle
+from .nytimes import NYTimesArticle
+from .theathletic import TheAthleticArticle
 
 PROVIDERS = [
     LeParisienArticle,
@@ -12,7 +12,7 @@ PROVIDERS = [
     LeTelegrammeArticle,
     LesEchosArticle,
     TheAthleticArticle,
-    NYTimes,
+    NYTimesArticle,
 ]
 
 ARTICLES:dict[str, Article] = {provider.SLUG: provider for provider in PROVIDERS}

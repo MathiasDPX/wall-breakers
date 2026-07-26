@@ -1,10 +1,12 @@
-from flask import Flask, render_template, send_file, request, abort
-import sass
-from werkzeug.exceptions import HTTPException
-from requests.exceptions import HTTPError
-from providers import *
-from flask_cors import CORS
 import os
+
+import sass
+from flask import Flask, abort, render_template, request, send_file
+from flask_cors import CORS
+from requests.exceptions import HTTPError
+from werkzeug.exceptions import HTTPException
+
+from providers import *
 
 app = Flask(__name__)
 CORS(app)
@@ -38,7 +40,7 @@ def openapi_route():
 @app.route("/api/getId")
 def redirection_api_route():
     url = request.args.get("url")
-    if url == None:
+    if url is None:
         return {"success": False, "message": "No URL provided"}, 400
 
     provider: Article = None
@@ -70,7 +72,7 @@ def redirection_api_route():
 
 @app.route("/api/article/<slug>:<id>")
 def article_api_route(slug, id):
-    if slug not in ARTICLES.keys():
+    if slug not in ARTICLES:
         return {"success": False, "message": "Provider not found"}, 400
 
     article: Article = ARTICLES[slug](id)
