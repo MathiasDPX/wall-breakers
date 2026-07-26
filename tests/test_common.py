@@ -1,6 +1,9 @@
+from unittest.mock import patch
+
 import pytest
 
 from providers import *
+from providers.nytimes import DataDomeCookieExpiredError
 
 ARTICLES = [
     (
@@ -43,3 +46,14 @@ def test_article_regex(cls, url, expected_id):
     for other in PROVIDERS:
         if other != cls:
             assert other.get_id_from_url(url) is None
+
+
+def test_nytimes_403_reports_expired_datadome_cookie():
+    response = type("Response", (), {"status_code": 403})()
+
+    with patch("providers.nytimes.requests.get", return_value=response):
+        with pytest.raises(
+            DataDomeCookieExpiredError,
+            match="The New York Times DataDome cookie has expired",
+        ):
+            NYTimesArticle("L2FydGljbGUuaHRtbA==")

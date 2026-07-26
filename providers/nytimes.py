@@ -21,6 +21,10 @@ _COOKIES = {
 }
 
 
+class DataDomeCookieExpiredError(RuntimeError):
+    pass
+
+
 def _build_inline(inline):
     content = escape(inline.get("text", ""))
 
@@ -147,6 +151,10 @@ class NYTimesArticle(Article):
         r = requests.get(
             f"https://www.nytimes.com{article_path}", headers=_HEADERS, cookies=_COOKIES
         )
+        if r.status_code == 403:
+            raise DataDomeCookieExpiredError(
+                "The New York Times DataDome cookie has expired"
+            )
         r.raise_for_status()
         data = NYTimesArticle._get_data(r.content.decode())["initialData"]["data"]["article"]
 

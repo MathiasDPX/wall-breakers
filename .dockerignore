@@ -1,8 +1,10 @@
 .git
-.github
-.pytest_cache
+.env
 .venv
-__pycache__
+.github
 *.py[cod]
 test*.html
 static/css
+__pycache__
+.env.example
+.pytest_cache

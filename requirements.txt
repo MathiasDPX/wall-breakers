@@ -1,4 +1,6 @@
+sentry-sdk[flask]
 beautifulsoup4
+python-dotenv
 pre-commit
 flask-cors
 demjson3

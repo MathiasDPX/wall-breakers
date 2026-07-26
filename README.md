@@ -23,6 +23,18 @@ You can run Wall Breakers with Docker and docker-compose.yml
 docker run -p 8000:8000 ghcr.io/mathiasdpx/wall-breakers:latest
 ```
 
+To report unhandled application errors to Sentry, provide the project DSN when
+starting the container. Sentry remains disabled when `SENTRY_DSN` is absent.
+
+```bash
+docker run -p 8000:8000 \
+  -e SENTRY_DSN=https://examplePublicKey@o0.ingest.sentry.io/0 \
+  -e SENTRY_ENVIRONMENT=production \
+  ghcr.io/mathiasdpx/wall-breakers:latest
+```
+
+`SENTRY_ENVIRONMENT` is optional and defaults to `production`.
+
 ## API
 
 API Documentation is in [`static/openapi.yml`](./static/openapi.yml) or [`http://localhost:5000/openapi.yml`](http://localhost:5000/openapi.yml)

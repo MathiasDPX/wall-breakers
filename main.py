@@ -1,12 +1,24 @@
 import os
 
 import sass
+import sentry_sdk
 from flask import Flask, abort, render_template, request, send_file
 from flask_cors import CORS
 from requests.exceptions import HTTPError
+from sentry_sdk.integrations.flask import FlaskIntegration
 from werkzeug.exceptions import HTTPException
 
 from providers import *
+
+SENTRY_DSN = os.getenv("SENTRY_DSN")
+if SENTRY_DSN:
+    sentry_sdk.init(
+        dsn=SENTRY_DSN,
+        environment=os.getenv("SENTRY_ENVIRONMENT", "production"),
+        integrations=[FlaskIntegration()],
+        ignore_errors=[KeyboardInterrupt],
+        enable_logs=True,
+    )
 
 app = Flask(__name__)
 CORS(app)
