@@ -17,10 +17,7 @@ _HEADERS = {
 }
 
 _COOKIES = {
-    "nyt-gdpr": "1",
-    "NYT-Edition": "edition|INTERNATIONAL",
-    "nyt-a": "8uyH55SxV5FQmPnTzAE7ZX",
-    "datadome": "N7J4r0MM81cG2juz6uQ9AJtX9Gs17wlliVxRL76Elv3VjZIx8MuWHQ2X0dp61OGyIPnETsGIKc8XEbwYkM6eas2nTGA1qMWDs65d06lZ3wfFOaVkeBgIXH7JFdy7C~Ok",
+    "datadome": "efCWgNbDsE_9jitq7H97ry3pSXzeHo3E~ermVCY7bRi47CTe9UmSQ~s1KxLQcNgqO4WdxegnxczDEL0VvWfy3MQkOWjbOIk0ogO_ot0LOXdC7fUsWmlZoINHlCyi9spI",
 }
 
 
@@ -32,6 +29,10 @@ def _build_inline(inline):
 
         if typename == "LinkFormat":
             url = escape(text_format.get("url", ""), quote=True)
+            id = NYTimesArticle.get_id_from_url(url)
+            if id != None:
+                url = f"/{NYTimesArticle.SLUG}/{id}"
+                
             title = text_format.get("title")
             title = f' title="{escape(title, quote=True)}"' if title else ""
             content = f'<a target="_blank" href="{url}"{title}>{content}</a>'
@@ -134,7 +135,7 @@ def _build_block(block):
                 f'src="{escape(url, quote=True)}" loading="lazy"></iframe>'
             )
 
-    return ""
+    return None
 
 
 class NYTimesArticle(Article):
@@ -149,13 +150,20 @@ class NYTimesArticle(Article):
         r.raise_for_status()
         data = NYTimesArticle._get_data(r.content.decode())["initialData"]["data"]["article"]
 
+        report = []
         content = ""
         for block in data["sprinkledBody"]["content"]:
-            content += _build_block(block)
+            built = _build_block(block)
+            if built == None:
+                report.append(f"- Unhandled `{block['__typename']}` block")
+            else:
+                content += built
 
+        report = list(set(report))
         image = data["promotionalImage"]["socialMediaRendition"]["rendition"]["url"]
         caption = " -- ".join(filter(None, [((data["promotionalImage"]["image"].get("caption") or {}).get("text") or "").strip(), (data["promotionalImage"]["image"].get("credit") or "").strip()]))
         content = add_figure(image, caption) + content
+        content = "<!--\n" + "\n".join(report) + "\n-->" + content
 
         super().__init__(
             id=article_id,
