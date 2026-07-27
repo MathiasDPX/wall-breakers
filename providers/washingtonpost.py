@@ -47,6 +47,8 @@ def _build_block(block):
         return add_figure(block['imageURL'], caption=block['fullcaption'], title=block["blurb"])
     elif typename == "sanitized_html":
         return "<p>" + _sanitize_html(block["content"]) + "</p>"
+    elif typename == "audio":
+        return f"<audio controls src=\"{block['rawUrl']}\"></audio>"
     
     return ""
 

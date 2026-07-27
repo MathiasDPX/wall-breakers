@@ -48,7 +48,7 @@ inputNode.addEventListener("keyup", function (event) {
                     feedbackNode.innerText = `Failed to redirect: ${data.message}`;
                 } else {
                     feedbackNode.classList.add('success');
-                    feedbackNode.innerText = `Redirecting to ${data.provider} #${data.id} ...`;
+                    feedbackNode.innerText = `Redirecting to ${data.provider}...`;
                     window.location.replace(data.url)
                 }
             })

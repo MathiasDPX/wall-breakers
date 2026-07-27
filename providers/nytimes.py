@@ -17,7 +17,7 @@ _HEADERS = {
 }
 
 _COOKIES = {
-    "datadome": "efCWgNbDsE_9jitq7H97ry3pSXzeHo3E~ermVCY7bRi47CTe9UmSQ~s1KxLQcNgqO4WdxegnxczDEL0VvWfy3MQkOWjbOIk0ogO_ot0LOXdC7fUsWmlZoINHlCyi9spI",
+    "datadome": "", # TODO: find a fix for datadome cookie
 }
 
 
