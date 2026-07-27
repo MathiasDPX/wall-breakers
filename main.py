@@ -7,8 +7,11 @@ from flask_cors import CORS
 from requests.exceptions import HTTPError
 from sentry_sdk.integrations.flask import FlaskIntegration
 from werkzeug.exceptions import HTTPException
+from dotenv import load_dotenv
 
 from providers import *
+
+load_dotenv()
 
 SENTRY_DSN = os.getenv("SENTRY_DSN")
 if SENTRY_DSN:

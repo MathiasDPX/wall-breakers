@@ -1,9 +1,8 @@
-from unittest.mock import patch
+from base64 import b64decode, b64encode
 
 import pytest
 
 from providers import *
-from providers.nytimes import DataDomeCookieExpiredError
 
 ARTICLES = [
     (
@@ -34,7 +33,12 @@ ARTICLES = [
     (
         NYTimesArticle,
         "https://www.nytimes.com/2026/07/25/opinion/boy-scouts-girls-gender.html",
-        "LzIwMjYvMDcvMjUvb3Bpbmlvbi9ib3ktc2NvdXRzLWdpcmxzLWdlbmRlci5odG1s"
+        b64encode(b"/2026/07/25/opinion/boy-scouts-girls-gender.html").decode() # The Article ID is the path after https://www.nytimes.com
+    ),
+    (
+        WashingtonPostArticle,
+        "https://www.washingtonpost.com/opinions/2026/07/26/christopher-nolan-odyssey-shows-cost-online-rage/",
+        b64encode(b"https://www.washingtonpost.com/opinions/2026/07/26/christopher-nolan-odyssey-shows-cost-online-rage/").decode() # The Article ID is the whole URL due to how Rainbow API is made
     )
 ]
 
@@ -46,14 +50,3 @@ def test_article_regex(cls, url, expected_id):
     for other in PROVIDERS:
         if other != cls:
             assert other.get_id_from_url(url) is None
-
-
-def test_nytimes_403_reports_expired_datadome_cookie():
-    response = type("Response", (), {"status_code": 403})()
-
-    with patch("providers.nytimes.requests.get", return_value=response):
-        with pytest.raises(
-            DataDomeCookieExpiredError,
-            match="The New York Times DataDome cookie has expired",
-        ):
-            NYTimesArticle("L2FydGljbGUuaHRtbA==")

@@ -11,6 +11,7 @@
 - [Le Monde](https://www.lemonde.fr/)
 - [Le Parisien](https://www.leparisien.fr/)
 - [New York Times](https://www.nytimes.com/)
+- [Washington Post](https://www.washingtonpost.com)
 - [Le Télégramme](https://www.letelegramme.fr/)
 - [Les Echos](https://www.lesechos.fr/)
 - [The Athletic](https://www.nytimes.com/athletic/)
@@ -23,17 +24,12 @@ You can run Wall Breakers with Docker and docker-compose.yml
 docker run -p 8000:8000 ghcr.io/mathiasdpx/wall-breakers:latest
 ```
 
-To report unhandled application errors to Sentry, provide the project DSN when
-starting the container. Sentry remains disabled when `SENTRY_DSN` is absent.
-
 ```bash
 docker run -p 8000:8000 \
-  -e SENTRY_DSN=https://examplePublicKey@o0.ingest.sentry.io/0 \
-  -e SENTRY_ENVIRONMENT=production \
   ghcr.io/mathiasdpx/wall-breakers:latest
 ```
 
-`SENTRY_ENVIRONMENT` is optional and defaults to `production`.
+It supports Sentry with the `SENTRY_ENVIRONMENT` and `SENTRY_DSN` environment variable but both are optional.
 
 ## API
 
