@@ -19,7 +19,11 @@ $font-display: 'Newsreader', serif;
 }
 
 body {
-    min-height: calc(100dvh - 5em);
+    box-sizing: border-box;
+    display: flex;
+    flex-direction: column;
+    min-height: 100dvh;
+    margin: 0;
     background-color: $bg-color;
     color: $text-color;
     padding: 20px;
@@ -169,9 +173,6 @@ footer {
     padding-bottom: 1em;
     margin-top: auto;
     padding-top: 3.5em;
-    position: absolute;
-    width: 95%;
-    bottom: 1.5em;
 
     a {
         text-decoration: none;

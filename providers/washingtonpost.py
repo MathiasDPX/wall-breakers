@@ -17,6 +17,9 @@ def _sanitize_html(html):
         id = WashingtonPostArticle.get_id_from_url(link["href"])
         link["target"] = "_blank"
         
+        if link["href"].startswith("FTS_"):
+            link.unwrap()
+        
         if id != None:
             link["href"] = "/wp/" + id
             continue
