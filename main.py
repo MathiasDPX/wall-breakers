@@ -10,6 +10,7 @@ from sentry_sdk.integrations.flask import FlaskIntegration
 from werkzeug.exceptions import HTTPException
 from dotenv import load_dotenv
 
+from providers.nytimes import DataDomeCookieExpiredError
 from providers import *
 
 load_dotenv()
@@ -38,12 +39,16 @@ def inject_context():
 
 @app.errorhandler(HTTPException)
 def handle_exception(e):
-    return render_template("error.html", exception=e), e.code
-
+    return render_template("error.html", code=e.code, name=e.name, description=e.description), e.code
 
 @app.errorhandler(HTTPError)
 def handle_api_exception(e):
     return {"success": False, "message": e.response.reason}, e.response.status_code
+
+
+@app.errorhandler(DataDomeCookieExpiredError)
+def handle_datadome_exception(e):
+    return render_template("error.html", code=503, name="Service Unavailable", description="The service is temporarily unavailable due to an expired DataDome token."), 503
 
 
 @app.route("/favicon.ico")
@@ -119,4 +124,4 @@ def index_route():
 
 
 if __name__ == "__main__":
-    app.run(debug=True)
+    app.run(debug=False)

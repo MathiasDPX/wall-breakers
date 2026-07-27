@@ -167,6 +167,10 @@ p#feedback {
 
 footer {
     @include heading-font;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
     text-align: center;
     color: #909090;
 

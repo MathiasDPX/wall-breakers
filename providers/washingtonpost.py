@@ -19,6 +19,7 @@ def _sanitize_html(html):
         
         if link["href"].startswith("FTS_"):
             link.unwrap()
+            continue
         
         if id != None:
             link["href"] = "/wp/" + id

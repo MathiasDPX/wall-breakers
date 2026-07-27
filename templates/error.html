@@ -3,7 +3,7 @@
 {% block head %}
 <meta property="og:type" content="website">
 <meta property="og:title" content="Wall Breaekers">
-<meta property="og:description" content="{{ exception.code }} - {{ exception.name }}">
+<meta property="og:description" content="{{ code }} - {{ name }}">
 <meta name="twitter:card" content="summary_large_image">
 <meta property="og:image" content="{{ url_for('static', filename='images/thumbnail.jpg') }}">
 {% endblock %}
@@ -26,7 +26,7 @@ label {
 </style>
 
 <div class="main">
-    <h1>{{ exception.code }}</h1>
-    <label>{{ exception.name }} - {{ exception.description }}</label>
+    <h1>{{ code }}</h1>
+    <label>{{ name }} - {{ description }}</label>
 </div>
 {% endblock %}
