@@ -15,7 +15,7 @@
     <footer>
         <small>
         {% if git_sha == "development" %}
-            Built at {{ "%02d:%02d"|format(build_ts.hour, build_ts.minute) }}
+            Built at <time datetime="{{ build_ts.isoformat() }}">{{ build_ts.strftime('%H:%M UTC') }}</time>
         {% else %}
             Built on <a href="https://github.com/MathiasDPX/wall-breakers/commit/{{ git_sha }}" target="_blank">{{ git_sha[:7] }}</a>
         {% endif %}

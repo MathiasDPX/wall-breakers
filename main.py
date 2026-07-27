@@ -1,5 +1,5 @@
 import os
-from datetime import datetime
+from datetime import datetime, timezone
 
 import sass
 import sentry_sdk
@@ -24,7 +24,7 @@ if SENTRY_DSN:
         enable_logs=True,
     )
 
-build_ts = datetime.now()
+build_ts = datetime.now(timezone.utc)
 app = Flask(__name__)
 CORS(app)
 sass.compile(dirname=("./static/scss/", "./static/css"))
