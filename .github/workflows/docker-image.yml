@@ -10,6 +10,9 @@ permissions:
   contents: read
   packages: write
 
+env:
+  GITHUB_SHA: ${{ github.sha }}
+
 jobs:
   test:
     runs-on: ubuntu-latest

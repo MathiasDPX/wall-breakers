@@ -1,4 +1,5 @@
 import os
+from datetime import datetime
 
 import sass
 import sentry_sdk
@@ -23,10 +24,17 @@ if SENTRY_DSN:
         enable_logs=True,
     )
 
+build_ts = datetime.now()
 app = Flask(__name__)
 CORS(app)
 sass.compile(dirname=("./static/scss/", "./static/css"))
 
+@app.context_processor
+def inject_context():
+    return {
+        "build_ts": build_ts,
+        "git_sha": os.getenv("GITHUB_SHA", "development")
+    }
 
 @app.errorhandler(HTTPException)
 def handle_exception(e):
