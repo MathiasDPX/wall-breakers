@@ -9,24 +9,8 @@
 {% endblock %}
 
 {% block content %}
-<style>
-h1 {
-    text-align: center;
-    font-size: 1500%;
-    font-family: "Newsreader", serif;
-    margin-bottom: 0;
-    color: #ffffff;
-}
-
-label {
-    text-align: center;
-    width: 100%;
-    display: block;
-}
-</style>
-
-<div class="main">
+<div class="main error-page">
     <h1>{{ code }}</h1>
-    <label>{{ name }} - {{ description }}</label>
+    <p>{{ name }} - {{ description }}</p>
 </div>
 {% endblock %}

@@ -18,15 +18,20 @@ $font-display: 'Newsreader', serif;
     font-family: $font-heading;
 }
 
-body {
+*,
+*::before,
+*::after {
     box-sizing: border-box;
+}
+
+body {
     display: flex;
     flex-direction: column;
     min-height: 100dvh;
     margin: 0;
     background-color: $bg-color;
     color: $text-color;
-    padding: 20px;
+    padding: clamp(12px, 4vw, 20px);
 }
 
 a {
@@ -36,10 +41,16 @@ a {
 article {
     display: flex;
     flex-direction: column;
+    width: 100%;
     max-width: 70ch;
     margin: auto;
     font-family: $font-body;
     text-align: justify;
+
+    #content {
+        min-width: 0;
+        overflow-wrap: anywhere;
+    }
 
     figcaption {
         line-height: 1.25em;
@@ -100,10 +111,27 @@ figure {
     }
 
     img {
+        display: block;
         width: 100%;
+        height: auto;
         padding-bottom: 0.1em;
         border-radius: 5px;
     }
+}
+
+iframe,
+video {
+    max-width: 100%;
+}
+
+pre,
+table {
+    max-width: 100%;
+    overflow-x: auto;
+}
+
+table {
+    display: block;
 }
 
 figcaption {
@@ -117,7 +145,7 @@ figcaption {
 
 nav {
     font-family: $font-display;
-    font-size: 300%;
+    font-size: clamp(2.25rem, 10vw, 3rem);
     font-weight: bold;
     text-align: center;
     padding-bottom: 0.2em;
@@ -132,13 +160,16 @@ nav {
 
 div.main {
     margin: 0 auto;
-    width: 480px;
+    width: 100%;
+    max-width: 480px;
 }
 
 input#searchInput {
+    display: block;
     padding: 16px 20px;
     margin: 1em 0;
     width: 100%;
+    font-size: 1rem;
     position: relative;
     border-radius: 7.5px;
     background-color: $bg-color;
@@ -186,4 +217,44 @@ footer {
 audio {
     width: 100%;
     padding-bottom: 1em;
+}
+
+.error-page {
+    text-align: center;
+
+    h1 {
+        margin: 0;
+        color: #ffffff;
+        font-family: $font-display;
+        font-size: clamp(7rem, 38vw, 15rem);
+        line-height: 1;
+    }
+
+    p {
+        margin-top: 1rem;
+    }
+}
+
+@media (max-width: 600px) {
+    article {
+        text-align: left;
+
+        header {
+            padding-bottom: 1em;
+        }
+
+        h1 {
+            font-size: 1.75rem;
+            line-height: 1.15;
+        }
+    }
+
+    .gallery {
+        grid-template-columns: 1fr;
+        gap: 1rem;
+    }
+
+    footer {
+        padding-top: 2.5em;
+    }
 }
