@@ -13,13 +13,14 @@
     <nav><a href="/">Wall Breakers</a></nav>
     {% block content %}{% endblock %}
     <footer>
-        <small>
-        {% if git_sha == "development" %}
-            Built at <time datetime="{{ build_ts.isoformat() }}">{{ build_ts.strftime('%H:%M UTC') }}</time>
-        {% else %}
-            Built on <a href="https://github.com/MathiasDPX/wall-breakers/commit/{{ git_sha }}" target="_blank">{{ git_sha[:7] }}</a>
-        {% endif %}
-        </small>
+        <div>
+            {% if git_sha == "development" %}
+                Built at <time datetime="{{ build_ts.isoformat() }}">{{ build_ts.strftime('%H:%M UTC') }}</time>
+            {% else %}
+                Built on <a href="https://github.com/MathiasDPX/wall-breakers/commit/{{ git_sha }}" target="_blank">{{ git_sha[:7] }}</a>
+            {% endif %}
+        </div>
+        <a href="https://github.com/MathiasdPX/wall-breakers" target="_blank">MathiasDPX/wall-breakers</a>
     </footer>
 </body>
 </html>

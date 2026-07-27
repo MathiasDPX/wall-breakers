@@ -59,6 +59,10 @@ article {
     p {
         line-height: 1.5em;
     }
+
+    img {
+        width: 100%;
+    }
 }
 
 h1,
@@ -199,11 +203,14 @@ p#feedback {
 footer {
     @include heading-font;
     display: flex;
+    flex-direction: column;
     align-items: center;
     justify-content: center;
     width: 100%;
     text-align: center;
+    font-size: 0.9em;
     color: #909090;
+    line-height: 1.25em;
 
     padding-bottom: 1em;
     margin-top: auto;
