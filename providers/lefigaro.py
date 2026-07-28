@@ -58,7 +58,7 @@ class FigaroArticle(Article):
         r.raise_for_status()
         data = r.json()["data"]["resource"]
 
-        content = ""
+        content = f"<audio controls src=\"{data['audio']['url']}\"></audio>"
         for block in data["body"]["structured"]:
             content += _build_block(block)
 
