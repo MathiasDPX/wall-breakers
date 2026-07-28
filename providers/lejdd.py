@@ -35,7 +35,7 @@ class JDDArticle(Article):
             container.decompose()
         
         content = soup.decode_contents()
-        content = add_figure(data["image"]["url"], f"{data['image']['title']} -- {data['image']['credits']}") + content
+        content = add_figure(data["image"]["url"], f"{data['image']['title']} &copy; {data['image']['credits']}") + content
 
         super().__init__(
             id=article_id,

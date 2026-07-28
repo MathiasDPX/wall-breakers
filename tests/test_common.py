@@ -1,8 +1,8 @@
-from base64 import b64decode, b64encode
+from base64 import b64encode
 
 import pytest
 
-from providers import *
+from providers.registry import *
 
 ARTICLES = [
     (

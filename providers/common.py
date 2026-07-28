@@ -10,7 +10,7 @@ class Article(ABC):
     content: list
     url: str
     image: str
-    
+
     def __post_init__(self):
         self.id = f"{self.PROVIDER}:{self.id}"
 
@@ -41,8 +41,13 @@ class Article(ABC):
         }
 
 
-def add_figure(url, caption="", title=""):    
+def add_figure(url, caption="", title=""):
+    if not title:
+        title = caption
+    if not caption:
+        caption = title
+
     caption = f"<figcaption>{caption}</figcaption>" if caption else ""
-    title = f" title=\"{title}\"" if title else ""
-    
+    title = f' title="{title}"' if title else ""
+
     return f'<figure><img src="{url}"{title}>{caption}</figure>'

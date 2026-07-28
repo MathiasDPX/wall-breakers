@@ -83,7 +83,7 @@ class LeTelegrammeArticle(Article):
                 continue
                 
             image = f"https://media.letelegramme.fr/api/v1/images/view/{addon['idImg']}/web_golden_xxl/{addon['idImg']}.1"
-            content = add_figure(image, f"{addon['title']} -- {addon['credits']}") + content
+            content = add_figure(image, f"{addon['title']} &copy; {addon['credits']}") + content
 
         super().__init__(
             id=article_id,

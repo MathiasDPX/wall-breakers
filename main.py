@@ -11,7 +11,7 @@ from werkzeug.exceptions import HTTPException
 from dotenv import load_dotenv
 
 from providers.nytimes import DataDomeCookieExpiredError
-from providers import *
+from providers.registry import *
 
 load_dotenv()
 
