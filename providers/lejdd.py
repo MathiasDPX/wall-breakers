@@ -23,10 +23,16 @@ class JDDArticle(Article):
         
         for a in soup.find_all("a", href=True):
             a["target"] = "_blank"
+            href = a["href"]
             
             # Decode article URLs
-            if "https://www.lejdd.fr/" in a["href"]:
-                a["href"] = f"/{self.SLUG}/"+JDDArticle.get_id_from_url(a["href"])
+            if "https://www.lejdd.fr/" in href:
+                a["href"] = f"/{self.SLUG}/"+JDDArticle.get_id_from_url(href)
+            elif href.startswith("/"):
+                a["href"] = f"/{self.SLUG}/"+JDDArticle.get_id_from_url("https://www.lejdd.fr"+href)
+        
+        for container in soup.select("div.readtoo"):
+            container.decompose()
         
         content = soup.decode_contents()
         content = add_figure(data["image"]["url"], f"{data['image']['title']} -- {data['image']['credits']}") + content
