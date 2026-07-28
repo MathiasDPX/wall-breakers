@@ -10,9 +10,10 @@
 
 - [Le Monde](https://www.lemonde.fr/)
 - [Le Parisien](https://www.leparisien.fr/)
-- [New York Times](https://www.nytimes.com/)
-- [Washington Post](https://www.washingtonpost.com)
+- [Le Figaro](https://www.lefigaro.fr/)
 - [Le Télégramme](https://www.letelegramme.fr/)
+- [Washington Post](https://www.washingtonpost.com)
+- [New York Times](https://www.nytimes.com/)
 - [Le JDD](https://www.lejdd.fr/)
 - [Les Echos](https://www.lesechos.fr/)
 - [The Athletic](https://www.nytimes.com/athletic/)

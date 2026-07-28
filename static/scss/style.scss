@@ -58,6 +58,10 @@ article {
 
     p {
         line-height: 1.5em;
+
+        & + img {
+            padding-bottom: 1em;
+        }
     }
 
     img {
@@ -136,7 +140,6 @@ table {
 
 figcaption {
     display: flex;
-    flex-direction: column;
     max-width: 97.5%;
     padding-left: calc((100% - 97.5%) / 2);
     color: $muted-color;

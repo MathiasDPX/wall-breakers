@@ -44,6 +44,11 @@ ARTICLES = [
         JDDArticle,
         "https://www.lejdd.fr/culture/expositions-la-france-au-fil-de-lart-179928",
         "179928"
+    ),
+    (
+        FigaroArticle,
+        "https://sante.lefigaro.fr/psychologie/complice-d-un-systeme-monstrueux-hans-asperger-le-psychiatre-qui-triait-les-enfants-pour-le-reich-20260728",
+        b64encode(b"https://sante.lefigaro.fr/psychologie/complice-d-un-systeme-monstrueux-hans-asperger-le-psychiatre-qui-triait-les-enfants-pour-le-reich-20260728").decode() # The Article ID is the whole URL due to how Figaro's GraphQL is made
     )
 ]
 
