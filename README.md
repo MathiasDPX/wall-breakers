@@ -13,6 +13,7 @@
 - [New York Times](https://www.nytimes.com/)
 - [Washington Post](https://www.washingtonpost.com)
 - [Le Télégramme](https://www.letelegramme.fr/)
+- [Le JDD](https://www.lejdd.fr/)
 - [Les Echos](https://www.lesechos.fr/)
 - [The Athletic](https://www.nytimes.com/athletic/)
 
@@ -53,4 +54,5 @@ pytest
 3. Add it to the list of supported medias in `templates/index.html`
 4. Write tests in `tests/test_common.py`
 5. Add it to the README
-6. Make a PR!
+6. Add it to `static/openapi.yml`
+7. Make a PR!

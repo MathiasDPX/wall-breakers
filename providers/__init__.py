@@ -6,6 +6,7 @@ from .letelegramme import LeTelegrammeArticle
 from .nytimes import NYTimesArticle
 from .theathletic import TheAthleticArticle
 from .washingtonpost import WashingtonPostArticle
+from .lejdd import JDDArticle
 
 PROVIDERS = [
     LeParisienArticle,
@@ -14,7 +15,8 @@ PROVIDERS = [
     LesEchosArticle,
     TheAthleticArticle,
     NYTimesArticle,
-    WashingtonPostArticle
+    WashingtonPostArticle,
+    JDDArticle,
 ]
 
 ARTICLES:dict[str, Article] = {provider.SLUG: provider for provider in PROVIDERS}

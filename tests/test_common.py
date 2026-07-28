@@ -39,6 +39,11 @@ ARTICLES = [
         WashingtonPostArticle,
         "https://www.washingtonpost.com/opinions/2026/07/26/christopher-nolan-odyssey-shows-cost-online-rage/",
         b64encode(b"https://www.washingtonpost.com/opinions/2026/07/26/christopher-nolan-odyssey-shows-cost-online-rage/").decode() # The Article ID is the whole URL due to how Rainbow API is made
+    ),
+    (
+        JDDArticle,
+        "https://www.lejdd.fr/culture/expositions-la-france-au-fil-de-lart-179928",
+        "179928"
     )
 ]
 
