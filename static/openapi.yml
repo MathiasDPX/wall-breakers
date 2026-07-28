@@ -53,7 +53,7 @@ paths:
           name: slug
           schema:
             type: string
-            enum: ["jdd", "lm", "lp", "le", "lt", "nyt", "ta", "wp", "lf"]
+            enum: ["jdd", "lm", "lp", "le", "lt", "nyt", "ta", "wp", "lf", "lib"]
           required: true
           description: |-
             Provider slug
@@ -68,6 +68,7 @@ paths:
               - `nyt`: New York Times
               - `wp`: The Washington Post
               - `lf`: Le Figaro
+              - `lib`: Libération
         - in: path
           name: id
           schema:

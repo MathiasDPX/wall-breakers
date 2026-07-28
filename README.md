@@ -12,6 +12,7 @@
 - [Le Parisien](https://www.leparisien.fr/)
 - [Le Figaro](https://www.lefigaro.fr/)
 - [Le Télégramme](https://www.letelegramme.fr/)
+- [Libération](https://www.liberation.fr/)
 - [Washington Post](https://www.washingtonpost.com)
 - [New York Times](https://www.nytimes.com/)
 - [Le JDD](https://www.lejdd.fr/)
