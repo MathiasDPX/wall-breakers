@@ -35,6 +35,8 @@ def _build_block(block):
         return add_figure(block['image']['url'], f"{block['caption']} -- {block['credit']}", f"{block['caption']} -- {block['credit']}")
     elif typename == "Quote":
         return f"<blockquote>{block['text']}<br><br>- {block['credit']}</blockquote>"
+    elif typename == "ParagraphWithPaywall":
+        return "<p>" + _sanitize_html(block["paywall"]["text"]) + "</p>"
     
     return ""
 
