@@ -2,7 +2,7 @@
 
 {% block head %}
 <meta property="og:type" content="website">
-<meta property="og:title" content="Wall Breaekers">
+<meta property="og:title" content="Wall Breakers">
 <meta property="og:description" content="Blow up paywalls with 💣">
 <meta name="twitter:card" content="summary_large_image">
 <meta property="og:image" content="{{ url_for('static', filename='images/thumbnail.jpg') }}">
@@ -10,53 +10,59 @@
 
 {% block content %}
 <div class="main">
-    <input id="searchInput" placeholder="Link to the original article" type="text" autofocus>
-    <p id="feedback" class="error"></p>
+    <div class="article-form">
+        <input id="searchInput" name="url" placeholder="Link to the original article" type="url" inputmode="url" autocomplete="url" required autofocus>
+        <p id="feedback" role="status" aria-live="polite"></p>
+    </form>
 
-    <p>Supported sources:</p>
-    <ul>
-        <li>Le Parisien (leparisien.fr)</li>
-        <li>Le Monde (lemonde.fr)</li>
-        <li><s>New York Times (nytimes.com)</s></li>
-        <li>Washington Post (washingtonpost.com)</li>
-        <li>Le Télégramme (letelegramme.fr)</li>
-        <li>Les Echos (lesechos.fr)</li>
-        <li>L'Équipe (lequipe.fr)</li>
-        <li>The Athletic (nytimes.com/athletic)</li>
-        <li>Le JDD (lejdd.fr)</li>
-        <li>Le Figaro (lefigaro.fr)</li>
-        <li>Libération (liberation.fr)</li>
-    </ul>
+    <section class="sources" aria-labelledby="sources-title">
+        <h1 id="sources-title">Supported sources</h1>
+        <ul>
+            <li>Le Parisien</li>
+            <li>Le Monde</li>
+            <li>Washington Post</li>
+            <li>Le Télégramme</li>
+            <li>Les Echos</li>
+            <li>L'Équipe</li>
+            <li>The Athletic</li>
+            <li>Le JDD</li>
+            <li>Le Figaro</li>
+            <li>Libération</li>
+            <li><s>New York Times</s></li>
+        </ul>
+    </section>
 </div>
 
 
 <script>
 const inputNode = document.getElementById("searchInput");
-const feedbackNode = document.getElementById("feedback")
+const feedbackNode = document.getElementById("feedback");
+
+
 
 inputNode.addEventListener("keyup", function (event) {
     if (event.key === "Enter") {
+        feedbackNode.className = "loading";
+        feedbackNode.innerText = "Looking for the article…";
+        
         const params = new URLSearchParams({
             'url': inputNode.value
         });
-        feedbackNode.classList.remove('success');
-        feedbackNode.classList.remove('error');
 
         fetch(`/api/getId?${params}`)
             .then(response => response.json())
             .then(data => {
                 if (data.success === false) {
-                    feedbackNode.classList.add('error');
-                    feedbackNode.innerText = `Failed to redirect: ${data.message}`;
+                    throw new Error(data.message || "This link is not supported.");
                 } else {
                     feedbackNode.classList.add('success');
                     feedbackNode.innerText = `Redirecting to ${data.provider}...`;
-                    window.location.replace(data.url)
+                    window.location.assign(data.url)
                 }
             })
             .catch(error => {
                 feedbackNode.classList.add('error');
-                feedbackNode.innerText = `Failed to redirect: ${error}`;
+                feedbackNode.innerText = `${error}`;
             })
     }
 });

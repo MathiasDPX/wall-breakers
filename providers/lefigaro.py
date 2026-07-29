@@ -32,7 +32,7 @@ def _build_block(block):
     elif typename == "Heading":
         return f"<h2>{block['text']}</h2>"
     elif typename == "Photo":
-        return add_figure(block['image']['url'], f"{block['caption']} -- {block['credit']}", f"{block['caption']} -- {block['credit']}")
+        return add_figure(block['image']['url'], f"{block['caption']} &copy; {block['credit']}")
     elif typename == "Quote":
         return f"<blockquote>{block['text']}<br><br>- {block['credit']}</blockquote>"
     elif typename == "ParagraphWithPaywall":
@@ -59,14 +59,16 @@ class FigaroArticle(Article):
         data = r.json()["data"]["resource"]
 
         content = f"<audio controls src=\"{data['audio']['url']}\"></audio>"
+
+        content += add_figure(
+            data["mainMedia"]["image"]["url"],
+            f"{data['mainMedia']['caption']} &copy; {data['mainMedia']['credit']}"
+        )
+
+        
         for block in data["body"]["structured"]:
             content += _build_block(block)
-
-        content = add_figure(
-            data["mainMedia"]["image"]["url"],
-            f"{data['mainMedia']['caption']} -- {data['mainMedia']['credit']}"
-        ) + content
-
+            
         super().__init__(
             id=article_id,
             headline=data["headline"],

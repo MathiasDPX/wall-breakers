@@ -11,8 +11,8 @@
 {% block content %}
 <article>
     <header>
-        <h1><a href="{{ article.url }}" target="_blank">{{ article.headline }}</a></h1>
-        <p>{{ article.subheadline|safe }}</p>
+        <h1><a href="{{ article.url }}" target="_blank" rel="noreferrer">{{ article.headline }}</a></h1>
+        <div class="subheadline">{{ article.subheadline|safe }}</div>
     </header>
 
     <div id="content">

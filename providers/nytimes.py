@@ -169,7 +169,7 @@ class NYTimesArticle(Article):
 
         report = list(set(report))
         image = data["promotionalImage"]["socialMediaRendition"]["rendition"]["url"]
-        caption = " -- ".join(filter(None, [((data["promotionalImage"]["image"].get("caption") or {}).get("text") or "").strip(), (data["promotionalImage"]["image"].get("credit") or "").strip()]))
+        caption = " &copy; ".join(filter(None, [((data["promotionalImage"]["image"].get("caption") or {}).get("text") or "").strip(), (data["promotionalImage"]["image"].get("credit") or "").strip()]))
         content = add_figure(image, caption) + content
         content = "<!--\n" + "\n".join(report) + "\n-->" + content
 

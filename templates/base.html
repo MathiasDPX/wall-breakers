@@ -3,6 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="theme-color" content="#0f0f0f">
     <title>Wall Breakers</title>
     <link href="{{ url_for('static', filename='css/style.css') }}" rel="stylesheet">
     <link rel="icon" href="{{ url_for('static', filename='images/favicon.svg') }}" sizes="any" type="image/svg+xml">
@@ -11,16 +12,16 @@
 </head>
 <body>
     <nav><a href="/">Wall Breakers</a></nav>
-    {% block content %}{% endblock %}
+    <main>{% block content %}{% endblock %}</main>
     <footer>
         <div>
             {% if git_sha == "development" %}
                 Built at <time datetime="{{ build_ts.isoformat() }}">{{ build_ts.strftime('%H:%M UTC') }}</time>
             {% else %}
-                Built on <a href="https://github.com/MathiasDPX/wall-breakers/commit/{{ git_sha }}" target="_blank">{{ git_sha[:7] }}</a>
+                Built on <a href="https://github.com/MathiasDPX/wall-breakers/commit/{{ git_sha }}" target="_blank" rel="noreferrer">{{ git_sha[:7] }}</a>
             {% endif %}
         </div>
-        <a href="https://github.com/MathiasdPX/wall-breakers" target="_blank">MathiasDPX/wall-breakers</a>
+        <a href="https://github.com/MathiasdPX/wall-breakers" target="_blank" rel="noreferrer">MathiasDPX/wall-breakers</a>
     </footer>
 </body>
 </html>

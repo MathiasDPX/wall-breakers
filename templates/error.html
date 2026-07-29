@@ -2,7 +2,7 @@
 
 {% block head %}
 <meta property="og:type" content="website">
-<meta property="og:title" content="Wall Breaekers">
+<meta property="og:title" content="Wall Breakers">
 <meta property="og:description" content="{{ code }} - {{ name }}">
 <meta name="twitter:card" content="summary_large_image">
 <meta property="og:image" content="{{ url_for('static', filename='images/thumbnail.jpg') }}">
@@ -11,6 +11,7 @@
 {% block content %}
 <div class="main error-page">
     <h1>{{ code }}</h1>
-    <p>{{ name }} - {{ description }}</p>
+    <p>{{ name }} — {{ description }}</p>
+    <a href="/">Back to home</a>
 </div>
 {% endblock %}
