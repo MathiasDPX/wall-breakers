@@ -1,0 +1,93 @@
+import re
+
+import requests
+from bs4 import BeautifulSoup
+
+from .common import Article, add_figure
+
+_URL_ID_PATTERN = re.compile(r"https:\/\/www\.lequipe\.fr\/.+\/(\d+)")
+
+
+def _build_block(block):
+    typename = block["__type"]
+    
+    if typename == "article_paragraph":
+        if block["layout"] == "embed":
+            return ""
+        
+        return "<p>" + _sanitize_html(block["content"]) + "</p>"
+    elif typename == "article_paragraph_media":
+        return add_figure(_build_media(block["media"], 1000), block["media"].get("legende"))
+    
+    return ""
+
+def _get_article_body(items):
+    for item in items:
+        if item["layout"] == "article_body":
+            return item
+        
+    return None
+
+def _sanitize_html(html):
+    soup = BeautifulSoup(html, features="html.parser")
+    
+    for a in soup.find_all("a", href=True):
+        a["target"] = "_blank"
+        
+        if a["href"].startswith("/"):
+            id = EquipeArticle.get_id_from_url(f"https://www.lequipe.fr{a['href']}")
+            if id is not None:
+                a["href"] = f"/{EquipeArticle.SLUG}/{id}"
+    
+    return soup.decode_contents()
+
+def _build_media(media, height):
+    image = media["url"].replace("{width}", str(int(height*media['ratio'])))
+    image = image.replace("{height}", str(height))
+    image = image.replace("{quality}", "80")
+    
+    return image
+
+class EquipeArticle(Article):
+    SLUG = "ekip"
+    PROVIDER = "L'Équipe"
+    
+    def __init__(self, article_id: str):        
+        r = requests.get(f"https://dwh.lequipe.fr/api/v9/efr/news/"+article_id)
+        
+        r.raise_for_status()
+        data = r.json()
+
+        content = ""
+        body = _get_article_body(data["items"])
+        
+        for block in body["objet"]["paragraphs"]:
+            content += _build_block(block)
+        
+        if data["metas"]["sharing_image"]["ratio"] != -1:
+            image = _build_media(data["metas"]["sharing_image"]["formats"]["landscape"], 1000)
+            content = add_figure(image, data["metas"]["sharing_image"].get("legende")) + content
+        else:
+            image = None
+
+        super().__init__(
+            id=article_id,
+            headline=data["metas"]["title"],
+            subheadline=data["metas"]["description"],
+            content=content,
+            url=data["urls"]["web"],
+            image=image
+        )
+    
+    def get_id_from_url(url: str):
+        match = _URL_ID_PATTERN.search(url)
+        if match is None:
+            return None
+
+        return match.group(1)
+
+
+if __name__ == "__main__":
+    article = EquipeArticle.get_from_url("https://www.lequipe.fr/Football/Article/-il-montre-que-tout-le-monde-peut-reussir-dans-le-nord-de-marseille-la-castellane-est-fiere-de-zinedine-zidane-le-nouveau-selectionneur-des-bleus/1707695")
+
+    print(article)

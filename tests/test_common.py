@@ -54,6 +54,11 @@ ARTICLES = [
         LiberationArticle,
         "https://www.liberation.fr/sports/football/zidane-nouveau-selectionneur-de-lequipe-de-france-une-oeuvre-de-patience-et-un-effet-retard-20260728_XJNJUDMOGNHT3MBMVYYJU374XE/",
         "XJNJUDMOGNHT3MBMVYYJU374XE"
+    ),
+    (
+        EquipeArticle,
+        "https://www.lequipe.fr/Football/Article/-il-montre-que-tout-le-monde-peut-reussir-dans-le-nord-de-marseille-la-castellane-est-fiere-de-zinedine-zidane-le-nouveau-selectionneur-des-bleus/1707695",
+        "1707695"
     )
 ]
 

@@ -13,6 +13,7 @@
 - [Le Figaro](https://www.lefigaro.fr/)
 - [Le Télégramme](https://www.letelegramme.fr/)
 - [Libération](https://www.liberation.fr/)
+- [L'Équipe](https://www.lequipe.fr/)
 - [Washington Post](https://www.washingtonpost.com)
 - [New York Times](https://www.nytimes.com/)
 - [Le JDD](https://www.lejdd.fr/)
@@ -52,9 +53,9 @@ pytest
 ### Add a media
 
 1. Create a file in `providers/` named after your media (take examples on others medias)
-2. Add your media in `providers/__init__.py`
-3. Add it to the list of supported medias in `templates/index.html`
-4. Write tests in `tests/test_common.py`
+2. Add your media in `providers/registry.py`
+3. Write tests in `tests/test_common.py`
+4. Add it to the list of supported medias in `templates/index.html`
 5. Add it to the README
 6. Add it to `static/openapi.yml`
 7. Make a PR!
