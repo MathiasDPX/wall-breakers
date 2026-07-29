@@ -16,11 +16,7 @@ class LeParisienArticle(Article):
     PROVIDER = "Le Parisien"
 
     def __init__(self, article_id: str):
-        r = requests.get(
-            f"https://gateway-api.leparisien.fr/v1/contents/articles/{article_id}"
-        )
-        r.raise_for_status()
-        data = r.json()["story"]
+        data = LeParisienArticle.get_data(article_id)
         
         content = data["bodyContent"]
         
@@ -79,6 +75,12 @@ class LeParisienArticle(Article):
         
         return match.group(1)
         
+    def get_data(id):
+        r = requests.get(
+            f"https://gateway-api.leparisien.fr/v1/contents/articles/{id}"
+        )
+        r.raise_for_status()
+        return r.json()["story"]
 
 
 if __name__ == "__main__":

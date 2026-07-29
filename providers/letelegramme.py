@@ -15,12 +15,7 @@ class LeTelegrammeArticle(Article):
     PROVIDER = "Le Télégramme"
     
     def __init__(self, article_id: str):
-        r = requests.get(
-            f"https://api.letelegramme.fr/editorial/www0f/elements/{article_id}?mode=full",
-            headers=_HEADERS,
-        )
-        r.raise_for_status()
-        data = r.json()
+        data = LeTelegrammeArticle.get_data(article_id)
 
         soup = BeautifulSoup("".join(data["content"]), features="html.parser")
         if soup.find_all("div", attrs={"class": "article_content"}):
@@ -100,6 +95,14 @@ class LeTelegrammeArticle(Article):
             return None
 
         return match.group(1)
+    
+    def get_data(id):
+        r = requests.get(
+            f"https://api.letelegramme.fr/editorial/www0f/elements/{id}?mode=full",
+            headers=_HEADERS,
+        )
+        r.raise_for_status()
+        return r.json()
 
 
 if __name__ == "__main__":

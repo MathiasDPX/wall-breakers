@@ -24,6 +24,8 @@ if SENTRY_DSN:
         ignore_errors=[KeyboardInterrupt],
         enable_logs=True,
     )
+    
+DEBUG = os.getenv("DEBUG", "false").lower() == "true"
 
 build_ts = datetime.now(timezone.utc)
 app = Flask(__name__)
@@ -34,7 +36,8 @@ sass.compile(dirname=("./static/scss/", "./static/css"))
 def inject_context():
     return {
         "build_ts": build_ts,
-        "git_sha": os.getenv("GITHUB_SHA", "development")
+        "git_sha": os.getenv("GITHUB_SHA", "development"),
+        "debug": DEBUG
     }
 
 @app.errorhandler(HTTPException)
@@ -112,10 +115,22 @@ def article_api_route(slug, id):
 def article_route(slug, id):
     article_cls = ARTICLES.get(slug)
     if article_cls is None:
-        abort(404)
+        return abort(404)
 
     article = article_cls(id)
     return render_template("article.html", article=article)
+
+@app.route("/<slug>/<id>/raw")
+def raw_article_route(slug, id):
+    if not DEBUG:
+        return abort(423)
+        
+    article_cls = ARTICLES.get(slug)
+    if article_cls is None:
+        return abort(404)
+
+    article = article_cls.get_data(id)
+    return article
 
 
 @app.route("/")

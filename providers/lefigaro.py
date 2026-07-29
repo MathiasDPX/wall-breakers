@@ -45,18 +45,7 @@ class FigaroArticle(Article):
     PROVIDER = "Le Figaro"
     
     def __init__(self, article_id: str):
-        article_path = base64.b64decode(article_id).decode()
-        
-        
-        variables = json.dumps({
-            "url": article_path
-        })
-        r = requests.get(
-            f"https://api-graphql.lefigaro.fr/graphql", params={"id": "FigaroCoreMobile_resourceByUrl_persistent_47eb9ddbda1ea9c3194af6af47800cd54a0475a6df1da0d8e5ef1770c2c240cc", "variables": variables}
-        )
-        
-        r.raise_for_status()
-        data = r.json()["data"]["resource"]
+        data = FigaroArticle.get_data(article_id)
 
         content = add_figure(
             data["mainMedia"]["image"]["url"],
@@ -84,6 +73,19 @@ class FigaroArticle(Article):
             return None
 
         return base64.b64encode(match.group(1).encode()).decode("ascii")
+    
+    def get_data(id):
+        article_path = base64.b64decode(id).decode()
+        
+        variables = json.dumps({
+            "url": article_path
+        })
+        r = requests.get(
+            f"https://api-graphql.lefigaro.fr/graphql", params={"id": "FigaroCoreMobile_resourceByUrl_persistent_47eb9ddbda1ea9c3194af6af47800cd54a0475a6df1da0d8e5ef1770c2c240cc", "variables": variables}
+        )
+        
+        r.raise_for_status()
+        return r.json()["data"]["resource"]
 
 
 if __name__ == "__main__":

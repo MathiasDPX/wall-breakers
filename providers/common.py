@@ -12,6 +12,7 @@ class Article(ABC):
     image: str
 
     def __post_init__(self):
+        self.raw_id = self.id
         self.id = f"{self.PROVIDER}:{self.id}"
 
     @classmethod
@@ -25,6 +26,11 @@ class Article(ABC):
     @abstractmethod
     def get_id_from_url(url: str):
         raise NotImplementedError
+
+    @abstractmethod
+    def get_data(id: str):
+        raise NotImplementedError
+
 
     def __repr__(self):
         return f"{self.__class__.__name__}(headline='{self.headline}')"

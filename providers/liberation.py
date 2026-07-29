@@ -69,15 +69,7 @@ class LiberationArticle(Article):
     PROVIDER = "Libération"
 
     def __init__(self, article_id: str):
-        params = {
-            "website": "liberation",
-            "_id": article_id,
-        }
-        r = requests.get(
-            "https://arc.api.liberation.fr/content/v4/", headers=_HEADERS, params=params
-        )
-        r.raise_for_status()
-        data = r.json()
+        data = LiberationArticle.get_data(article_id)
 
         content = ""
         for block in data["content_elements"]:
@@ -113,6 +105,17 @@ class LiberationArticle(Article):
             return None
 
         return match.group(1)
+    
+    def get_data(id):
+        params = {
+            "website": "liberation",
+            "_id": id,
+        }
+        r = requests.get(
+            "https://arc.api.liberation.fr/content/v4/", headers=_HEADERS, params=params
+        )
+        r.raise_for_status()
+        return r.json()
 
 
 if __name__ == "__main__":

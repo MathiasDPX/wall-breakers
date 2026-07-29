@@ -147,16 +147,7 @@ class NYTimesArticle(Article):
     PROVIDER = "New York Times"
 
     def __init__(self, article_id: str):
-        article_path = base64.b64decode(article_id).decode()
-        r = requests.get(
-            f"https://www.nytimes.com{article_path}", headers=_HEADERS, cookies=_COOKIES
-        )
-        if r.status_code == 403:
-            raise DataDomeCookieExpiredError(
-                "The New York Times DataDome cookie has expired"
-            )
-        r.raise_for_status()
-        data = NYTimesArticle._get_data(r.content.decode())["initialData"]["data"]["article"]
+        data = NYTimesArticle.get_data(article_id)
 
         report = []
         content = ""
@@ -195,6 +186,16 @@ class NYTimesArticle(Article):
             return None
 
         return demjson3.decode(match.group(1))
+    
+    def get_data(id):
+        article_path = base64.b64decode(id).decode()
+        r = requests.get(
+            f"https://www.nytimes.com{article_path}", headers=_HEADERS, cookies=_COOKIES
+        )
+        if r.status_code == 403:
+            raise DataDomeCookieExpiredError("The New York Times DataDome cookie has expired")
+        r.raise_for_status()
+        return NYTimesArticle._get_data(r.content.decode())["initialData"]["data"]["article"]
 
 
 if __name__ == "__main__":

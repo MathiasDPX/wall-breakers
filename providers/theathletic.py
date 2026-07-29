@@ -24,21 +24,7 @@ class TheAthleticArticle(Article):
     PROVIDER = "The Athletic"
     
     def __init__(self, article_id: str):
-        r = requests.get(
-            f"https://www.nytimes.com/athletic/{article_id}"
-        )
-        r.raise_for_status()
-        content = r.text
-        
-        match = _METADATA_PATTERN.search(content)
-        if match is None:
-            raise Exception("Article metadata not found")
-        metadata = json.loads(match.group(1))
-        
-        match = _DATA_PATTERN.search(content)
-        if match is None:
-            raise Exception("Article data not found")
-        data = json.loads(match.group(1))
+        metadata, data = TheAthleticArticle.get_data(article_id)
         
         soup = BeautifulSoup(data["props"]["pageProps"]["article"]["article_body_desktop"], features="html.parser")
         
@@ -85,6 +71,23 @@ class TheAthleticArticle(Article):
             return None
 
         return match.group(1)
+    
+    def get_data(id):
+        r = requests.get(f"https://www.nytimes.com/athletic/{id}")
+        r.raise_for_status()
+        content = r.text
+        
+        match = _METADATA_PATTERN.search(content)
+        if match is None:
+            raise Exception("Article metadata not found")
+        metadata = json.loads(match.group(1))
+        
+        match = _DATA_PATTERN.search(content)
+        if match is None:
+            raise Exception("Article data not found")
+        data = json.loads(match.group(1))
+        
+        return [metadata, data]
 
 
 if __name__ == "__main__":

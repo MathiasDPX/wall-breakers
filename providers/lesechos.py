@@ -15,15 +15,7 @@ class LesEchosArticle(Article):
     PROVIDER = "Les Echos"
     
     def __init__(self, article_id: str):
-        r = requests.get(
-            f"https://api.lesechos.fr/api/v2/posts/{article_id}",
-            headers={
-                "Host": "api.lesechos.fr",
-                "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:152.0) Gecko/20100101 Firefox/152.0"
-            }
-        )
-        r.raise_for_status()
-        data = r.json()
+        data = LesEchosArticle.get_data(article_id)
 
         soup = BeautifulSoup(data["description"], features="html.parser")
 
@@ -58,6 +50,17 @@ class LesEchosArticle(Article):
             return None
 
         return match.group(1)
+    
+    def get_data(id):
+        r = requests.get(
+            f"https://api.lesechos.fr/api/v2/posts/{id}",
+            headers={
+                "Host": "api.lesechos.fr",
+                "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:152.0) Gecko/20100101 Firefox/152.0"
+            }
+        )
+        r.raise_for_status()
+        return r.json()
 
 
 if __name__ == "__main__":

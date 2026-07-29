@@ -15,9 +15,7 @@ class JDDArticle(Article):
     PROVIDER = "Le Journal du Dimanche"
     
     def __init__(self, article_id: str):
-        r = requests.get(f"https://api-cms.lejdd.fr/lmn_api/v1/node/article/{article_id}")
-        r.raise_for_status()
-        data = r.json()
+        data = JDDArticle.get_data(article_id)
         
         soup = BeautifulSoup(data["body"], features="html.parser")
         
@@ -52,6 +50,12 @@ class JDDArticle(Article):
             return None
 
         return match.group(1)
+    
+    def get_data(id):
+        r = requests.get(f"https://api-cms.lejdd.fr/lmn_api/v1/node/article/{id}")
+        r.raise_for_status()
+        
+        return r.json()
 
 
 if __name__ == "__main__":

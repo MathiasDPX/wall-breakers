@@ -15,11 +15,7 @@ class LeMondeArticle(Article):
     PROVIDER = "Le Monde"
     
     def __init__(self, article_id: str):
-        r = requests.get(
-            f"https://apps.lemonde.fr/aec/v1/premium-ios-tablet/article/{article_id}"
-        )
-        r.raise_for_status()
-        data = r.json()
+        data = LeMondeArticle.get_data(article_id)
 
         soup = BeautifulSoup(data["template_vars"]["content"], features="html.parser")
         if soup.find_all("div", attrs={"class": "article_content"}):
@@ -93,6 +89,13 @@ class LeMondeArticle(Article):
             return None
 
         return match.group(1)
+    
+    def get_data(id):
+        r = requests.get(
+            f"https://apps.lemonde.fr/aec/v1/premium-ios-tablet/article/{id}"
+        )
+        r.raise_for_status()
+        return r.json()
 
 
 if __name__ == "__main__":

@@ -44,6 +44,7 @@ API Documentation is in [`static/openapi.yml`](./static/openapi.yml) or [`http:/
 ```bash
 # Run wall-breakers (venv recommended)
 pip install -r requirements.txt
+DEBUG="true"
 python main.py
 
 # Run tests

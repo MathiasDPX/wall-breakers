@@ -59,10 +59,7 @@ class EquipeArticle(Article):
     PROVIDER = "L'Équipe"
 
     def __init__(self, article_id: str):
-        r = requests.get(f"https://dwh.lequipe.fr/api/v9/efr/news/" + article_id)
-
-        r.raise_for_status()
-        data = r.json()
+        data = EquipeArticle.get_data(article_id)
 
         content = ""
         body = _get_item(data["items"], "article_body")
@@ -97,6 +94,12 @@ class EquipeArticle(Article):
             return None
 
         return match.group(1)
+    
+    def get_data(id):
+        r = requests.get(f"https://dwh.lequipe.fr/api/v9/efr/news/" + id)
+
+        r.raise_for_status()
+        return r.json()
 
 
 if __name__ == "__main__":

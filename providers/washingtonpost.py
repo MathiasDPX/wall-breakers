@@ -59,13 +59,7 @@ class WashingtonPostArticle(Article):
     
     def __init__(self, article_id: str):
         article_path = base64.b64decode(article_id).decode()
-        
-        r = requests.get(
-            f"https://rainbowapi-a.wpdigital.net/rainbow-data-service/rainbow/content-by-url.json", params={"url": article_path+"&platform=iphoneclassic&followLinks=false"}
-        )
-        
-        r.raise_for_status()
-        data = r.json()
+        data = WashingtonPostArticle.get_data(article_id)
 
         content = ""
         
@@ -93,6 +87,13 @@ class WashingtonPostArticle(Article):
             return None
 
         return base64.b64encode(match.group(1).encode()).decode("ascii")
+    
+    def get_data(id):
+        article_path = base64.b64decode(id).decode()
+        r = requests.get(f"https://rainbowapi-a.wpdigital.net/rainbow-data-service/rainbow/content-by-url.json", params={"url": article_path+"&platform=iphoneclassic&followLinks=false"})
+        
+        r.raise_for_status()
+        return r.json()
 
 
 if __name__ == "__main__":
