@@ -89,7 +89,7 @@ class LiberationArticle(Article):
         copyright = data["promo_items"]["basic"].get("copyright")
         copyright = " &copy; " + copyright if copyright is not None else ""
         content = (
-            add_figure(image, data["promo_items"]["basic"]["caption"] + copyright)
+            add_figure(image, data["promo_items"]["basic"].get("caption") + copyright)
             + content
         )
         

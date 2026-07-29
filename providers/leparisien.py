@@ -60,7 +60,7 @@ class LeParisienArticle(Article):
         content = soup.decode_contents()
 
         # Add image
-        content = add_figure(data["promo_items"]["basic"]["url"], data["promo_items"]["basic"]["caption"]) + content
+        content = add_figure(data["promo_items"]["basic"]["url"], data["promo_items"]["basic"].get("caption")) + content
 
 
         super().__init__(

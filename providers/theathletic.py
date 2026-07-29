@@ -68,7 +68,7 @@ class TheAthleticArticle(Article):
         
         image = metadata["image"][0]
         
-        content = add_figure(image["url"], image["caption"]+" -- "+image['creditText']) + content
+        content = add_figure(image["url"], image["caption"]+" &copy; "+image['creditText']) + content
 
         super().__init__(
             id=article_id,
