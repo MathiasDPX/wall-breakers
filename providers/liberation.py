@@ -88,15 +88,15 @@ class LiberationArticle(Article):
 
         copyright = data["promo_items"]["basic"].get("copyright")
         copyright = " &copy; " + copyright if copyright is not None else ""
+        
+        audio = get_audio_url(url)
+        if audio.get("status") == "DONE":
+            content = f"<audio controls src=\"{audio['audio_url']}\"></audio>" + content
 
         content = (
             add_figure(image, data["promo_items"]["basic"].get("caption") + copyright)
             + content
         )
-
-        audio = get_audio_url(url)
-        if audio.get("status") == "DONE":
-            content = f"<audio controls src=\"{audio['audio_url']}\"></audio>" + content
 
         super().__init__(
             id=article_id,

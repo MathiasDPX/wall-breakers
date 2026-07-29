@@ -68,6 +68,13 @@ class WashingtonPostArticle(Article):
         data = r.json()
 
         content = ""
+        
+        # Invert the audio block with its next block (hopefully the article audio with the first figure)
+        for i, block in enumerate(data["items"][:-1]):
+            if block["type"] == "audio":
+                data["items"][i], data["items"][i + 1] = data["items"][i + 1], data["items"][i]
+                break
+        
         for block in data["items"]:
             content += _build_block(block)
 

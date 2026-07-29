@@ -58,12 +58,12 @@ class FigaroArticle(Article):
         r.raise_for_status()
         data = r.json()["data"]["resource"]
 
-        content = f"<audio controls src=\"{data['audio']['url']}\"></audio>"
-
-        content += add_figure(
+        content = add_figure(
             data["mainMedia"]["image"]["url"],
             f"{data['mainMedia']['caption']} &copy; {data['mainMedia']['credit']}"
         )
+        
+        content += f"<audio controls src=\"{data['audio']['url']}\"></audio>"
 
         
         for block in data["body"]["structured"]:
