@@ -59,6 +59,11 @@ ARTICLES = [
         EquipeArticle,
         "https://www.lequipe.fr/Football/Article/-il-montre-que-tout-le-monde-peut-reussir-dans-le-nord-de-marseille-la-castellane-est-fiere-de-zinedine-zidane-le-nouveau-selectionneur-des-bleus/1707695",
         "1707695"
+    ),
+    (
+        OuestFranceArticle,
+        "https://www.ouest-france.fr/societe/ruralites/tu-es-un-peu-le-maire-sans-lecharpe-les-secretaires-de-mairie-espece-en-voie-de-disparition-1b28e6b2-66d4-11f0-bb8e-c5b2af864a8a",
+        "1b28e6b2-66d4-11f0-bb8e-c5b2af864a8a"
     )
 ]
 

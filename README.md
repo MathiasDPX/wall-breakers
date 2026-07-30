@@ -18,6 +18,7 @@
 - [New York Times](https://www.nytimes.com/)
 - [Le JDD](https://www.lejdd.fr/)
 - [Les Echos](https://www.lesechos.fr/)
+- [Ouest-France](https://www.ouest-france.fr/)
 - [The Athletic](https://www.nytimes.com/athletic/)
 
 ## Deployment
@@ -55,7 +56,7 @@ pytest
 
 1. Create a file in `providers/` named after your media (take examples on others medias)
 2. Add your media in `providers/registry.py`
-3. Write tests in `tests/test_common.py`
+3. Write tests in `tests/`
 4. Add it to the list of supported medias in `templates/index.html`
 5. Add it to the README
 6. Add it to `static/openapi.yml`

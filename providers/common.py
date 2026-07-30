@@ -1,5 +1,6 @@
 from abc import ABC, abstractmethod
 from dataclasses import dataclass
+import requests
 
 
 @dataclass
@@ -46,6 +47,60 @@ class Article(ABC):
             "image": self.image,
         }
 
+
+class OAuthClient:
+    def __init__(self, refresh_token, client_id, token_url):
+        self.refresh_token = refresh_token
+        self.client_id = client_id
+        self.token_url = token_url
+        self.access_token = None
+        
+    def _headers(self, **headers):
+        return {
+            "Authorization": f"Bearer {self.access_token}",
+            **headers,
+        }
+        
+    def refresh(self):
+        r = requests.post(
+            self.token_url,
+            data={
+                "grant_type": "refresh_token",
+                "refresh_token": self.refresh_token,
+                "client_id": self.client_id,
+            },
+        )
+        r.raise_for_status()
+        
+        token = r.json()
+        self.access_token = token["access_token"]
+        
+        if "refresh_token" in token:
+            self.refresh_token = token["refresh_token"]
+            
+        return token
+    
+    def request(self, method: str, url: str, retry=True, **kwargs):
+        headers = kwargs.pop("headers", {})
+        response = requests.request(
+            method,
+            url,
+            headers=self._headers(**headers),
+            **kwargs,
+        )
+        
+        if response.status_code == 401 and retry:
+            self.refresh()
+            return self.request(method, url, retry=False, headers=headers, **kwargs)
+        
+        response.raise_for_status()
+        return response
+    
+    def get(self, url, **kwargs):
+        return self.request("GET", url, **kwargs)
+    
+    def post(self, url, **kwargs):
+        return self.request("POST", url, **kwargs)
 
 def add_figure(url, caption="", title=""):
     if not title:

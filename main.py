@@ -11,6 +11,7 @@ from werkzeug.exceptions import HTTPException
 from dotenv import load_dotenv
 
 from providers.nytimes import DataDomeCookieExpiredError
+from providers.ouestfrance import OuestFranceDisabledException
 from providers.registry import *
 
 load_dotenv()
@@ -52,6 +53,10 @@ def handle_api_exception(e):
 @app.errorhandler(DataDomeCookieExpiredError)
 def handle_datadome_exception(e):
     return render_template("error.html", code=503, name="Service Unavailable", description="The service is temporarily unavailable due to an expired DataDome token."), 503
+
+@app.errorhandler(OuestFranceDisabledException)
+def handle_ouestfrance_exception(e):
+    return render_template("error.html", code=501, name="Not Implemented", description="Ouest-France is disabled because the <code>OUESTFRANCE_REFRESH_TOKEN</code> environment variable is not set."), 501
 
 
 @app.route("/favicon.ico")

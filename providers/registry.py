@@ -10,6 +10,7 @@ from .lejdd import JDDArticle
 from .lefigaro import FigaroArticle
 from .liberation import LiberationArticle
 from .lequipe import EquipeArticle
+from .ouestfrance import OuestFranceArticle
 
 PROVIDERS = [
     LeParisienArticle,
@@ -23,6 +24,7 @@ PROVIDERS = [
     FigaroArticle,
     LiberationArticle,
     EquipeArticle,
+    OuestFranceArticle,
 ]
 
 ARTICLES:dict[str, Article] = {provider.SLUG: provider for provider in PROVIDERS}

@@ -11,6 +11,6 @@
 {% block content %}
 <div class="main error-page">
     <h1>{{ code }}</h1>
-    <p>{{ name }} - {{ description }}</p>
+    <p>{{ name }} - {{ description|safe }}</p>
 </div>
 {% endblock %}
