@@ -27,6 +27,7 @@ if SENTRY_DSN:
     )
     
 DEBUG = os.getenv("DEBUG", "false").lower() == "true"
+OUESTFRANCE_ENABLED = os.getenv("OUESTFRANCE_REFRESH_TOKEN", None) != None
 
 build_ts = datetime.now(timezone.utc)
 app = Flask(__name__)
@@ -38,7 +39,8 @@ def inject_context():
     return {
         "build_ts": build_ts,
         "git_sha": os.getenv("GITHUB_SHA", "development"),
-        "debug": DEBUG
+        "debug": DEBUG,
+        "is_ouestfrance_enabled": OUESTFRANCE_ENABLED
     }
 
 @app.errorhandler(HTTPException)

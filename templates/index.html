@@ -28,7 +28,11 @@
             <li>Le JDD</li>
             <li>Le Figaro</li>
             <li>Libération</li>
+            {% if is_ouestfrance_enabled %}
             <li>Ouest-France</li>
+            {% else %}
+            <li><s>Ouest-France</s></li>
+            {% endif %}
             <li><s>New York Times</s></li>
         </ul>
     </section>
