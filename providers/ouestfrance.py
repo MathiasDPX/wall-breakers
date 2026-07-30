@@ -17,6 +17,7 @@ if REFRESH_TOKEN:
         "platform-app-mobile-of-android",
         "https://auth.ouest-france.fr/auth/realms/sipa/protocol/openid-connect/token"
     )
+    client.start_refresh_loop()
 else:
     client = None
 

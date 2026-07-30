@@ -5,3 +5,4 @@ __pycache__/
 
 test*.html
 static/css
+data/
