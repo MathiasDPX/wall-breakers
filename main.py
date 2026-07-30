@@ -5,16 +5,17 @@ import sass
 import sentry_sdk
 from flask import Flask, abort, render_template, request, send_file
 from flask_cors import CORS
+from dotenv import load_dotenv
 from requests.exceptions import HTTPError
 from sentry_sdk.integrations.flask import FlaskIntegration
 from werkzeug.exceptions import HTTPException
-from dotenv import load_dotenv
+
+load_dotenv()
 
 from providers.nytimes import DataDomeCookieExpiredError
 from providers.ouestfrance import OuestFranceDisabledException
 from providers.registry import *
-
-load_dotenv()
+from providers.common import get_article_from_url
 
 SENTRY_DSN = os.getenv("SENTRY_DSN")
 if SENTRY_DSN:
@@ -83,21 +84,16 @@ def redirection_api_route():
 
     provider: Article = None
     article_id = None
-    article_url = None
 
-    for cls in PROVIDERS:
-        article_id = cls.get_id_from_url(url)
-
-        if article_id is not None:
-            provider = cls
-            article_url = f"/{cls.SLUG}/{article_id}"
-            break
+    provider, article_id = get_article_from_url(url)
 
     if article_id is None:
         return {
             "success": False,
             "message": "No provider found available for this URL",
         }, 404
+    
+    article_url = f"/{provider.SLUG}/{article_id}"
 
     return {
         "success": True,

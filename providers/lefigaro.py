@@ -5,21 +5,14 @@ import json
 import requests
 from bs4 import BeautifulSoup
 
-from .common import Article, add_figure
+from .common import Article, add_figure, fix_links
 
 _URL_ID_PATTERN = re.compile(r"(https:\/\/.+\.lefigaro\.fr\/.+-\d{8})")
 
 
 def _sanitize_html(html):
     soup = BeautifulSoup(html, features="html.parser")
-    
-    for a in soup.find_all("a", href=True):
-        a["target"] = "_blank"
-        href = a["href"]
-        
-        id = FigaroArticle.get_id_from_url(href)
-        if id is not None:
-            a["href"] = f"/{FigaroArticle.SLUG}/{id}"
+    fix_links(soup)
     
     return soup.decode_contents()
 

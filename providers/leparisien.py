@@ -3,7 +3,7 @@ import re
 import requests
 from bs4 import BeautifulSoup
 
-from .common import Article, add_figure
+from .common import Article, add_figure, fix_links
 
 _URL_ID_PATTERN = re.compile(
     r".+leparisien\.fr\/.+-\d{2}-\d{2}-\d{4}-([A-Z0-9]{26})\.php"
@@ -44,14 +44,7 @@ class LeParisienArticle(Article):
                 if key in ("href", "src", "srcset", "fetchpriority", "alt", "aria-label",)
             }
             
-            for a in soup.find_all("a", href=True):
-                a["target"] = "_blank"
-            
-                # Decode article URLs
-                if "https://www.leparisien.fr/" in a["href"]:
-                    id = LeParisienArticle.get_id_from_url(a["href"])
-                    if id != None:
-                        a["href"] = f"/lp/{id}"
+            fix_links(soup)
             
         content = soup.decode_contents()
 

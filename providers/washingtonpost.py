@@ -5,7 +5,7 @@ import re
 from bs4 import BeautifulSoup
 import requests
 
-from .common import Article, add_figure
+from .common import Article, add_figure, fix_links
 
 _URL_ID_PATTERN = re.compile(r"(https:\/\/www\.washingtonpost\.com/.+)")
 
@@ -13,16 +13,10 @@ _URL_ID_PATTERN = re.compile(r"(https:\/\/www\.washingtonpost\.com/.+)")
 def _sanitize_html(html):
     soup = BeautifulSoup(html, features="html.parser")
     
-    for link in soup.find_all("a", href=True):
-        id = WashingtonPostArticle.get_id_from_url(link["href"])
-        link["target"] = "_blank"
-        
+    fix_links(soup)
+    for link in soup.find_all("a", href=True):        
         if link["href"].startswith("FTS_"):
             link.unwrap()
-            continue
-        
-        if id != None:
-            link["href"] = "/wp/" + id
             continue
         
         if link["href"].startswith("https://www.amazon."):

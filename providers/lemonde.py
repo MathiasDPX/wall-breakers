@@ -3,10 +3,13 @@ import re
 import requests
 from bs4 import BeautifulSoup
 
-from .common import Article
+from .common import Article, fix_links
 
 _URL_ID_PATTERN = re.compile(
     r".+lemonde\.fr\/.+_(\d+)_\d+\.html"
+)
+_URI_ID_PATTERN = re.compile(
+    r"lmfr:\/\/element\/article\/(\d+).*"
 )
 
 
@@ -57,13 +60,7 @@ class LeMondeArticle(Article):
                 tag.decompose()
 
         
-        for a in soup.find_all("a", href=True):
-            a["target"] = "_blank"
-            
-            # Decode article URLs
-            if "lmfr://element/article" in a["href"]:
-                a["href"] = a["href"].replace("lmfr://element/article/", "")
-                a["href"] = a["href"].replace("?source=article_inline_link", "")
+        fix_links(soup)
 
         image = "static/images/thumbnail.jpg"
         figure = soup.find('figure')
@@ -85,10 +82,14 @@ class LeMondeArticle(Article):
     
     def get_id_from_url(url: str):
         match = _URL_ID_PATTERN.search(url)
-        if match is None:
-            return None
-
-        return match.group(1)
+        if match is not None:
+            return match.group(1)
+        
+        match = _URI_ID_PATTERN.search(url)
+        if match is not None:
+            return match.group(1)
+        
+        return None
     
     def get_data(id):
         r = requests.get(

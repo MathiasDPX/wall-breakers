@@ -3,7 +3,7 @@ import re
 import requests
 from bs4 import BeautifulSoup
 
-from .common import Article, add_figure
+from .common import Article, add_figure, fix_link, fix_links
 
 _URL_ID_PATTERN = re.compile(r"https:\/\/www\.lequipe\.fr\/.+\/(\d+)")
 
@@ -35,13 +35,10 @@ def _get_item(items, layout):
 def _sanitize_html(html):
     soup = BeautifulSoup(html, features="html.parser")
 
+    fix_links(soup)
     for a in soup.find_all("a", href=True):
-        a["target"] = "_blank"
-
         if a["href"].startswith("/"):
-            id = EquipeArticle.get_id_from_url(f"https://www.lequipe.fr{a['href']}")
-            if id is not None:
-                a["href"] = f"/{EquipeArticle.SLUG}/{id}"
+            a["href"] = fix_link(f"https://www.lequipe.fr{a['href']}")
 
     return soup.decode_contents()
 

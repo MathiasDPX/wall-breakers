@@ -3,7 +3,7 @@ import re
 import requests
 from bs4 import BeautifulSoup
 
-from .common import Article, add_figure
+from .common import Article, add_figure, fix_links
 
 _URL_ID_PATTERN = re.compile(
     r"https:\/\/www\.liberation\.fr\/.+-\d{8}_([A-Z0-9]+)(?:.+)?"
@@ -36,12 +36,7 @@ def get_audio_url(article_url):
 def _sanitize_html(html):
     soup = BeautifulSoup(html, features="html.parser")
 
-    for a in soup.find_all("a", href=True):
-        a["target"] = "_blank"
-
-        id = LiberationArticle.get_id_from_url(a["href"])
-        if id is not None:
-            a["href"] = f"/{LiberationArticle.SLUG}/{id}"
+    fix_links(soup)
 
     return soup.decode_contents()
 

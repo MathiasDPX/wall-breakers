@@ -3,7 +3,7 @@ import re
 import requests
 from bs4 import BeautifulSoup
 
-from .common import Article, add_figure
+from .common import Article, add_figure, fix_links
 
 _URL_ID_PATTERN = re.compile(
     r"https:\/\/www\.lejdd\.fr\/.+-(\d+)"
@@ -19,15 +19,13 @@ class JDDArticle(Article):
         
         soup = BeautifulSoup(data["body"], features="html.parser")
         
+        
         for a in soup.find_all("a", href=True):
-            a["target"] = "_blank"
-            href = a["href"]
-            
             # Decode article URLs
-            if "https://www.lejdd.fr/" in href:
-                a["href"] = f"/{self.SLUG}/"+JDDArticle.get_id_from_url(href)
-            elif href.startswith("/"):
-                a["href"] = f"/{self.SLUG}/"+JDDArticle.get_id_from_url("https://www.lejdd.fr"+href)
+            if a["href"].startswith("/"):
+                a["href"] = "https://www.lejdd.fr"+a["href"]
+        
+        fix_links(soup)
         
         for container in soup.select("div.readtoo"):
             container.decompose()

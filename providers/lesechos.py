@@ -3,7 +3,7 @@ import re
 import requests
 from bs4 import BeautifulSoup
 
-from .common import Article, add_figure
+from .common import Article, add_figure, fix_links
 
 _URL_ID_PATTERN = re.compile(
     r".+lesechos.fr\/.+-(\d+)"
@@ -23,12 +23,7 @@ class LesEchosArticle(Article):
         for container in soup.select("div.encadre-lire-aussi"):
             container.decompose()
         
-        for a in soup.find_all("a", href=True):
-            a["target"] = "_blank"
-            
-            # Decode article URLs
-            if "https://www.lesechos.fr/" in a["href"]:
-                a["href"] = "/le/"+LesEchosArticle.get_id_from_url(a["href"])
+        fix_links(soup)
 
         image = f"https://media.lesechos.com/api/v1/images/view/{data['image']['id']}/976x549-webp/{data['image']['filename']}"
         

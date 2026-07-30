@@ -2,6 +2,7 @@ from base64 import b64encode
 
 import pytest
 
+from providers.common import get_article_from_url
 from providers.registry import *
 
 ARTICLES = [
@@ -75,3 +76,8 @@ def test_article_regex(cls, url, expected_id):
     for other in PROVIDERS:
         if other != cls:
             assert other.get_id_from_url(url) is None
+
+
+@pytest.mark.parametrize("cls,url,expected_id", ARTICLES)
+def test_get_article_from_url(cls, url, expected_id):
+    assert get_article_from_url(url) == (cls, expected_id)

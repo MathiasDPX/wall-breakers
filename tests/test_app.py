@@ -1,7 +1,14 @@
+import os
+
 import pytest
+from dotenv import load_dotenv
 
 from main import app
 from providers.registry import *
+
+load_dotenv()
+
+OUESTFRANCE_ENABLED = os.getenv("OUESTFRANCE_REFRESH_TOKEN", None) != None
 
 URLS = [
     "https://www.leparisien.fr/sports/football/coupe-du-monde/france-angleterre-la-composition-probable-des-bleus-avec-zaire-emery-cherki-olise-et-mbappe-18-07-2026-ZMLNSNIHBVGEPALOLJ3KGMBQAI.php",
@@ -36,4 +43,10 @@ def test_article_pages(client, url):
     # We doesn't care if it's the correct ID/provider as it's test by test_article_regex in test_common.py
     
     page_response = client.get(data['url'])
-    assert page_response.status_code == 200
+    
+    if data['slug'] == OuestFranceArticle.SLUG and not OUESTFRANCE_ENABLED:
+        # If Ouest-France is disabled and the URL is Ouest-France, expect a 501 Not Implemented
+        assert page_response.status_code == 501
+    else:
+        print(data['slug'], OUESTFRANCE_ENABLED)
+        assert page_response.status_code == 200

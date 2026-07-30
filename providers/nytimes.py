@@ -4,8 +4,9 @@ from html import escape
 
 import demjson3
 import requests
+from bs4 import BeautifulSoup
 
-from .common import Article, add_figure
+from .common import Article, add_figure, fix_links
 
 _URL_ID_PATTERN = re.compile(r"https:\/\/(?:www\.)?nytimes\.com(\/.+\.html)")
 
@@ -162,6 +163,11 @@ class NYTimesArticle(Article):
         image = data["promotionalImage"]["socialMediaRendition"]["rendition"]["url"]
         caption = " &copy; ".join(filter(None, [((data["promotionalImage"]["image"].get("caption") or {}).get("text") or "").strip(), (data["promotionalImage"]["image"].get("credit") or "").strip()]))
         content = add_figure(image, caption) + content
+
+        soup = BeautifulSoup(content, features="html.parser")
+        fix_links(soup)
+        content = soup.decode_contents()
+
         content = "<!--\n" + "\n".join(report) + "\n-->" + content
 
         super().__init__(

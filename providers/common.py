@@ -102,6 +102,7 @@ class OAuthClient:
     def post(self, url, **kwargs):
         return self.request("POST", url, **kwargs)
 
+
 def add_figure(url, caption="", title=""):
     if not title:
         title = caption
@@ -112,3 +113,27 @@ def add_figure(url, caption="", title=""):
     title = f' title="{title}"' if title else ""
 
     return f'<figure><img src="{url}"{title}>{caption}</figure>'
+
+def get_article_from_url(url: str):
+    from .registry import PROVIDERS
+
+    for provider in PROVIDERS:
+        id = provider.get_id_from_url(url)
+        if id is not None:
+            return provider, id
+
+    return None, None
+
+
+def fix_links(soup):
+    for a in soup.find_all("a", href=True):
+        a["target"] = "_blank"
+        a["href"] = fix_link(a["href"])
+        
+def fix_link(url):        
+    provider, id = get_article_from_url(url)
+    
+    if id is None:
+        return url
+    
+    return f"/{provider.SLUG}/{id}"

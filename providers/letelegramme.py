@@ -3,7 +3,7 @@ import re
 import requests
 from bs4 import BeautifulSoup
 
-from .common import Article, add_figure
+from .common import Article, add_figure, fix_links
 
 _URL_ID_PATTERN = re.compile(r".+letelegramme\.fr\/.+-(\d+)\.php")
 
@@ -61,14 +61,7 @@ class LeTelegrammeArticle(Article):
             ):
                 tag.decompose()
 
-        for a in soup.find_all("a", href=True):
-            a["target"] = "_blank"
-            
-            # Decode article URLs
-            if "https://www.letelegramme.fr/" in a["href"]:
-                id = LeTelegrammeArticle.get_id_from_url(a["href"])
-                if id != None:
-                    a["href"] = f"/lt/{id}"
+        fix_links(soup)
 
         content = soup.decode_contents()
 

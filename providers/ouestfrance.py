@@ -3,7 +3,7 @@ import os
 
 from bs4 import BeautifulSoup
 
-from .common import Article, add_figure, OAuthClient
+from .common import Article, add_figure, OAuthClient, fix_links
 
 _URL_ID_PATTERN = re.compile(
     r"https:\/\/www\.ouest-france\.fr\/.+-([a-z0-9]{8}-[a-z0-9]{4}-[a-z0-9]{4}-[a-z0-9]{4}-[a-z0-9]{12})"
@@ -23,12 +23,7 @@ else:
 def _sanitize_html(html):
     soup = BeautifulSoup(html, features="html.parser")
     
-    for a in soup.find_all("a", href=True):
-        a["target"] = "_blank"
-        
-        id = OuestFranceArticle.get_id_from_url(a["href"])
-        if "ouest-france.fr" in a["href"]:
-            a["href"] = f"/{OuestFranceArticle.SLUG}/{id}"
+    fix_links(soup)
     
     return soup.decode_contents()
 

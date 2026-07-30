@@ -12,7 +12,7 @@ from .liberation import LiberationArticle
 from .lequipe import EquipeArticle
 from .ouestfrance import OuestFranceArticle
 
-PROVIDERS = [
+PROVIDERS:list[Article] = [
     LeParisienArticle,
     LeMondeArticle,
     LeTelegrammeArticle,

@@ -4,7 +4,7 @@ import re
 import requests
 from bs4 import BeautifulSoup
 
-from .common import Article, add_figure
+from .common import Article, add_figure, fix_links
 
 _URL_ID_PATTERN = re.compile(
     r".+nytimes\.com\/athletic\/(\d+)(?:\/(?:.+)?)?"
@@ -41,14 +41,7 @@ class TheAthleticArticle(Article):
 
             caption.replace_with(BeautifulSoup(add_figure(url, text), "html.parser"))
         
-        for a in soup.find_all("a", href=True):
-            a["target"] = "_blank"
-            
-            # Decode article URLs
-            if "https://www.nytimes.com/athletic/" in a["href"]:
-                id = TheAthleticArticle.get_id_from_url(a["href"])
-                if id != None:
-                    a["href"] = f"/{self.SLUG}/{id}"
+        fix_links(soup)
         
         content = soup.decode_contents()
         
