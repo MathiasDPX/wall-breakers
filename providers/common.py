@@ -1,5 +1,6 @@
 from abc import ABC, abstractmethod
 from dataclasses import dataclass
+from hashlib import sha256
 import json
 import os
 from pathlib import Path
@@ -63,17 +64,24 @@ class OAuthClient:
             data_dir or os.getenv("DATA_DIR", "data")
         ) / f"oauth-{self.client_id}.json"
 
-        if self._token_path.is_file():
-            with self._token_path.open("r", encoding="utf-8") as f:
-                data = json.load(f)
-            self.access_token = data.get("access_token", None)
-            self.refresh_token = data.get("refresh_token", self.refresh_token)
-
         self._lock = threading.Lock()
+        self._refresh_token_hash = sha256(refresh_token.encode("utf-8")).hexdigest()
         self._refresh_thread = threading.Thread(
             target=self._auto_refresh_loop,
             daemon=True,
         )
+
+        if self._token_path.is_file():
+            with self._token_path.open("r", encoding="utf-8") as f:
+                data = json.load(f)
+
+            original_refresh_token_hash = data.get("original_refresh_token_hash", "")
+            self.access_token = data.get("access_token", None)
+            self.refresh_token = data.get("refresh_token", self.refresh_token)
+
+            if original_refresh_token_hash != self._refresh_token_hash:
+                self.refresh_token = refresh_token
+                self.refresh()
 
     def _auto_refresh_loop(self):
         # Preventive refresh every 24 hours in case nobody sent a request to Ouest-France
@@ -112,7 +120,9 @@ class OAuthClient:
             with self._token_path.open("w", encoding="utf-8") as f:
                 json.dump({
                     "refresh_token": self.refresh_token,
-                    "access_token": self.access_token
+                    "access_token": self.access_token,
+                    "original_refresh_token_hash": self._refresh_token_hash
+
                 }, f, ensure_ascii=False)
 
             return token
