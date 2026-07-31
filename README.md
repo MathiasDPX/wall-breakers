@@ -21,6 +21,15 @@
 - [Ouest-France](https://www.ouest-france.fr/)
 - [The Athletic](https://www.nytimes.com/athletic/)
 
+## Userscript
+F
+A userscript that displays a banner at the top of compatible websites, with a redirect to Wall Breakers, is available at [`https://news.mathiasd.fr/redirect.user.js`] or [`static/userscript.js`](./static/userscript.js). It is compatible with Tampermonkey and Greasemonkey
+
+
+## API
+
+API Documentation is in [`static/openapi.yml`](./static/openapi.yml) or [`https://news.mathiasd.fr/openapi.yml`](https://news.mathiasd.fr/openapi.yml)
+
 ## Deployment
 
 You can run Wall Breakers with Docker and docker-compose.yml
@@ -34,11 +43,7 @@ docker run -p 8000:8000 \
   ghcr.io/mathiasdpx/wall-breakers:latest
 ```
 
-It supports Sentry with the `SENTRY_ENVIRONMENT` and `SENTRY_DSN` environment variable but both are optional.
-
-## API
-
-API Documentation is in [`static/openapi.yml`](./static/openapi.yml) or [`http://localhost:5000/openapi.yml`](http://localhost:5000/openapi.yml)
+It supports Sentry with the `SENTRY_ENVIRONMENT` and `SENTRY_DSN` environments variables but both are optional.
 
 ## Development
 
@@ -57,7 +62,5 @@ pytest
 1. Create a file in `providers/` named after your media (take examples on others medias)
 2. Add your media in `providers/registry.py`
 3. Write tests in `tests/`
-4. Add it to the list of supported medias in `templates/index.html`
-5. Add it to the README
-6. Add it to `static/openapi.yml`
-7. Make a PR!
+4. Add it everywhere (`templates/index.html`, `README.md`, `static/openapi.yml`, `static/userscript.js`)
+5. Make a PR!

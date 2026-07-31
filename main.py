@@ -50,6 +50,9 @@ def inject_context():
 def favicon_route():
     return send_file(os.path.join("static", "images", "favicon.ico"))
 
+@app.route("/redirect.user.js")
+def userscript_route():
+    return send_file(os.path.join("static", "userscript.js"))
 
 @app.route("/openapi.yml")
 def openapi_route():
