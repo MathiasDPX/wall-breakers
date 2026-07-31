@@ -45,7 +45,7 @@ def _build_block(block):
 
 class OuestFranceArticle(Article):
     SLUG = "of"
-    PROVIDER = "OuestFrance"
+    PROVIDER = "Ouest-France"
 
     def __init__(self, article_id: str):
         if not REFRESH_TOKEN:
@@ -55,7 +55,7 @@ class OuestFranceArticle(Article):
 
         # paying: is the article for subscribers only
         # paid: does the user has a subscription
-        # paid is false is paying is, even if the user has an active subscription
+        # paid is false if paying is, even if the user has an active subscription
         if data["paywall"]["paid"] != data["paywall"]["paying"]:
             raise OuestFranceMissingSubscriptionException()
 

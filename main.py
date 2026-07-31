@@ -3,13 +3,15 @@ from datetime import datetime, timezone
 
 import sass
 import sentry_sdk
-from flask import Flask, abort, render_template, request, send_file
+from flask import Flask, abort, render_template, request, send_file, Response, g
 from flask_cors import CORS
 from dotenv import load_dotenv
 from sentry_sdk.integrations.flask import FlaskIntegration
+from prometheus_client import generate_latest
 
 load_dotenv()
 
+import metrics
 from errors import register_error_handlers
 from providers.registry import *
 from providers.common import get_article_from_url
@@ -102,8 +104,14 @@ def article_route(slug, id):
     if article_cls is None:
         return abort(404)
 
-    article = article_cls(id)
-    return render_template("article.html", article=article)
+    with metrics.RESPONSE_TIME.labels(provider=article_cls.PROVIDER).time():
+        article = article_cls(id)
+
+        metrics.PAGE_VIEWS.labels(
+            namespace=article_cls.PROVIDER
+        ).inc()
+
+        return render_template("article.html", article=article)
 
 @app.route("/<slug>/<id>/raw")
 def raw_article_route(slug, id):
@@ -117,6 +125,14 @@ def raw_article_route(slug, id):
     article = article_cls.get_data(id)
     return article
 
+
+@app.route("/metrics")
+def metrics_route():
+    response = Response(
+        generate_latest(),
+        mimetype="text/plain"
+    )
+    return response
 
 @app.route("/")
 def index_route():
