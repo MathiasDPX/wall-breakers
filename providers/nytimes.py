@@ -6,6 +6,7 @@ import demjson3
 import requests
 from bs4 import BeautifulSoup
 
+from .exceptions import *
 from .common import Article, add_figure, fix_links
 
 _URL_ID_PATTERN = re.compile(r"https:\/\/(?:www\.)?nytimes\.com(\/.+\.html)")
@@ -20,10 +21,6 @@ _HEADERS = {
 _COOKIES = {
     "datadome": "", # TODO: find a fix for datadome cookie
 }
-
-
-class DataDomeCookieExpiredError(RuntimeError):
-    pass
 
 
 def _build_inline(inline):

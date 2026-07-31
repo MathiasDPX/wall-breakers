@@ -6,14 +6,11 @@ import sentry_sdk
 from flask import Flask, abort, render_template, request, send_file
 from flask_cors import CORS
 from dotenv import load_dotenv
-from requests.exceptions import HTTPError
 from sentry_sdk.integrations.flask import FlaskIntegration
-from werkzeug.exceptions import HTTPException
 
 load_dotenv()
 
-from providers.nytimes import DataDomeCookieExpiredError
-from providers.ouestfrance import OuestFranceDisabledException
+from errors import register_error_handlers
 from providers.registry import *
 from providers.common import get_article_from_url
 
@@ -33,7 +30,9 @@ OUESTFRANCE_ENABLED = os.getenv("OUESTFRANCE_REFRESH_TOKEN", None) != None
 build_ts = datetime.now(timezone.utc)
 app = Flask(__name__)
 CORS(app)
+register_error_handlers(app)
 sass.compile(dirname=("./static/scss/", "./static/css"))
+
 
 @app.context_processor
 def inject_context():
@@ -43,24 +42,7 @@ def inject_context():
         "debug": DEBUG,
         "is_ouestfrance_enabled": OUESTFRANCE_ENABLED
     }
-
-@app.errorhandler(HTTPException)
-def handle_exception(e):
-    return render_template("error.html", code=e.code, name=e.name, description=e.description), e.code
-
-@app.errorhandler(HTTPError)
-def handle_api_exception(e):
-    return {"success": False, "message": e.response.reason}, e.response.status_code
-
-
-@app.errorhandler(DataDomeCookieExpiredError)
-def handle_datadome_exception(e):
-    return render_template("error.html", code=503, name="Service Unavailable", description="The service is temporarily unavailable due to an expired DataDome token."), 503
-
-@app.errorhandler(OuestFranceDisabledException)
-def handle_ouestfrance_exception(e):
-    return render_template("error.html", code=501, name="Not Implemented", description="Ouest-France is disabled because the <code>OUESTFRANCE_REFRESH_TOKEN</code> environment variable is not set."), 501
-
+    
 
 @app.route("/favicon.ico")
 def favicon_route():

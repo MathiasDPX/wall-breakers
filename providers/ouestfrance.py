@@ -3,6 +3,7 @@ import os
 
 from bs4 import BeautifulSoup
 
+from .exceptions import *
 from .common import Article, add_figure, OAuthClient, fix_links
 
 _URL_ID_PATTERN = re.compile(
@@ -41,9 +42,6 @@ def _build_block(block):
         return f"<h{hlevel}>" + block["data"]["content"] + f"</h{hlevel}>"
     
     return ""
-    
-class OuestFranceDisabledException(RuntimeError):
-    pass
 
 class OuestFranceArticle(Article):
     SLUG = "of"
@@ -54,6 +52,12 @@ class OuestFranceArticle(Article):
             raise OuestFranceDisabledException()
         
         data = OuestFranceArticle.get_data(article_id)["data"]
+
+        # paying: is the article for subscribers only
+        # paid: does the user has a subscription
+        # paid is false is paying is, even if the user has an active subscription
+        if data["paywall"]["paid"] != data["paywall"]["paying"]:
+            raise OuestFranceMissingSubscriptionException()
 
         image = data["photos"][0]
 
