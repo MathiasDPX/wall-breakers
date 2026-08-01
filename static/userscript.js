@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         Wall Breakers Redirect
 // @namespace    https://mathiasd.fr/
-// @version      1.0.1
+// @version      1.1.0
 // @description  Show a popup on article compatible with Wall Breakers
 // @author       MathiasDPX
 // @updateURL    https://news.mathiasd.fr/redirect.user.js
@@ -27,6 +27,7 @@ const BASE_URL = "https://news.mathiasd.fr";
 function add_banner(href) {
     var banner = document.createElement("div");
     var link = document.createElement("a");
+    var closeButton = document.createElement("button");
 
     Object.assign(banner.style, {
         position: "fixed",
@@ -55,10 +56,27 @@ function add_banner(href) {
         link.style.textDecoration = "none";
     });
 
+    closeButton.innerText = "✖";
+    Object.assign(closeButton.style, {
+        position: "fixed",
+        right: "1em",
+        border: "none",
+        background: "none",
+        color: "white",
+        cursor: "pointer"
+    });
+
+    closeButton.onclick = () => {
+        banner.remove();
+    };
+
     banner.appendChild(link);
+    banner.appendChild(closeButton)
     document.body.prepend(banner);
 
     requestAnimationFrame(() => {
+        if (!banner.isConnected) return;
+
         document.body.style.paddingTop = `${banner.offsetHeight}px`;
     })
 }
