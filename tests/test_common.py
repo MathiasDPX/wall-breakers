@@ -65,6 +65,11 @@ ARTICLES = [
         OuestFranceArticle,
         "https://www.ouest-france.fr/societe/ruralites/tu-es-un-peu-le-maire-sans-lecharpe-les-secretaires-de-mairie-espece-en-voie-de-disparition-1b28e6b2-66d4-11f0-bb8e-c5b2af864a8a",
         "1b28e6b2-66d4-11f0-bb8e-c5b2af864a8a"
+    ),
+    (
+        CourrierInternationalArticle,
+        "https://www.courrierinternational.com/article/sciences-les-animaux-revent-ils-aussi_198382_1",
+        "198382"
     )
 ]
 

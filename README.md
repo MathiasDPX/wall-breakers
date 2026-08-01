@@ -15,14 +15,15 @@
 - [Libération](https://www.liberation.fr/)
 - [L'Équipe](https://www.lequipe.fr/)
 - [Washington Post](https://www.washingtonpost.com)
-- [New York Times](https://www.nytimes.com/)
+<!-- - [New York Times](https://www.nytimes.com/)-->
 - [Le JDD](https://www.lejdd.fr/)
 - [Les Echos](https://www.lesechos.fr/)
 - [Ouest-France](https://www.ouest-france.fr/)
+- [Courrier International](https://www.courrierinternational.com/)
 - [The Athletic](https://www.nytimes.com/athletic/)
 
 ## Userscript
-F
+
 A userscript that displays a banner at the top of compatible websites, with a redirect to Wall Breakers, is available at [`https://news.mathiasd.fr/redirect.user.js`] or [`static/userscript.js`](./static/userscript.js). It is compatible with Tampermonkey and Greasemonkey
 
 

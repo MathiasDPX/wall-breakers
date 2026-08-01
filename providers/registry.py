@@ -11,6 +11,7 @@ from .lefigaro import FigaroArticle
 from .liberation import LiberationArticle
 from .lequipe import EquipeArticle
 from .ouestfrance import OuestFranceArticle
+from .courrierinternational import CourrierInternationalArticle
 
 PROVIDERS:list[Article] = [
     LeParisienArticle,
@@ -25,6 +26,7 @@ PROVIDERS:list[Article] = [
     LiberationArticle,
     EquipeArticle,
     OuestFranceArticle,
+    CourrierInternationalArticle,
 ]
 
 ARTICLES:dict[str, Article] = {provider.SLUG: provider for provider in PROVIDERS}

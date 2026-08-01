@@ -19,6 +19,7 @@
 // @match        https://*.liberation.fr/*
 // @match        https://*.lequipe.fr/*
 // @match        https://*.ouest-france.fr/*
+// @match        https://*.courrierinternational.com/*
 // ==/UserScript==
 
 const BASE_URL = "https://news.mathiasd.fr";

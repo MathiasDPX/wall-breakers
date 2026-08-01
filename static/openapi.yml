@@ -71,6 +71,7 @@ paths:
               - `lib`: Libération
               - `ekip`: L'Équipe
               - `of`: Ouest-France
+              - `ci`: Courrier International
         - in: path
           name: id
           schema:
