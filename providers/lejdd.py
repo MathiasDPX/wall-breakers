@@ -50,7 +50,9 @@ class JDDArticle(Article):
         return match.group(1)
     
     def get_data(id):
-        r = requests.get(f"https://api-cms.lejdd.fr/lmn_api/v1/node/article/{id}")
+        r = requests.get(f"https://api-cms.lejdd.fr/lmn_api/v1/node/article/{id}", headers={
+            "User-Agent": "Mozilla/5.0 (X11; Linux x86_64; rv:152.0) Gecko/20100101 Firefox/152.0"
+        })
         r.raise_for_status()
         
         return r.json()
