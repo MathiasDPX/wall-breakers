@@ -150,7 +150,7 @@ class OAuthClient:
         return self.request("POST", url, **kwargs)
 
 
-def add_figure(url, caption="", title=""):
+def add_figure(url:str, caption="", title=""):
     if not title:
         title = caption
     if not caption:
@@ -158,8 +158,14 @@ def add_figure(url, caption="", title=""):
 
     caption = f"<figcaption>{caption}</figcaption>" if caption else ""
     title = f' title="{title}"' if title else ""
+    
+    if not url.endswith(".mp4"):
+        media = f'<img src="{url}"{title}>'
+    else:
+        media = f'<video controls src="{url}"{title}>'
+        
 
-    return f'<figure><img src="{url}"{title}>{caption}</figure>'
+    return f'<figure>{media}{caption}</figure>'
 
 def get_article_from_url(url: str):
     from .registry import PROVIDERS

@@ -1,3 +1,4 @@
+from random import choice
 import base64
 import re
 
@@ -8,6 +9,33 @@ from bs4 import BeautifulSoup
 from .common import Article, add_figure, fix_links
 
 _URL_ID_PATTERN = re.compile(r"(https:\/\/.+\.lefigaro\.fr\/.+-\d{8})")
+
+
+def get_best_quality_stream(m3u8_content):
+    lines = m3u8_content.strip().splitlines()
+    streams = []
+
+    for i, line in enumerate(lines):
+        if line.startswith("#EXT-X-STREAM-INF"):
+            bandwidth_match = re.search(r"BANDWIDTH=(\d+)", line)
+            resolution_match = re.search(r"RESOLUTION=(\d+x\d+)", line)
+
+            bandwidth = int(bandwidth_match.group(1)) if bandwidth_match else 0
+            resolution = resolution_match.group(1) if resolution_match else "audio-only"
+
+            if i + 1 < len(lines):
+                url = lines[i + 1].strip()
+                streams.append({
+                    "bandwidth": bandwidth,
+                    "resolution": resolution,
+                    "url": url
+                })
+
+    if not streams:
+        return None
+
+    best = max(streams, key=lambda s: s["bandwidth"])
+    return best
 
 
 def _sanitize_html(html):
@@ -49,8 +77,11 @@ class FigaroArticle(Article):
             )
             thumbnail = data["mainMedia"]["image"]["url"]
         elif mainMediaType == "VideoFigaro":
+            videos = FigaroArticle.get_videos(data["mainMedia"]["id"])
+            mp4s = [video for video in videos if video.get("type") == "MP4"]
+            
             content = add_figure(
-                data["mainMedia"]["thumbnail"]["image"]["url"],
+                choice(mp4s).get("url", ""),
                 f"{data['mainMedia']['thumbnail']['caption']} &copy; {data['mainMedia']['thumbnail']['credit']}"
             )
             thumbnail = data["mainMedia"]["thumbnail"]["image"]["url"]
@@ -89,6 +120,16 @@ class FigaroArticle(Article):
         
         r.raise_for_status()
         return r.json()["data"]["resource"]
+
+    def get_videos(video_id):
+        variables = json.dumps({
+            "videoFigaroId": video_id
+        })
+        
+        r = requests.get("https://api-graphql.lefigaro.fr/graphql", params={"id": "FigaroCoreMobile_videoFigaroAssets_persistent_1a65935f94d8bb8968d84332ecec012542855262532dcc3436f73ec639669368", "variables": variables})
+        r.raise_for_status()
+        
+        return r.json()["data"]["videoFigaroAssets"]
 
 
 if __name__ == "__main__":
