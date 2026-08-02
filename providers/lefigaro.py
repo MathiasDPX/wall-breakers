@@ -40,11 +40,21 @@ class FigaroArticle(Article):
     def __init__(self, article_id: str):
         data = FigaroArticle.get_data(article_id)
 
-        content = add_figure(
-            data["mainMedia"]["image"]["url"],
-            f"{data['mainMedia']['caption']} &copy; {data['mainMedia']['credit']}"
-        )
-        
+        mainMediaType = data["mainMedia"]["__typename"]
+        thumbnail = "static/images/thumbnail.jpg"
+        if mainMediaType == "Photo":
+            content = add_figure(
+                data["mainMedia"]["image"]["url"],
+                f"{data['mainMedia']['caption']} &copy; {data['mainMedia']['credit']}"
+            )
+            thumbnail = data["mainMedia"]["image"]["url"]
+        elif mainMediaType == "VideoFigaro":
+            content = add_figure(
+                data["mainMedia"]["thumbnail"]["image"]["url"],
+                f"{data['mainMedia']['thumbnail']['caption']} &copy; {data['mainMedia']['thumbnail']['credit']}"
+            )
+            thumbnail = data["mainMedia"]["thumbnail"]["image"]["url"]
+            
         content += f"<audio controls src=\"{data['audio']['url']}\"></audio>"
 
         
@@ -57,7 +67,7 @@ class FigaroArticle(Article):
             subheadline=data["standfirst"],
             content=content,
             url=data["url"],
-            image=data["mainMedia"]["image"]["url"]
+            image=thumbnail
         )
     
     def get_id_from_url(url: str):
