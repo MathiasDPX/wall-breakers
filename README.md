@@ -24,7 +24,7 @@
 
 ## Userscript
 
-A userscript that displays a banner at the top of compatible websites, with a redirect to Wall Breakers, is available at [`https://news.mathiasd.fr/redirect.user.js`] or [`static/userscript.js`](./static/userscript.js). It is compatible with Tampermonkey and Greasemonkey
+A userscript that displays a banner at the top of compatible websites, with a redirect to Wall Breakers, is available at [`https://news.mathiasd.fr/redirect.user.js`](https://news.mathiasd.fr/redirect.user.js) or [`static/userscript.js`](./static/userscript.js). It is compatible with Tampermonkey and Greasemonkey
 
 
 ## API
@@ -33,11 +33,7 @@ API Documentation is in [`static/openapi.yml`](./static/openapi.yml) or [`https:
 
 ## Deployment
 
-You can run Wall Breakers with Docker and docker-compose.yml
-
-```bash
-docker run -p 8000:8000 ghcr.io/mathiasdpx/wall-breakers:latest
-```
+You can run Wall Breakers with Docker or docker-compose.yml
 
 ```bash
 docker run -p 8000:8000 \
