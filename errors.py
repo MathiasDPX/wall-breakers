@@ -44,3 +44,11 @@ def register_error_handlers(app):
     @app.errorhandler(OuestFranceMissingSubscriptionException)
     def handle_ouestfrance_missingsubscription_exception(e):
         return error_response(402, "Payment Required", "The Ouest-France account does not has any active subscription.")
+    
+    @app.errorhandler(MediapartDisabledException)
+    def handle_mediapart_disabled_exception(e):
+        return error_response(501, "Not Implemented", "Mediapart is disabled because the <code>PIERREVIVES_USERNAME</code> or  <code>PIERREVIVES_PASSWORD</code> environment variable is not set.")
+    
+    @app.errorhandler(MediapartInvalidLogin)
+    def handle_mediapart_invalidlogin_exception(e):
+        return error_response(402, "Payment Required", "The Mediapart account does not has any active subscription.")

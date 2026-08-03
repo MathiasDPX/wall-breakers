@@ -11,33 +11,6 @@ from .common import Article, add_figure, fix_links
 _URL_ID_PATTERN = re.compile(r"(https:\/\/.+\.lefigaro\.fr\/.+-\d{8})")
 
 
-def get_best_quality_stream(m3u8_content):
-    lines = m3u8_content.strip().splitlines()
-    streams = []
-
-    for i, line in enumerate(lines):
-        if line.startswith("#EXT-X-STREAM-INF"):
-            bandwidth_match = re.search(r"BANDWIDTH=(\d+)", line)
-            resolution_match = re.search(r"RESOLUTION=(\d+x\d+)", line)
-
-            bandwidth = int(bandwidth_match.group(1)) if bandwidth_match else 0
-            resolution = resolution_match.group(1) if resolution_match else "audio-only"
-
-            if i + 1 < len(lines):
-                url = lines[i + 1].strip()
-                streams.append({
-                    "bandwidth": bandwidth,
-                    "resolution": resolution,
-                    "url": url
-                })
-
-    if not streams:
-        return None
-
-    best = max(streams, key=lambda s: s["bandwidth"])
-    return best
-
-
 def _sanitize_html(html):
     soup = BeautifulSoup(html, features="html.parser")
     fix_links(soup)

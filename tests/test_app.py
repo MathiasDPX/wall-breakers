@@ -9,6 +9,7 @@ from providers.registry import *
 load_dotenv()
 
 OUESTFRANCE_ENABLED = os.getenv("OUESTFRANCE_REFRESH_TOKEN", None) != None
+MEDIAPART_ENABLED = os.getenv("PIERREVIVES_USERNAME") is not None and os.getenv("PIERREVIVES_PASSWORD") is not None
 
 URLS = [
     "https://www.leparisien.fr/sports/football/coupe-du-monde/france-angleterre-la-composition-probable-des-bleus-avec-zaire-emery-cherki-olise-et-mbappe-18-07-2026-ZMLNSNIHBVGEPALOLJ3KGMBQAI.php",
@@ -24,6 +25,7 @@ URLS = [
     "https://www.lequipe.fr/Football/Article/-il-montre-que-tout-le-monde-peut-reussir-dans-le-nord-de-marseille-la-castellane-est-fiere-de-zinedine-zidane-le-nouveau-selectionneur-des-bleus/1707695",
     "https://www.ouest-france.fr/societe/ruralites/tu-es-un-peu-le-maire-sans-lecharpe-les-secretaires-de-mairie-espece-en-voie-de-disparition-1b28e6b2-66d4-11f0-bb8e-c5b2af864a8a",
     "https://www.courrierinternational.com/article/sciences-les-animaux-revent-ils-aussi_198382_1",
+    "https://www.mediapart.fr/journal/international/020826/les-jours-comptes-de-gianni-infantino-la-tete-du-football-mondial",
 ]
 
 
@@ -47,6 +49,9 @@ def test_article_pages(client, url):
     
     if data['slug'] == OuestFranceArticle.SLUG and not OUESTFRANCE_ENABLED:
         # If Ouest-France is disabled and the URL is Ouest-France, expect a 501 Not Implemented
+        assert page_response.status_code == 501
+    elif data['slug'] == MediapartArticle.SLUG and not MEDIAPART_ENABLED:
+        # If Mediapart is disabled and the URL is Mediapart, expect a 501 Not Implemented
         assert page_response.status_code == 501
     else:
         print(data['slug'], OUESTFRANCE_ENABLED)

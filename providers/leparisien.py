@@ -44,7 +44,7 @@ class LeParisienArticle(Article):
                 if key in ("href", "src", "srcset", "fetchpriority", "alt", "aria-label",)
             }
             
-            fix_links(soup)
+        fix_links(soup)
             
         content = soup.decode_contents()
 

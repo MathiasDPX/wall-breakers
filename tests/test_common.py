@@ -70,6 +70,11 @@ ARTICLES = [
         CourrierInternationalArticle,
         "https://www.courrierinternational.com/article/sciences-les-animaux-revent-ils-aussi_198382_1",
         "198382"
+    ),
+    (
+        MediapartArticle,
+        "https://www.mediapart.fr/journal/international/020826/les-jours-comptes-de-gianni-infantino-la-tete-du-football-mondial",
+        b64encode(b"https://www.mediapart.fr/journal/international/020826/les-jours-comptes-de-gianni-infantino-la-tete-du-football-mondial").decode()
     )
 ]
 

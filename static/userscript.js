@@ -20,6 +20,7 @@
 // @match        https://*.lequipe.fr/*
 // @match        https://*.ouest-france.fr/*
 // @match        https://*.courrierinternational.com/*
+// @match        https://*.mediapart.fr/*
 // ==/UserScript==
 
 const BASE_URL = "https://news.mathiasd.fr";

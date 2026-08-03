@@ -12,7 +12,11 @@ $sans: 'Inter', sans-serif;
 $serif: 'Newsreader', Georgia, serif;
 $article: Georgia, 'Times New Roman', serif;
 
-*, *::before, *::after { box-sizing: border-box; }
+*,
+*::before,
+*::after {
+    box-sizing: border-box;
+}
 
 body {
     display: flex;
@@ -24,7 +28,9 @@ body {
     color: $text;
 }
 
-a { color: $accent; }
+a {
+    color: $accent;
+}
 
 nav {
     margin-bottom: 48px;
@@ -33,10 +39,15 @@ nav {
     font: 600 clamp(2.4rem, 8vw, 3.2rem)/1 $serif;
     text-align: center;
 
-    a { color: $text; text-decoration: none; }
+    a {
+        color: $text;
+        text-decoration: none;
+    }
 }
 
-main { width: 100%; }
+main {
+    width: 100%;
+}
 
 .main {
     width: 100%;
@@ -58,8 +69,13 @@ main { width: 100%; }
         color: $text;
         font: 1rem $sans;
 
-        &::placeholder { color: #666; }
-        &:focus { border-color: $accent; }
+        &::placeholder {
+            color: #666;
+        }
+
+        &:focus {
+            border-color: $accent;
+        }
     }
 }
 
@@ -69,8 +85,13 @@ main { width: 100%; }
     color: $muted;
     font: .85rem/1.4 $sans;
 
-    &.error { color: $error; }
-    &.success { color: $success; }
+    &.error {
+        color: $error;
+    }
+
+    &.success {
+        color: $success;
+    }
 }
 
 .sources {
@@ -91,7 +112,9 @@ main { width: 100%; }
         font: .9rem/1.4 $sans;
     }
 
-    s { color: #666; }
+    s {
+        color: #666;
+    }
 }
 
 article {
@@ -112,13 +135,19 @@ article {
         font: 600 clamp(2rem, 5vw, 3rem)/1.1 $sans;
         letter-spacing: -.025em;
 
-        a { color: $text; text-decoration: none; }
+        a {
+            color: $text;
+            text-decoration: none;
+        }
     }
 
     .subheadline {
         color: $muted;
         font: 1.1rem/1.5 $sans;
-        p { margin: 0; }
+
+        p {
+            margin: 0;
+        }
     }
 
     #content {
@@ -128,12 +157,45 @@ article {
         line-height: 1.65;
     }
 
-    h2, h3 { font-family: $sans; }
-    img { display: block; width: 100%; height: auto; }
-    figure { margin: 0 0 1.5em; }
-    figcaption { margin-top: 6px; color: $muted; font: .75rem/1.4 $sans; }
-    iframe, video, audio { width: 100%; max-width: 100%; }
-    pre, table { display: block; max-width: 100%; overflow-x: auto; }
+    h2,
+    h3 {
+        font-family: $sans;
+    }
+
+    img {
+        display: block;
+        width: 100%;
+        height: auto;
+    }
+
+    figure {
+        margin: 0 0 1.5em;
+    }
+
+    figcaption {
+        margin-top: 6px;
+        color: $muted;
+        font: .75rem/1.4 $sans;
+    }
+
+    iframe,
+    video {
+        width: 100%;
+        max-width: 100%;
+        height: 320px
+    }
+
+    audio {
+        width: 100%;
+        max-width: 100%;
+    }
+
+    pre,
+    table {
+        display: block;
+        max-width: 100%;
+        overflow-x: auto;
+    }
 }
 
 .gallery {
@@ -152,8 +214,14 @@ article {
         font: 600 clamp(8rem, 35vw, 14rem)/.9 $serif;
     }
 
-    p { color: $muted; font: 1rem/1.5 $sans; }
-    a { font: .9rem $sans; }
+    p {
+        color: $muted;
+        font: 1rem/1.5 $sans;
+    }
+
+    a {
+        font: .9rem $sans;
+    }
 }
 
 footer {
@@ -166,14 +234,33 @@ footer {
     font: .8rem/1.5 $sans;
     text-align: center;
 
-    a { text-decoration: none; }
+    a {
+        text-decoration: none;
+    }
 }
 
 @media (max-width: 600px) {
-    body { padding-inline: 14px; }
-    nav { margin-bottom: 36px; }
-    .sources ul { grid-template-columns: 1fr; }
-    article h1 { font-size: 1.8rem; }
-    article #content { font-size: 1.03rem; }
-    .gallery { grid-template-columns: 1fr; }
+    body {
+        padding-inline: 14px;
+    }
+
+    nav {
+        margin-bottom: 36px;
+    }
+
+    .sources ul {
+        grid-template-columns: 1fr;
+    }
+
+    article h1 {
+        font-size: 1.8rem;
+    }
+
+    article #content {
+        font-size: 1.03rem;
+    }
+
+    .gallery {
+        grid-template-columns: 1fr;
+    }
 }

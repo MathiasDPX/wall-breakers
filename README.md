@@ -13,14 +13,15 @@
 - [Le Figaro](https://www.lefigaro.fr/)
 - [Le Télégramme](https://www.letelegramme.fr/)
 - [Libération](https://www.liberation.fr/)
+- [Mediapart](https://www.mediapart.fr/)
 - [L'Équipe](https://www.lequipe.fr/)
 - [Washington Post](https://www.washingtonpost.com)
-<!-- - [New York Times](https://www.nytimes.com/)-->
 - [Le JDD](https://www.lejdd.fr/)
 - [Les Echos](https://www.lesechos.fr/)
 - [Ouest-France](https://www.ouest-france.fr/)
 - [Courrier International](https://www.courrierinternational.com/)
 - [The Athletic](https://www.nytimes.com/athletic/)
+<!-- - [New York Times](https://www.nytimes.com/)-->
 
 ## Userscript
 

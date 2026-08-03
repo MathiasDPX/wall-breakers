@@ -1,3 +1,4 @@
+from .exceptions import MediapartInvalidLogin
 from abc import ABC, abstractmethod
 from dataclasses import dataclass
 from hashlib import sha256
@@ -7,6 +8,7 @@ from pathlib import Path
 import threading
 import requests
 import time
+import re
 
 
 @dataclass
@@ -149,6 +151,59 @@ class OAuthClient:
     def post(self, url, **kwargs):
         return self.request("POST", url, **kwargs)
 
+
+class CASClient:
+    _EXECUTION_VALUE_REGEX = re.compile(r'name="execution" value="([a-z0-9-]+_.+)"')
+    
+    def __init__(self, username, password):
+        self.username = username
+        self.password = password
+        self.expire_at = 0
+        
+        self._session = requests.Session()
+        
+    def request(self, method: str, url: str, **kwargs):
+        if time.time() > self.expire_at:
+            self.get_token()
+            
+        response = self._session.request(
+            method,
+            url,
+            **kwargs,
+        )
+        
+        response.raise_for_status()
+        return response
+    
+    def get(self, url, **kwargs):
+        return self.request("GET", url, **kwargs)
+        
+    def get_token(self):
+        # Get execution parameter
+        r = requests.get("https://fscas01rp.c3rb.org/md34/login?service=https%3A%2F%2Fwww.mediapart.fr%2F%3Fcasid%3Dmd34")
+        match = CASClient._EXECUTION_VALUE_REGEX.search(r.content.decode())
+        
+        if not match:
+            raise MediapartInvalidLogin
+    
+        execution_value = match.group(1)
+        
+        body = {
+            "username": self.username,
+            "password": self.password,
+            "_eventId": "submit",
+            "submit": "SE CONNECTER",
+            "execution": execution_value
+        }
+
+        r = self._session.post("https://fscas01rp.c3rb.org/md34/login?service=https%3A%2F%2Fwww.mediapart.fr%2F%3Fcasid%3Dmd34", data=body)
+        for c in self._session.cookies:
+            if c.name == "mdpt_iam_sess":
+                self.expire_at = c.expires
+                return
+            
+        raise MediapartInvalidLogin
+        
 
 def add_figure(url:str, caption="", title=""):
     if not title:

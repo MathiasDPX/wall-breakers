@@ -29,6 +29,11 @@
             <li>Le Figaro</li>
             <li>Libération</li>
             <li>Courrier international</li> 
+            {% if is_mediapart_enabled %}
+            <li>Mediapart</li>
+            {% else %}
+            <li><s>Mediapart</s></li>
+            {% endif %}
             {% if is_ouestfrance_enabled %}
             <li>Ouest-France</li>
             {% else %}
