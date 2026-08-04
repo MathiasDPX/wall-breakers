@@ -6,13 +6,15 @@
 <meta property="og:description" content="{{ article.subheadline }}">
 <meta name="twitter:card" content="summary_large_image">
 <meta property="og:image" content="{{ article.image }}">
+<script src="{{ url_for('static', filename='js/lightbox.js') }}"></script>
+<link href="{{ url_for('static', filename='css/lightbox.css') }}" rel="stylesheet">
 {% endblock %}
 
 {% block content %}
 <article>
     <header>
         <h1><a href="{{ article.url }}" target="_blank" rel="noreferrer">{{ article.headline }}</a></h1>
-        <div class="subheadline">{{ article.subheadline|safe }}{% if debug %}<a target="_blank" href="./{{ article.raw_id }}/raw" style="text-decoration:none;color:"> ↗</a>{% endif %}</div>
+        <div class="subheadline">{{ article.subheadline|safe }}{% if debug %}<a target="_blank" href="./{{ article.raw_id }}/raw" style="text-decoration:none;"> ↗</a>{% endif %}</div>
     </header>
 
     <div id="content">
