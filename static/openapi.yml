@@ -53,7 +53,7 @@ paths:
           name: slug
           schema:
             type: string
-            enum: ["jdd", "lm", "lp", "le", "lt", "nyt", "ta", "wp", "lf", "lib", "ekip", "of", "ci", "mp"]
+            enum: ["jdd", "lm", "lp", "le", "lt", "nyt", "ta", "wp", "lf", "lib", "ekip", "of", "ci", "mp", "af"]
           required: true
           description: |-
             Provider slug
@@ -73,6 +73,7 @@ paths:
               - `of`: Ouest-France
               - `ci`: Courrier International
               - `mp`: Mediapart
+              - `af`: Actu.fr
         - in: path
           name: id
           schema:

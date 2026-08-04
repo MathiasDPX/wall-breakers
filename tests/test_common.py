@@ -75,6 +75,11 @@ ARTICLES = [
         MediapartArticle,
         "https://www.mediapart.fr/journal/international/020826/les-jours-comptes-de-gianni-infantino-la-tete-du-football-mondial",
         b64encode(b"https://www.mediapart.fr/journal/international/020826/les-jours-comptes-de-gianni-infantino-la-tete-du-football-mondial").decode()
+    ),
+    (
+        ActuArticle,
+        "https://actu.fr/monde/deux-morts-et-18-000-cas-ce-que-l-on-sait-de-cette-epidemie-de-diarrhees-explosives-qui-sevit-aux-etats-unis_64626347.html",
+        "64626347"
     )
 ]
 
