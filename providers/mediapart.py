@@ -14,17 +14,21 @@ _URL_ID_PATTERN = re.compile(
 PIERREVIVES_USERNAME = os.getenv("PIERREVIVES_USERNAME")
 PIERREVIVES_PASSWORD = os.getenv("PIERREVIVES_PASSWORD")
 
-client = CASClient(
-    PIERREVIVES_USERNAME,
-    PIERREVIVES_PASSWORD,
-)
+if PIERREVIVES_USERNAME and PIERREVIVES_PASSWORD:
+    client = CASClient(
+        PIERREVIVES_USERNAME,
+        PIERREVIVES_PASSWORD,
+    )
+    client.start_refresh_loop()
+else:
+    client = None
 
 class MediapartArticle(Article):
     SLUG = "mp"
     PROVIDER = "Mediapart"
     
     def __init__(self, article_id: str):
-        if PIERREVIVES_PASSWORD is None or PIERREVIVES_USERNAME is None:
+        if client == None:
             raise MediapartDisabledException()
         
         data = MediapartArticle.get_data(article_id)
@@ -41,14 +45,16 @@ class MediapartArticle(Article):
             'div.news__heading',
             'div.splitter',
             'time',
-            '.dropcap-wrapper > span[aria-hidden="true"]',
+            'span[aria-hidden="true"]',
             'svg.media-container__fallback-icon',
             'aside:not([class])',
             'div.news__signature',
             'p.left, p.right, p.center',
             'div.hidden',
             'aside.news__body__right',
-            'aside.read-also'
+            'aside.read-also',
+            'article.collection-card',
+            'div.news__body__center__bottom'
         ]
         for container in content_soup.select(", ".join(selectors)):
             for video in container.select("figure.media--video"):
