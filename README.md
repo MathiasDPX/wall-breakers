@@ -15,6 +15,7 @@
 - [Libération](https://www.liberation.fr/)
 - [Mediapart](https://www.mediapart.fr/)
 - [Actu.fr](https://actu.fr/)
+- [Charente Libre](https://www.charentelibre.fr/)
 - [L'Équipe](https://www.lequipe.fr/)
 - [Washington Post](https://www.washingtonpost.com)
 - [Le JDD](https://www.lejdd.fr/)

@@ -80,6 +80,11 @@ ARTICLES = [
         ActuArticle,
         "https://actu.fr/monde/deux-morts-et-18-000-cas-ce-que-l-on-sait-de-cette-epidemie-de-diarrhees-explosives-qui-sevit-aux-etats-unis_64626347.html",
         "64626347"
+    ),
+    (
+        CharenteLibreArticle,
+        "https://www.charentelibre.fr/charente/champagne-mouton/cette-annee-on-va-s-interesser-au-theme-du-jardin-le-7e-festival-du-film-franco-britannique-de-champagne-mouton-cultive-son-originalite-30126109.php",
+        "30126109"
     )
 ]
 
