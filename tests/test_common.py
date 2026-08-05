@@ -85,6 +85,11 @@ ARTICLES = [
         CharenteLibreArticle,
         "https://www.charentelibre.fr/charente/champagne-mouton/cette-annee-on-va-s-interesser-au-theme-du-jardin-le-7e-festival-du-film-franco-britannique-de-champagne-mouton-cultive-son-originalite-30126109.php",
         "30126109"
+    ),
+    (
+        ExpressArticle,
+        "https://www.lexpress.fr/monde/proche-moyen-orient/leurope-a-besoin-du-maroc-pour-controler-sa-frontiere-sud-lanalyse-de-nando-sigona-ZR2OSRZ5Q5F3ZCKA6MBBI3WZOY/",
+        "ZR2OSRZ5Q5F3ZCKA6MBBI3WZOY"
     )
 ]
 

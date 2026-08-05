@@ -17,6 +17,7 @@
 - [Actu.fr](https://actu.fr/)
 - [Charente Libre](https://www.charentelibre.fr/)
 - [L'Équipe](https://www.lequipe.fr/)
+- [L'Express](https://www.lexpress.fr/)
 - [Washington Post](https://www.washingtonpost.com)
 - [Le JDD](https://www.lejdd.fr/)
 - [Les Echos](https://www.lesechos.fr/)

@@ -23,6 +23,7 @@
 // @match        https://*.mediapart.fr/*
 // @match        https://actu.fr/*
 // @match        https://*.charentelibre.fr/*
+// @match        https://*.lexpress.fr/*
 // ==/UserScript==
 
 const BASE_URL = "https://news.mathiasd.fr";
