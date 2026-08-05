@@ -16,6 +16,7 @@
 - [Mediapart](https://www.mediapart.fr/)
 - [Actu.fr](https://actu.fr/)
 - [Charente Libre](https://www.charentelibre.fr/)
+- [Paris Match](https://www.parismatch.com/)
 - [L'Équipe](https://www.lequipe.fr/)
 - [L'Express](https://www.lexpress.fr/)
 - [Washington Post](https://www.washingtonpost.com)

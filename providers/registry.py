@@ -16,6 +16,7 @@ from .mediapart import MediapartArticle
 from .actufr import ActuArticle
 from .charentelibre import CharenteLibreArticle
 from .lexpress import ExpressArticle
+from .parismatch import ParisMatchArticle
 
 PROVIDERS:list[Article] = [
     LeParisienArticle,
@@ -35,6 +36,7 @@ PROVIDERS:list[Article] = [
     ActuArticle,
     CharenteLibreArticle,
     ExpressArticle,
+    ParisMatchArticle,
 ]
 
 ARTICLES:dict[str, Article] = {provider.SLUG: provider for provider in PROVIDERS}

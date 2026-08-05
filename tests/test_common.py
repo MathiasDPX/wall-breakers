@@ -90,6 +90,11 @@ ARTICLES = [
         ExpressArticle,
         "https://www.lexpress.fr/monde/proche-moyen-orient/leurope-a-besoin-du-maroc-pour-controler-sa-frontiere-sud-lanalyse-de-nando-sigona-ZR2OSRZ5Q5F3ZCKA6MBBI3WZOY/",
         "ZR2OSRZ5Q5F3ZCKA6MBBI3WZOY"
+    ),
+    (
+        ParisMatchArticle,
+        "https://www.parismatch.com/actu/politique/claude-chirac-on-a-tout-fait-des-cafes-aux-photocopies-273699",
+        "273699"
     )
 ]
 
