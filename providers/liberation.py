@@ -69,21 +69,24 @@ class LiberationArticle(Article):
         content = ""
         for block in data["content_elements"]:
             content += _build_block(block)
-
-        image = data["promo_items"]["basic"]["additional_properties"]["originalUrl"]
+            
         url = "https://www.liberation.fr" + data["canonical_url"]
-
-        copyright = data["promo_items"]["basic"].get("copyright")
-        copyright = " &copy; " + copyright if copyright is not None else ""
         
         audio = get_audio_url(url)
         if audio.get("status") == "DONE":
             content = f"<audio controls src=\"{audio['audio_url']}\"></audio>" + content
 
-        content = (
-            add_figure(image, data["promo_items"]["basic"].get("caption") + copyright)
-            + content
-        )
+            
+        image = "static/images/thumbnail.jpg"
+        if "promo_items" in data:
+            image = data["promo_items"]["basic"]["additional_properties"]["originalUrl"]
+            copyright = data["promo_items"]["basic"].get("copyright")
+            copyright = " &copy; " + copyright if copyright is not None else ""
+            
+            content = (
+                add_figure(image, data["promo_items"]["basic"].get("caption") + copyright)
+                + content
+            )
 
         super().__init__(
             id=article_id,
@@ -117,5 +120,8 @@ if __name__ == "__main__":
     article = LiberationArticle.get_from_url(
         "https://www.liberation.fr/sports/football/zidane-nouveau-selectionneur-de-lequipe-de-france-une-oeuvre-de-patience-et-un-effet-retard-20260728_XJNJUDMOGNHT3MBMVYYJU374XE/"
     )
+    
+    article = LiberationArticle("681570")
+    print(article)
 
     print(article)
