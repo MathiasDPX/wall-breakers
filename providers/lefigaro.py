@@ -58,8 +58,10 @@ class FigaroArticle(Article):
                 f"{data['mainMedia']['thumbnail']['caption']} &copy; {data['mainMedia']['thumbnail']['credit']}"
             )
             thumbnail = data["mainMedia"]["thumbnail"]["image"]["url"]
-            
-        content += f"<audio controls src=\"{data['audio']['url']}\"></audio>"
+        
+        if data["audio"] != None:
+            if "url" in data['audio']:
+                content += f"<audio controls src=\"{data['audio']['url']}\"></audio>"
 
         
         for block in data["body"]["structured"]:
