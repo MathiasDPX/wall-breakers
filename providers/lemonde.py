@@ -3,7 +3,7 @@ import re
 import requests
 from bs4 import BeautifulSoup
 
-from .common import Article, fix_links
+from .common import Article, fix_links, add_figure
 
 _URL_ID_PATTERN = re.compile(
     r".+lemonde\.fr\/.+_(\d+)_\d+\.html"
@@ -68,8 +68,24 @@ class LeMondeArticle(Article):
             img = figure.find('img')
             if img:
                 image = img.get('src')
-        
+                
+        if data["audio"]["enabled"]:
+            audio = soup.new_tag("audio", controls=True)
+            audio["src"] = data["audio"]["audio_track"]["media_url"]
+            if figure:
+                figure.insert_after(audio)
+            else:
+                soup.insert(0, audio)
+                
         content = soup.decode_contents()
+                
+        if "property=\"og:image\"" in data["template_vars"]["og_metas"] and not figure:
+            meta_soup = BeautifulSoup(data["template_vars"]["og_metas"], "html.parser")
+            tag = meta_soup.find("meta", property="og:image")
+            
+            if tag:
+                image = tag["content"]
+                content = add_figure(image) + content
 
         super().__init__(
             id=article_id,

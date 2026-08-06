@@ -58,7 +58,7 @@ class CharenteLibreArticle(Article):
             headline=data["title"],
             subheadline=data["head"],
             content=content,
-            url="https://www.charentelibre.fr/"+data["url"],
+            url="https://www.charentelibre.fr"+data["url"],
             image=image_url
         )
     
