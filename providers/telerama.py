@@ -1,3 +1,4 @@
+import base64
 import re
 from urllib.parse import unquote
 
@@ -7,38 +8,33 @@ from bs4 import BeautifulSoup
 from .common import Article, fix_links
 
 _URL_ID_PATTERN = re.compile(
-    r"https:\/\/www\.nouvelobs\.com\/.+\/(\d{8}.OBS\d+)\/.+\.html"
+    r"https:\/\/www\.telerama\.fr(.+)"
 )
 
 _URI_ID_PATTERN = re.compile(
-    r"nobsfr:\/\/article\/(\d{8}\.OBS\d+).*"
+    r"tlrm:\/\/element\?id=(.+).*"
 )
 
-class NouvelObsArticle(Article):
-    SLUG = "no"
-    PROVIDER = "Le Nouvel Obs"
+class TeleramaArticle(Article):
+    SLUG = "tr"
+    PROVIDER = "Telerama"
     
     def __init__(self, article_id: str):
-        data = NouvelObsArticle.get_data(article_id)
+        data = TeleramaArticle.get_data(article_id)
 
         soup = BeautifulSoup(data["templates"]["raw_content"]["content"], features="html.parser")
-        if soup.find_all("div", attrs={"class": "article_content"}):
-            soup = soup.find("div", attrs={"class": "article_content"})
+        subheadline = soup.select_one("p.article__chapeau").decode_contents()
+        if soup.find_all("article", attrs={"class": "article__page-content"}):
+            soup = soup.find("article", attrs={"class": "article__page-content"})
 
         illustration = soup.select_one("header.article-header figure img")
         image = illustration.get("src") if illustration else None
 
-        for container in soup.select(".btn, div.recirculating-series, header, aside, div.article__affiliated-content, div.toast-container, div:not([class]), div.d-flex, div.advertising, div.article__author"):
+        for container in soup.select("noscript, style, script, link, section.article__page-header, p.article__chapeau, ul.sheet__notation-container, section.article__details, section.hide, section.video, section.edito"):
             container.decompose()
             
-        for element in soup.select("p"):
-            if element.decode_contents().strip() == "Pour aller plus loin":
-                element.decompose()
-
-        # Obliterate document metadata and non-content elements
-        for tag in soup.select("head, script, style"):
-            if tag.parent is not None:
-                tag.decompose()
+        for link in soup.select("section.media__lighbox a"):
+            link.unwrap()
 
         for tag in soup.find_all():
             # Keep only allowed attributes
@@ -68,37 +64,39 @@ class NouvelObsArticle(Article):
 
         super().__init__(
             id=article_id,
-            headline=data["element"]["title"],
-            subheadline=data["element"]["subtitle"],
+            headline=data["template_vars"]["share_title"],
+            subheadline=subheadline,
             content=content,
-            url=data["sharing"]["configurations"]["default"]["url"],
+            url=data["template_vars"]["share_title"],
             image=image
         )
     
     def get_id_from_url(url: str):
         match = _URL_ID_PATTERN.search(url)
         if match is not None:
-            return match.group(1)
+            return base64.b64encode(match.group(1).encode()).decode("ascii")
         
         match = _URI_ID_PATTERN.search(url)
         if match is not None:
-            return match.group(1)
+            return base64.b64encode(unquote(match.group(1)).encode()).decode("ascii")
         
         return None
     
     def get_data(id):
+        article_path = base64.b64decode(id).decode()
         r = requests.get(
-            f"https://apps.nouvelobs.com/obs/v1/premium-android-phone/article/{id}"
+            f"https://apps.telerama.fr/tlr/v1/premium-android-phone/element",
+            params={"id": article_path}
         )
         r.raise_for_status()
         return r.json()
     
     def get_readable_data(id):
-        data = NouvelObsArticle.get_data(id)
+        data = TeleramaArticle.get_data(id)
         return data["templates"]["raw_content"]["content"]
 
 
 if __name__ == "__main__":
-    article = NouvelObsArticle.get_from_url("https://www.nouvelobs.com/monde/20260807.OBS117259/sur-les-traces-d-ulysse-de-troie-a-djerba-nous-reprenons-la-mer-l-ame-navree.html")
+    article = TeleramaArticle.get_from_url("https://www.telerama.fr/series-tv/alley-cats-sur-netflix-ricky-gervais-aux-manettes-d-une-serie-animee-feline-et-chat-nous-plait-bien_cri-7045364.php")
 
     print(article)

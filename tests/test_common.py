@@ -100,6 +100,11 @@ ARTICLES = [
         NouvelObsArticle,
         "https://www.nouvelobs.com/monde/20260807.OBS117259/sur-les-traces-d-ulysse-de-troie-a-djerba-nous-reprenons-la-mer-l-ame-navree.html",
         "20260807.OBS117259"
+    ),
+    (
+        TeleramaArticle,
+        "https://www.telerama.fr/series-tv/alley-cats-sur-netflix-ricky-gervais-aux-manettes-d-une-serie-animee-feline-et-chat-nous-plait-bien_cri-7045364.php",
+        b64encode(b"/series-tv/alley-cats-sur-netflix-ricky-gervais-aux-manettes-d-une-serie-animee-feline-et-chat-nous-plait-bien_cri-7045364.php").decode()
     )
 ]
 

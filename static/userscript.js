@@ -26,6 +26,7 @@
 // @match        https://*.lexpress.fr/*
 // @match        https://*.parismatch.com/*
 // @match        https://*.nouvelobs.com/*
+// @match        https://*.telerama.fr/*
 // ==/UserScript==
 
 const BASE_URL = "https://news.mathiasd.fr";
