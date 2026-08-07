@@ -95,6 +95,11 @@ ARTICLES = [
         ParisMatchArticle,
         "https://www.parismatch.com/actu/politique/claude-chirac-on-a-tout-fait-des-cafes-aux-photocopies-273699",
         "273699"
+    ),
+    (
+        NouvelObsArticle,
+        "https://www.nouvelobs.com/monde/20260807.OBS117259/sur-les-traces-d-ulysse-de-troie-a-djerba-nous-reprenons-la-mer-l-ame-navree.html",
+        "20260807.OBS117259"
     )
 ]
 

@@ -23,6 +23,7 @@
 - [Le JDD](https://www.lejdd.fr/)
 - [Les Echos](https://www.lesechos.fr/)
 - [Ouest-France](https://www.ouest-france.fr/)
+- [Le Nouvel Obs](https://www.nouvelobs.com/)
 - [Courrier International](https://www.courrierinternational.com/)
 - [The Athletic](https://www.nytimes.com/athletic/)
 <!-- - [New York Times](https://www.nytimes.com/)-->
