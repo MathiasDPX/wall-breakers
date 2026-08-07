@@ -150,6 +150,18 @@ article {
         }
     }
 
+    .debug-section {
+        font: 1.1rem/1.5 $sans;
+
+        a {
+            text-decoration: none;
+
+            &:hover {
+                text-decoration: underline;
+            }
+        }
+    }
+
     #content {
         min-width: 0;
         overflow-wrap: anywhere;

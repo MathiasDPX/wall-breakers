@@ -39,6 +39,9 @@ class Article(ABC):
     @abstractmethod
     def get_data(id: str):
         raise NotImplementedError
+    
+    def get_readable_data(id: str):
+        raise NotImplementedError
 
 
     def __repr__(self):

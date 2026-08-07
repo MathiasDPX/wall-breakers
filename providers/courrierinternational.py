@@ -122,6 +122,10 @@ class CourrierInternationalArticle(Article):
         )
         r.raise_for_status()
         return r.json()
+    
+    def get_readable_data(id):
+        data = CourrierInternationalArticle.get_data(id)
+        return data["templates"]["raw_content"]["content"]
 
 
 if __name__ == "__main__":

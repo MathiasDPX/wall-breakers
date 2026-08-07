@@ -1,4 +1,5 @@
 import os
+import inspect
 from datetime import datetime, timezone
 
 import sass
@@ -115,8 +116,9 @@ def article_route(slug, id):
         metrics.PAGE_VIEWS.labels(
             namespace=article_cls.PROVIDER
         ).inc()
-
-        return render_template("article.html", article=article)
+        
+        viewable = article_cls.get_readable_data != Article.get_readable_data
+        return render_template("article.html", article=article, viewable=viewable)
 
 @app.route("/<slug>/<id>/raw")
 def raw_article_route(slug, id):
@@ -130,6 +132,17 @@ def raw_article_route(slug, id):
     article = article_cls.get_data(id)
     return article
 
+@app.route("/<slug>/<id>/view")
+def viewable_article_route(slug, id):
+    if not DEBUG:
+        return abort(423)
+        
+    article_cls = ARTICLES.get(slug)
+    if article_cls is None:
+        return abort(404)
+
+    article = article_cls.get_readable_data(id)
+    return article
 
 @app.route("/metrics")
 def metrics_route():

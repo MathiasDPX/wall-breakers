@@ -113,6 +113,11 @@ class LeMondeArticle(Article):
         )
         r.raise_for_status()
         return r.json()
+    
+    def get_readable_data(id):
+        data = LeMondeArticle.get_data(id)
+        templates = data["template_vars"]
+        return templates["content"] + templates["stylesheets"] + templates["scripts_head"]
 
 
 if __name__ == "__main__":

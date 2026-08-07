@@ -2,6 +2,7 @@ import re
 import os
 import base64
 
+from flask import redirect
 from bs4 import BeautifulSoup
 
 from .exceptions import MediapartDisabledException
@@ -135,6 +136,9 @@ class MediapartArticle(Article):
         r.raise_for_status()
         
         return r.content
+    
+    def get_readable_data(id):
+        return redirect("./raw")
 
 
 if __name__ == "__main__":

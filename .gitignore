@@ -3,6 +3,5 @@ __pycache__/
 .venv/
 .env
 
-test*.html
 static/css
 data/

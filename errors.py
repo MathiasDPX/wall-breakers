@@ -52,3 +52,7 @@ def register_error_handlers(app):
     @app.errorhandler(MediapartInvalidLogin)
     def handle_mediapart_invalidlogin_exception(e):
         return error_response(402, "Payment Required", "The Mediapart account does not has any active subscription.")
+    
+    @app.errorhandler(NotImplementedError)
+    def handle_notimplemented_exception(e):
+        return error_response(501, "Not Implemented", "This page isn't implemented yet")
