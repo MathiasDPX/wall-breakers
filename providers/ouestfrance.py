@@ -15,7 +15,7 @@ REFRESH_TOKEN = os.getenv("OUESTFRANCE_REFRESH_TOKEN", None)
 if REFRESH_TOKEN:
     client = OAuthClient(
         REFRESH_TOKEN,
-        "platform-app-mobile-of-android",
+        os.getenv("OUESTFRANCE_AZP", "bms-sso-login"),
         "https://auth.ouest-france.fr/auth/realms/sipa/protocol/openid-connect/token"
     )
     client.start_refresh_loop()
