@@ -55,6 +55,12 @@ def _build_block(block):
     elif typename == "cf-scribd":
         attrs = block["attrs"]
         return f'<iframe src="{attrs["url"]}" height="{attrs["height"]}" width="{attrs["width"]}">'
+    elif typename == "bulletList":
+        items = "".join(
+            f"<li>{''.join(_build_block(subblock) for subblock in item.get('content', []))}</li>"
+            for item in block.get("content", [])
+        )
+        return f"<ul>{items}</ul>"
     
     return ""
 
