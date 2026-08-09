@@ -25,6 +25,7 @@
 - [Ouest-France](https://www.ouest-france.fr/)
 - [Le Nouvel Obs](https://www.nouvelobs.com/)
 - [Télérama](https://www.telerama.fr/)
+- [Le JDC](https://www.lejdc.fr/)
 - [Courrier International](https://www.courrierinternational.com/)
 - [The Athletic](https://www.nytimes.com/athletic/)
 <!-- - [New York Times](https://www.nytimes.com/)-->

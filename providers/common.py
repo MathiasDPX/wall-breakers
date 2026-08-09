@@ -263,3 +263,13 @@ def fix_link(url):
         return url
     
     return f"/{provider.SLUG}/{id}"
+
+def make_figcaption(caption, credit):
+    if caption is None and credit is None:
+        return ""
+    elif caption is None:
+        return "&copy; " + credit
+    elif credit is None:
+        return caption
+    else:
+        return caption + " &copy; " + credit

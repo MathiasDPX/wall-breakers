@@ -19,6 +19,7 @@ from .lexpress import ExpressArticle
 from .parismatch import ParisMatchArticle
 from .nouvelobs import NouvelObsArticle
 from .telerama import TeleramaArticle
+from .lejdc import JDCArticle
 
 PROVIDERS:list[Article] = [
     LeParisienArticle,
@@ -41,6 +42,7 @@ PROVIDERS:list[Article] = [
     ParisMatchArticle,
     NouvelObsArticle,
     TeleramaArticle,
+    JDCArticle,
 ]
 
 ARTICLES:dict[str, Article] = {provider.SLUG: provider for provider in PROVIDERS}
