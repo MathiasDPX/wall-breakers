@@ -33,7 +33,8 @@ def _build_block(block):
     typename = block["type"]
     
     if typename == "TEXT_PARAGRAPH":
-        if "<strong>Lire aussi" in block["data"]["content"]:
+        lowercase = block["data"]["content"].lower()
+        if "lire aussi" in lowercase and "<strong>" in lowercase:
             return ""
         
         return "<p>" + _sanitize_html(block["data"]["content"]) + "</p>"
