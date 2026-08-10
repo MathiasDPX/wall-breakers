@@ -276,3 +276,16 @@ footer {
         grid-template-columns: 1fr;
     }
 }
+
+@media print {
+    nav,
+    footer,
+    div.debug-section,
+    audio {
+        display: none !important;
+    }
+
+    article *:not(article div#content a) {
+        color: #000000 !important;
+    }
+}
