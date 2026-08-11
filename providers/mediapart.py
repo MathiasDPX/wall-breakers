@@ -56,7 +56,9 @@ class MediapartArticle(Article):
             'aside.news__body__right',
             'aside.read-also',
             'article.collection-card',
-            'div.news__body__center__bottom'
+            'div.news__body__center__bottom',
+            'a.news__prolonger',
+            'aside.box._source'
         ]
         for container in content_soup.select(", ".join(selectors)):
             for video in container.select("figure.media--video"):
