@@ -17,6 +17,7 @@ _URI_ID_PATTERN = re.compile(
 class NouvelObsArticle(Article):
     SLUG = "no"
     PROVIDER = "Le Nouvel Obs"
+    FAVICON = "https://www.nouvelobs.com/bucket/resources/web/img/icons/nouvelobs/a7889d3ceeca0d2a6307.png"
     
     def __init__(self, article_id: str):
         data = NouvelObsArticle.get_data(article_id)

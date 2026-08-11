@@ -13,7 +13,7 @@
 {% block content %}
 <article>
     <header>
-        <h1><a href="{{ article.url }}" target="_blank" rel="noreferrer">{{ article.headline }}</a></h1>
+        <h1><a href="{{ article.url }}" target="_blank" rel="noreferrer">{% if article.FAVICON %}<img class="provider-icon" src="{{ article.FAVICON }}" title="{{ article.PROVIDER }}">{% endif %}{{ article.headline }}</a></h1>
         <div class="subheadline">{{ article.subheadline|safe }}</div>
         {% if debug %}
         <div class="debug-section">

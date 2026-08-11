@@ -50,6 +50,7 @@ def _build_block(block):
 class WashingtonPostArticle(Article):
     SLUG = "wp"
     PROVIDER = "Washington Post"
+    FAVICON = "https://www.washingtonpost.com/favicon.svg"
     
     def __init__(self, article_id: str):
         article_path = base64.b64decode(article_id).decode()

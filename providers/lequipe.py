@@ -15,7 +15,7 @@ def _build_block(block):
         if block["layout"] != "text":
             return ""
 
-        return "<p>" + _sanitize_html(block["content"]) + "</p>"
+        return "<p>" + _sanitize_html(block.get("content", "")) + "</p>"
     elif typename == "article_paragraph_media":
         return add_figure(
             _build_media(block["media"], 1000), block["media"].get("legende")
@@ -54,6 +54,7 @@ def _build_media(media, height):
 class EquipeArticle(Article):
     SLUG = "ekip"
     PROVIDER = "L'Équipe"
+    FAVICON = "https://www.lequipe.fr/favicons/favicon.svg"
 
     def __init__(self, article_id: str):
         data = EquipeArticle.get_data(article_id)

@@ -13,6 +13,7 @@ _URL_ID_PATTERN = re.compile(
 class JDDArticle(Article):
     SLUG = "jdd"
     PROVIDER = "Le Journal du Dimanche"
+    FAVICON = "https://www.lejdd.fr/build/images/apple-touch-icon-120-precomposed.png"
     
     def __init__(self, article_id: str):
         data = JDDArticle.get_data(article_id)

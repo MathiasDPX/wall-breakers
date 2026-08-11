@@ -183,6 +183,14 @@ article {
         }
     }
 
+    .provider-icon {
+        height: 0.85em;
+        width: auto;
+        vertical-align: center;
+        display: inline-block;
+        margin-right: 0.15em;
+    }
+
     #content {
         min-width: 0;
         overflow-wrap: anywhere;

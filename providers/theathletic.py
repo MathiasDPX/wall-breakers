@@ -22,6 +22,7 @@ _DATA_PATTERN = re.compile(
 class TheAthleticArticle(Article):
     SLUG = "ta"
     PROVIDER = "The Athletic"
+    FAVICON = "https://www.nytimes.com/athletic/static/img/athletic-icon-144x144.png"
     
     def __init__(self, article_id: str):
         metadata, data = TheAthleticArticle.get_data(article_id)

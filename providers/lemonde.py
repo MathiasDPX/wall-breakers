@@ -16,6 +16,7 @@ _URI_ID_PATTERN = re.compile(
 class LeMondeArticle(Article):
     SLUG = "lm"
     PROVIDER = "Le Monde"
+    FAVICON = "https://www.lemonde.fr/bucket/resources/front/static/img/logos/pwa-180.png"
     
     def __init__(self, article_id: str):
         data = LeMondeArticle.get_data(article_id)

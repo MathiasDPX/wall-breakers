@@ -13,6 +13,7 @@ _URL_ID_PATTERN = re.compile(
 class ActuArticle(Article):
     SLUG = "af"
     PROVIDER = "Actu.fr"
+    FAVICON = "https://static.actu.fr/themes/actu_v2/dist/favicons/apple-touch-icon.png"
     
     def __init__(self, article_id: str):
         data = ActuArticle.get_data(article_id)

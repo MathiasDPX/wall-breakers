@@ -62,6 +62,7 @@ def _build_block(block):
 class LiberationArticle(Article):
     SLUG = "lib"
     PROVIDER = "Libération"
+    FAVICON = "https://www.liberation.fr/pf/resources/images/liberation/favicon.ico?d=249"
 
     def __init__(self, article_id: str):
         data = LiberationArticle.get_data(article_id)
@@ -72,9 +73,12 @@ class LiberationArticle(Article):
             
         url = "https://www.liberation.fr" + data["canonical_url"]
         
-        audio = get_audio_url(url)
-        if audio.get("status") == "DONE":
-            content = f"<audio controls src=\"{audio['audio_url']}\"></audio>" + content
+        try:
+            audio = get_audio_url(url)
+            if audio.get("status") == "DONE":
+                content = f"<audio controls src=\"{audio['audio_url']}\"></audio>" + content
+        except:
+            pass
 
             
         image = "static/images/thumbnail.jpg"

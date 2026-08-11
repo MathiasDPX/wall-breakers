@@ -31,6 +31,7 @@ def fix_cri_uri(uri: str):
 class CourrierInternationalArticle(Article):
     SLUG = "ci"
     PROVIDER = "Courrier International"
+    FAVICON = "https://www.courrierinternational.com/bucket/assets/64d83f984faf88a94dd821bcc4640b47bfab388b/img/logos/favicon.svg"
     
     def __init__(self, article_id: str):
         data = CourrierInternationalArticle.get_data(article_id)

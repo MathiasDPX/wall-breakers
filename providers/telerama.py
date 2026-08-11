@@ -18,6 +18,7 @@ _URI_ID_PATTERN = re.compile(
 class TeleramaArticle(Article):
     SLUG = "tr"
     PROVIDER = "Telerama"
+    FAVICON = "https://www.telerama.fr/dist/assets/img/logos/pwa-180.png"
     
     def __init__(self, article_id: str):
         data = TeleramaArticle.get_data(article_id)

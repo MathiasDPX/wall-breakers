@@ -68,6 +68,7 @@ def _build_block(block):
 class JDCArticle(Article):
     SLUG = "jdc"
     PROVIDER = "Le Journal du Centre"
+    FAVICON = "https://www.lejdc.fr/iv4/assets/favicon/favicon_JC/apple-touch-icon.png"
 
     def __init__(self, article_id: str):
         data = JDCArticle.get_data(article_id)

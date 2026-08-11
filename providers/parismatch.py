@@ -39,6 +39,7 @@ def _build_block(block):
 class ParisMatchArticle(Article):
     SLUG = "pm"
     PROVIDER = "Paris Match"
+    FAVICON = "https://www.parismatch.com/build/images/apple-touch-icon-114-precomposed.png"
 
     def __init__(self, article_id: str):
         data = ParisMatchArticle.get_data(article_id)

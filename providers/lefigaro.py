@@ -37,6 +37,7 @@ def _build_block(block):
 class FigaroArticle(Article):
     SLUG = "lf"
     PROVIDER = "Le Figaro"
+    FAVICON = "https://www.lefigaro.fr/apple-touch-icon.png"
     
     def __init__(self, article_id: str):
         data = FigaroArticle.get_data(article_id)

@@ -14,6 +14,7 @@ _URL_ID_PATTERN = re.compile(
 class LeParisienArticle(Article):
     SLUG = "lp"
     PROVIDER = "Le Parisien"
+    FAVICON = "https://play-lh.googleusercontent.com/wPtP28sF4PWzfC1_AbxNuykHRK179Z_ow05tGcJxJqyUWhVreosptmK9oxVGWF1lbIHmVAO0Cnhq3Y8Uuurlug=w240-h480-rw"
 
     def __init__(self, article_id: str):
         data = LeParisienArticle.get_data(article_id)

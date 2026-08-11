@@ -13,6 +13,7 @@ _HEADERS = {"x-tlg-api-key": "Tftd9qndckFJWEvuj5tprjcLtWeQpr1F"}
 class LeTelegrammeArticle(Article):
     SLUG = "lt"
     PROVIDER = "Le Télégramme"
+    FAVICON = "https://www.letelegramme.fr/apple-touch-icon.png?39cabe1fd9d9dbd0ebb82fc497f4728bad450ad4-1786351968"
     
     def __init__(self, article_id: str):
         data = LeTelegrammeArticle.get_data(article_id)

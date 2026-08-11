@@ -27,6 +27,7 @@ else:
 class MediapartArticle(Article):
     SLUG = "mp"
     PROVIDER = "Mediapart"
+    FAVICON = "https://www.mediapart.fr/icon-news.svg"
     
     def __init__(self, article_id: str):
         if client == None:

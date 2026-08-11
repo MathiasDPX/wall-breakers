@@ -14,6 +14,7 @@ _URL_ID_PATTERN = re.compile(
 class CharenteLibreArticle(Article):
     SLUG = "cl"
     PROVIDER = "Charente Libre"
+    FAVICON = "https://www.charentelibre.fr/cl/android-icon-192x192.png"
 
     def __init__(self, article_id: str):
         data = CharenteLibreArticle.get_data(article_id)

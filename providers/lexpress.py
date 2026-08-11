@@ -29,6 +29,7 @@ def _build_block(block):
 class ExpressArticle(Article):
     SLUG = "lx"
     PROVIDER = "L'Express"
+    FAVICON = "https://www.lexpress.fr/pf/resources/icons/fav/apple-touch-icon.png?d=865"
 
     def __init__(self, article_id: str):
         data = ExpressArticle.get_data(article_id)

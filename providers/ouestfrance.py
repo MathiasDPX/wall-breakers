@@ -47,6 +47,7 @@ def _build_block(block):
 class OuestFranceArticle(Article):
     SLUG = "of"
     PROVIDER = "Ouest-France"
+    FAVICON = "https://media.ouest-france.fr/v1/pictures/c1e53b40060544ad069e9bcb80c1695e-apple-touch-icon.png?client_id=cmsfront&sign=65ca41798b5fc22da12dea1b06dbd34f69c2ae1362fd347f463b9146393e92c0"
 
     def __init__(self, article_id: str):
         if not REFRESH_TOKEN:

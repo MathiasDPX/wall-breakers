@@ -1,6 +1,7 @@
 from base64 import b64encode
 
 import pytest
+import requests
 
 from providers.common import get_article_from_url
 from providers.registry import *
@@ -126,3 +127,14 @@ def test_article_regex(cls, url, expected_id):
 @pytest.mark.parametrize("cls,url,expected_id", ARTICLES)
 def test_get_article_from_url(cls, url, expected_id):
     assert get_article_from_url(url) == (cls, expected_id)
+
+@pytest.mark.parametrize("cls,url,expected_id", ARTICLES)
+def test_favicon(cls, url, expected_id):
+    if getattr(cls, "FAVICON", None):
+        headers = {
+            "User-Agent": "Mozilla/5.0 (X11; Linux x86_64; rv:153.0) Gecko/20100101 Firefox/153.0"
+        }
+        r = requests.get(cls.FAVICON, headers=headers)
+        assert r.status_code == 200
+        
+    assert True
