@@ -3,7 +3,7 @@ import re
 import requests
 from bs4 import BeautifulSoup
 
-from .common import Article, add_figure, fix_links
+from .common import Article, add_figure, fix_links, make_figcaption
 
 _URL_ID_PATTERN = re.compile(
     r"https:\/\/www\.charentelibre\.fr\/.+-(\d+)\.php"
@@ -42,16 +42,7 @@ class CharenteLibreArticle(Article):
             legend = media.get("legend")
             author = media.get("author")
             
-            if legend is None and author is None:
-                caption = ""
-            elif legend is None and author is not None:
-                caption = f"&copy; {author}"
-            elif legend is not None and author is None:
-                caption = legend
-            else:
-                caption = f"{legend} &copy; {author}"
-            
-            content = add_figure(media["uri"], caption) + content
+            content = add_figure(media["uri"], make_figcaption(legend, author)) + content
         
         super().__init__(
             id=data["id"],

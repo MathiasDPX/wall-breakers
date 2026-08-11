@@ -3,7 +3,7 @@ import re
 import requests
 from bs4 import BeautifulSoup
 
-from .common import Article, add_figure, fix_links
+from .common import Article, add_figure, fix_links, make_figcaption
 
 _URL_ID_PATTERN = re.compile(r".+letelegramme\.fr\/.+-(\d+)\.php")
 
@@ -71,7 +71,7 @@ class LeTelegrammeArticle(Article):
                 continue
                 
             image = f"https://media.letelegramme.fr/api/v1/images/view/{addon['idImg']}/web_golden_xxl/{addon['idImg']}.1"
-            content = add_figure(image, f"{addon['title']} &copy; {addon['credits']}") + content
+            content = add_figure(image, make_figcaption(addon['title'], addon['credits'])) + content
 
         super().__init__(
             id=article_id,

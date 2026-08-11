@@ -4,7 +4,7 @@ import re
 import requests
 from bs4 import BeautifulSoup
 
-from .common import Article, add_figure, fix_links
+from .common import Article, add_figure, fix_links, make_figcaption
 
 _URL_ID_PATTERN = re.compile(
     r".+nytimes\.com\/athletic\/(\d+)(?:\/(?:.+)?)?"
@@ -47,7 +47,7 @@ class TheAthleticArticle(Article):
         
         image = metadata["image"][0]
         
-        content = add_figure(image["url"], image["caption"]+" &copy; "+image['creditText']) + content
+        content = add_figure(image["url"], make_figcaption(image["caption"], image['creditText'])) + content
 
         super().__init__(
             id=article_id,

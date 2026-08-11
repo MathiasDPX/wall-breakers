@@ -6,7 +6,7 @@ import json
 import requests
 from bs4 import BeautifulSoup
 
-from .common import Article, add_figure, fix_links
+from .common import Article, add_figure, fix_links, make_figcaption
 
 _URL_ID_PATTERN = re.compile(r"(https:\/\/.+\.lefigaro\.fr\/.+-\d{8})")
 
@@ -46,7 +46,7 @@ class FigaroArticle(Article):
         if mainMediaType == "Photo":
             content = add_figure(
                 data["mainMedia"]["image"]["url"],
-                f"{data['mainMedia']['caption']} &copy; {data['mainMedia']['credit']}"
+                make_figcaption(data['mainMedia']['caption'], data['mainMedia']['credit'])
             )
             thumbnail = data["mainMedia"]["image"]["url"]
         elif mainMediaType == "VideoFigaro":
@@ -55,7 +55,7 @@ class FigaroArticle(Article):
             
             content = add_figure(
                 choice(mp4s).get("url", ""),
-                f"{data['mainMedia']['thumbnail']['caption']} &copy; {data['mainMedia']['thumbnail']['credit']}"
+                make_figcaption(data['mainMedia']['thumbnail']['caption'], data['mainMedia']['thumbnail']['credit'])
             )
             thumbnail = data["mainMedia"]["thumbnail"]["image"]["url"]
         

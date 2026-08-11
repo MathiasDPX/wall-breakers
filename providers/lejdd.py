@@ -3,7 +3,7 @@ import re
 import requests
 from bs4 import BeautifulSoup
 
-from .common import Article, add_figure, fix_links
+from .common import Article, add_figure, fix_links, make_figcaption
 
 _URL_ID_PATTERN = re.compile(
     r"https:\/\/www\.lejdd\.fr\/.+-(\d+)"
@@ -31,7 +31,7 @@ class JDDArticle(Article):
             container.decompose()
         
         content = soup.decode_contents()
-        content = add_figure(data["image"]["url"], f"{data['image']['title']} &copy; {data['image']['credits']}") + content
+        content = add_figure(data["image"]["url"], make_figcaption(data['image']['title'], data['image']['credits'])) + content
 
         super().__init__(
             id=article_id,

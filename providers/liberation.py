@@ -3,7 +3,7 @@ import re
 import requests
 from bs4 import BeautifulSoup
 
-from .common import Article, add_figure, fix_links
+from .common import Article, add_figure, fix_links, make_figcaption
 
 _URL_ID_PATTERN = re.compile(
     r"https:\/\/www\.liberation\.fr\/.+-\d{8}_([A-Z0-9]+)(?:.+)?"
@@ -81,10 +81,10 @@ class LiberationArticle(Article):
         if "promo_items" in data:
             image = data["promo_items"]["basic"]["additional_properties"]["originalUrl"]
             copyright = data["promo_items"]["basic"].get("copyright")
-            copyright = " &copy; " + copyright if copyright is not None else ""
+            caption = data["promo_items"]["basic"].get("caption")
             
             content = (
-                add_figure(image, data["promo_items"]["basic"].get("caption") + copyright)
+                add_figure(image, make_figcaption(caption, copyright))
                 + content
             )
 

@@ -3,7 +3,7 @@ import re
 import requests
 from bs4 import BeautifulSoup
 
-from .common import Article, add_figure, fix_links
+from .common import Article, add_figure, fix_links, make_figcaption
 
 _URL_ID_PATTERN = re.compile(
     r"https:\/\/www\.parismatch\.com\/.+-(\d+)"
@@ -45,7 +45,6 @@ class ParisMatchArticle(Article):
 
         image = data["image"]["url"]
 
-        credits = f"{data['image']['description']} &copy; {data['image']['credits']}"
         soup = BeautifulSoup(data["body"], features="html.parser")
         fix_links(soup)
 
@@ -53,7 +52,7 @@ class ParisMatchArticle(Article):
             element.decompose()
 
         content = (
-            add_figure(image, credits)
+            add_figure(image, make_figcaption(data['image']['description'], data['image']['credits']))
             + soup.decode_contents()
         )
 

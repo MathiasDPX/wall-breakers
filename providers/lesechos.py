@@ -3,7 +3,7 @@ import re
 import requests
 from bs4 import BeautifulSoup
 
-from .common import Article, add_figure, fix_links
+from .common import Article, add_figure, fix_links, make_figcaption
 
 _URL_ID_PATTERN = re.compile(
     r".+lesechos.fr\/.+-(\d+)"
@@ -28,7 +28,7 @@ class LesEchosArticle(Article):
         image = f"https://media.lesechos.com/api/v1/images/view/{data['image']['id']}/976x549-webp/{data['image']['filename']}"
         
         content = soup.decode_contents()
-        content = add_figure(image, f"{data['image']['caption']} &copy; {data['image']['credits']}") + content
+        content = add_figure(image, make_figcaption(data['image']['caption'], data['image']['credits'])) + content
 
         super().__init__(
             id=article_id,

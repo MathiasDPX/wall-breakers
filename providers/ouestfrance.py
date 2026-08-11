@@ -4,7 +4,7 @@ import os
 from bs4 import BeautifulSoup
 
 from .exceptions import *
-from .common import Article, add_figure, OAuthClient, fix_links
+from .common import Article, add_figure, OAuthClient, fix_links, make_figcaption
 
 _URL_ID_PATTERN = re.compile(
     r"https:\/\/www\.ouest-france\.fr\/.+-([a-z0-9]{8}-[a-z0-9]{4}-[a-z0-9]{4}-[a-z0-9]{4}-[a-z0-9]{12})"
@@ -62,7 +62,7 @@ class OuestFranceArticle(Article):
 
         image = data["photos"][0]
 
-        content = add_figure(image["url"], f"{image['caption']} &copy; {image['credits']}")
+        content = add_figure(image["url"], make_figcaption(image['caption'], image['credits']))
 
         for block in data["body"]:
             content += _build_block(block)
