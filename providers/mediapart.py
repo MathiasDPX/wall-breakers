@@ -9,7 +9,7 @@ from .exceptions import MediapartDisabledException
 from .common import Article, CASClient, fix_links
 
 _URL_ID_PATTERN = re.compile(
-    r"(https:\/\/www\.mediapart\.fr\/.+)"
+    r"(https:\/\/www\.mediapart\.fr\/.+\/\d+\/.+)"
 )
 
 PIERREVIVES_USERNAME = os.getenv("PIERREVIVES_USERNAME")
