@@ -13,7 +13,7 @@ _URL_ID_PATTERN = re.compile(
 class LesEchosArticle(Article):
     SLUG = "le"
     PROVIDER = "Les Echos"
-    FAVICON = "https://www.lesechos.fr/assets/les-echos/020128d1da0fecffdf3de5ff92440a19.webp"
+    FAVICON = "https://play-lh.googleusercontent.com/JprLe9HZQzrOEqTZ7-x8nWQone0MRVEIc-ilvB4v106usxh4LODZhav8UtyM2IZbHz2xzX7ypBAs3vDv-lu4=w240-h480-rw"
     
     def __init__(self, article_id: str):
         data = LesEchosArticle.get_data(article_id)
