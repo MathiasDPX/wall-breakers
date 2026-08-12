@@ -100,6 +100,12 @@ class MediapartArticle(Article):
                 and tag.name not in ["img", "br", "hr", "input", "iframe", "video", "audio", "source"]
             ):
                 tag.decompose()
+                
+        for div in soup.select("div"):
+            children = list(div.find_all(recursive=False))
+            
+            if len(children) == 1 and children[0].name == "div":
+                div.unwrap()
 
         for iframe in soup.select("figure[data-path*='player.vimeo.com'] iframe"):
             w = iframe.get("width", "")
