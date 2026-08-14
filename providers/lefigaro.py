@@ -60,9 +60,9 @@ class FigaroArticle(Article):
             )
             thumbnail = data["mainMedia"]["thumbnail"]["image"]["url"]
         
-        if data["audio"] != None:
-            if "url" in data['audio']:
-                content += f"<audio controls src=\"{data['audio']['url']}\"></audio>"
+        audio = data.get("audio")
+        if audio and "url" in audio:
+            content += f"<audio controls src=\"{audio['url']}\"></audio>"
 
         
         for block in data["body"]["structured"]:
@@ -91,7 +91,7 @@ class FigaroArticle(Article):
             "url": article_path
         })
         r = requests.get(
-            f"https://api-graphql.lefigaro.fr/graphql", params={"id": "FigaroCoreMobile_resourceByUrl_persistent_47eb9ddbda1ea9c3194af6af47800cd54a0475a6df1da0d8e5ef1770c2c240cc", "variables": variables}
+            "https://api-graphql.lefigaro.fr/graphql", params={"id": "FigaroCoreMobile_resourceByUrl_persistent_47eb9ddbda1ea9c3194af6af47800cd54a0475a6df1da0d8e5ef1770c2c240cc", "variables": variables}
         )
         
         r.raise_for_status()

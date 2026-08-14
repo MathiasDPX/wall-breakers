@@ -86,7 +86,7 @@ class TeleramaArticle(Article):
     def get_data(id):
         article_path = base64.b64decode(id).decode()
         r = requests.get(
-            f"https://apps.telerama.fr/tlr/v1/premium-android-phone/element",
+            "https://apps.telerama.fr/tlr/v1/premium-android-phone/element",
             params={"id": article_path}
         )
         r.raise_for_status()

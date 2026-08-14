@@ -94,7 +94,7 @@ class EquipeArticle(Article):
         return match.group(1)
     
     def get_data(id):
-        r = requests.get(f"https://dwh.lequipe.fr/api/v9/efr/news/" + id)
+        r = requests.get("https://dwh.lequipe.fr/api/v9/efr/news/" + id)
 
         r.raise_for_status()
         return r.json()

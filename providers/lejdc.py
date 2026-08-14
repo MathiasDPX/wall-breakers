@@ -81,9 +81,8 @@ class JDCArticle(Article):
         
         content = add_figure(image, make_figcaption(article["mainPhoto"]["caption"], article["mainPhoto"]["credit"]))
         
-        if article["isTextToSpeechAvailable"]:
-            if article["textToSpeech"] is not None:
-                content += f'<audio controls src="{article["textToSpeech"]["url"]}"></audio>'
+        if article["isTextToSpeechAvailable"] and article["textToSpeech"] is not None:
+            content += f'<audio controls src="{article["textToSpeech"]["url"]}"></audio>'
         
         blocks = article["contentJson"]["content"]
         for block in blocks:

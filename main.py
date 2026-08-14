@@ -4,7 +4,7 @@ from datetime import datetime, timezone
 import sass
 import sentry_sdk
 from dotenv import load_dotenv
-from flask import Flask, Response, abort, g, render_template, request, send_file
+from flask import Flask, Response, abort, render_template, request, send_file
 from flask_cors import CORS
 from prometheus_client import generate_latest
 from sentry_sdk.integrations.flask import FlaskIntegration
