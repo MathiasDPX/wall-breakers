@@ -29,6 +29,7 @@
 // @match        https://*.telerama.fr/*
 // @match        https://*.lejdc.fr/*
 // @match        https://*.ft.com/*
+// @match        https://asia.nikkei.com/*
 // ==/UserScript==
 
 const BASE_URL = "https://news.mathiasd.fr";

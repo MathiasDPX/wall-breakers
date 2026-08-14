@@ -53,7 +53,7 @@ paths:
           name: slug
           schema:
             type: string
-            enum: ["jdd", "lm", "lp", "le", "lt", "nyt", "ta", "wp", "lf", "lib", "ekip", "of", "ci", "mp", "af", "cl", "lx", "pm", "no", "tr", "jdc", "ft"]
+            enum: ["jdd", "lm", "lp", "le", "lt", "nyt", "ta", "wp", "lf", "lib", "ekip", "of", "ci", "mp", "af", "cl", "lx", "pm", "no", "tr", "jdc", "ft", "na"]
           required: true
           description: |-
             Provider slug
@@ -81,6 +81,7 @@ paths:
               - `tr`: Télérama
               - `jdc`: Le Journal du Centre
               - `ft`: Financial Times
+              - `na`: Nikkei Asia
         - in: path
           name: id
           schema:

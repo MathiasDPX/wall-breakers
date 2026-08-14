@@ -28,6 +28,7 @@
 - [Le JDC](https://www.lejdc.fr/)
 - [Courrier International](https://www.courrierinternational.com/)
 - [Financial Times](https://www.ft.com/)
+- [Nikkei Asia](https://asia.nikkei.com/)
 - [The Athletic](https://www.nytimes.com/athletic/)
 <!-- - [New York Times](https://www.nytimes.com/)-->
 

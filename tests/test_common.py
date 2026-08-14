@@ -116,6 +116,11 @@ ARTICLES = [
         FinancialTimesArticle,
         "https://www.ft.com/content/63a28eea-9d73-487b-bb46-34530e215fce?syn-25a6b1a6=1",
         "63a28eea-9d73-487b-bb46-34530e215fce"
+    ),
+    (
+        NikkeiAsiaArticle,
+        "https://asia.nikkei.com/spotlight/policy-asia/can-takaichi-s-2.3tn-bet-on-industrial-policy-revive-growth-in-japan",
+        b64encode(b"/spotlight/policy-asia/can-takaichi-s-2.3tn-bet-on-industrial-policy-revive-growth-in-japan").decode()
     )
 ]
 
