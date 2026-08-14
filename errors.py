@@ -1,6 +1,6 @@
 from flask import jsonify, render_template, request
-from werkzeug.exceptions import HTTPException
 from requests import HTTPError
+from werkzeug.exceptions import HTTPException
 
 from providers.exceptions import *
 

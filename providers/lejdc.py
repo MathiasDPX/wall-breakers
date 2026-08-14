@@ -1,8 +1,8 @@
 import re
 
 import requests
-from flask import abort
 from bs4 import BeautifulSoup
+from flask import abort
 
 from .common import Article, add_figure, fix_links, make_figcaption
 

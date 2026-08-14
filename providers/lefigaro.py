@@ -1,8 +1,8 @@
-from random import choice
 import base64
-import re
-
 import json
+import re
+from random import choice
+
 import requests
 from bs4 import BeautifulSoup
 

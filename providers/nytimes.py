@@ -6,8 +6,8 @@ import demjson3
 import requests
 from bs4 import BeautifulSoup
 
-from .exceptions import *
 from .common import Article, add_figure, fix_links
+from .exceptions import *
 
 _URL_ID_PATTERN = re.compile(r"https:\/\/(?:www\.)?nytimes\.com(\/.+\.html)")
 

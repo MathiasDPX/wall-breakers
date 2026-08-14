@@ -3,18 +3,18 @@ from datetime import datetime, timezone
 
 import sass
 import sentry_sdk
-from flask import Flask, abort, render_template, request, send_file, Response, g
-from flask_cors import CORS
 from dotenv import load_dotenv
-from sentry_sdk.integrations.flask import FlaskIntegration
+from flask import Flask, Response, abort, g, render_template, request, send_file
+from flask_cors import CORS
 from prometheus_client import generate_latest
+from sentry_sdk.integrations.flask import FlaskIntegration
 
 load_dotenv()
 
 import metrics
 from errors import register_error_handlers
-from providers.registry import *
 from providers.common import get_article_from_url
+from providers.registry import *
 
 SENTRY_DSN = os.getenv("SENTRY_DSN")
 if SENTRY_DSN:

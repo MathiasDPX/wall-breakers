@@ -3,7 +3,7 @@ import re
 import requests
 from bs4 import BeautifulSoup
 
-from .common import Article, fix_links, add_figure
+from .common import Article, add_figure, fix_links
 
 _URL_ID_PATTERN = re.compile(
     r".+lemonde\.fr\/.+_(\d+)_\d+\.html"

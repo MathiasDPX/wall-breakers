@@ -1,12 +1,12 @@
-import re
-import os
 import base64
+import os
+import re
 
-from flask import redirect
 from bs4 import BeautifulSoup
+from flask import redirect
 
-from .exceptions import MediapartDisabledException
 from .common import Article, CASClient, fix_links
+from .exceptions import MediapartDisabledException
 
 _URL_ID_PATTERN = re.compile(
     r"(https:\/\/www\.mediapart\.fr\/.+\/\d+\/.+)"

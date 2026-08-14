@@ -1,10 +1,10 @@
-import re
 import os
+import re
 
 from bs4 import BeautifulSoup
 
+from .common import Article, OAuthClient, add_figure, fix_links, make_figcaption
 from .exceptions import *
-from .common import Article, add_figure, OAuthClient, fix_links, make_figcaption
 
 _URL_ID_PATTERN = re.compile(
     r"https:\/\/www\.ouest-france\.fr\/.+-([a-z0-9]{8}-[a-z0-9]{4}-[a-z0-9]{4}-[a-z0-9]{4}-[a-z0-9]{12})"

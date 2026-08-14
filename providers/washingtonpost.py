@@ -1,9 +1,9 @@
-from urllib.parse import urlparse, urlunparse
 import base64
 import re
+from urllib.parse import urlparse, urlunparse
 
-from bs4 import BeautifulSoup
 import requests
+from bs4 import BeautifulSoup
 
 from .common import Article, add_figure, fix_links
 
