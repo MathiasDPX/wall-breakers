@@ -8,3 +8,4 @@ static/css
 __pycache__
 .env.example
 .pytest_cache
+.ruff_cache

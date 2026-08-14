@@ -111,6 +111,11 @@ ARTICLES = [
         JDCArticle,
         "https://www.lejdc.fr/nevers-58000/sports/triathlon-de-nevers-vingtieme-de-la-course-alice-chevasson-finit-premiere-feminine-du-duathlon-m_15030796/",
         "5030796"
+    ),
+    (
+        FinancialTimesArticle,
+        "https://www.ft.com/content/63a28eea-9d73-487b-bb46-34530e215fce?syn-25a6b1a6=1",
+        "63a28eea-9d73-487b-bb46-34530e215fce"
     )
 ]
 

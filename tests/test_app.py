@@ -32,7 +32,8 @@ URLS = [
     "https://www.parismatch.com/actu/politique/claude-chirac-on-a-tout-fait-des-cafes-aux-photocopies-273699",
     "https://www.nouvelobs.com/monde/20260807.OBS117259/sur-les-traces-d-ulysse-de-troie-a-djerba-nous-reprenons-la-mer-l-ame-navree.html",
     "https://www.telerama.fr/series-tv/alley-cats-sur-netflix-ricky-gervais-aux-manettes-d-une-serie-animee-feline-et-chat-nous-plait-bien_cri-7045364.php",
-    "https://www.lejdc.fr/nevers-58000/sports/triathlon-de-nevers-vingtieme-de-la-course-alice-chevasson-finit-premiere-feminine-du-duathlon-m_15030796/"
+    "https://www.lejdc.fr/nevers-58000/sports/triathlon-de-nevers-vingtieme-de-la-course-alice-chevasson-finit-premiere-feminine-du-duathlon-m_15030796/",
+    "https://www.ft.com/content/63a28eea-9d73-487b-bb46-34530e215fce"
 ]
 
 

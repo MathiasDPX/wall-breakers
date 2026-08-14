@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         Wall Breakers Redirect
 // @namespace    https://mathiasd.fr/
-// @version      1.1.5
+// @version      1.1.6
 // @description  Show a popup on article compatible with Wall Breakers
 // @author       MathiasDPX
 // @updateURL    https://news.mathiasd.fr/redirect.user.js
@@ -28,6 +28,7 @@
 // @match        https://*.nouvelobs.com/*
 // @match        https://*.telerama.fr/*
 // @match        https://*.lejdc.fr/*
+// @match        https://*.ft.com/*
 // ==/UserScript==
 
 const BASE_URL = "https://news.mathiasd.fr";

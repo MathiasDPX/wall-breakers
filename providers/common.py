@@ -267,6 +267,9 @@ def fix_link(url):
     return f"/{provider.SLUG}/{id}"
 
 def make_figcaption(caption, credit):
+    if credit is not None and credit.strip().startswith("©"):
+        credit = credit.replace("©", "")
+        
     if caption is None and credit is None:
         return ""
     elif caption is None:

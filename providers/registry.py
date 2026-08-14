@@ -20,6 +20,7 @@ from .parismatch import ParisMatchArticle
 from .telerama import TeleramaArticle
 from .theathletic import TheAthleticArticle
 from .washingtonpost import WashingtonPostArticle
+from .financialtimes import FinancialTimesArticle
 
 PROVIDERS:list[Article] = [
     LeParisienArticle,
@@ -43,6 +44,7 @@ PROVIDERS:list[Article] = [
     NouvelObsArticle,
     TeleramaArticle,
     JDCArticle,
+    FinancialTimesArticle,
 ]
 
 ARTICLES:dict[str, Article] = {provider.SLUG: provider for provider in PROVIDERS}
