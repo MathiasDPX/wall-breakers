@@ -43,6 +43,16 @@ class MediapartArticle(Article):
         url = soup.find("meta", property="og:url").get("content")
         image = soup.find("meta", property="og:image").get("content")
 
+
+        summary_block = soup.find("aside", attrs={"aria-describedby": "a11y-summary-widget-title"})
+        if summary_block:
+            summary_title = summary_block.find("p", id="a11y-summary-widget-title")
+            summary_description = summary_block.find("div", id="article-summary-body")
+
+            summary = BeautifulSoup(f"<details><summary>{summary_title}</summary>{summary_description}</details>", features="html.parser")
+            summary_block.replace_with(summary)
+
+
         selectors = [
             'div.news__heading',
             'div.splitter',
@@ -72,7 +82,13 @@ class MediapartArticle(Article):
         # Keep all attributes for descendants of Vimeo figures
         vimeo_descendants = {id(d) for f in soup.select("figure[data-path*='player.vimeo.com']") for d in f.find_all()}
 
-        for tag in soup.find_all():
+        tags = soup.find_all()
+        for tag in tags:
+            # A decomposed parent clears the attributes of all its descendants,
+            # which are still present in this snapshot.
+            if tag.attrs is None:
+                continue
+
             # Obliterate unwanted tags
             if tag.name in ("script", "style", "link"):
                 tag.decompose()

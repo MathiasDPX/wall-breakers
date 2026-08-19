@@ -196,6 +196,27 @@ article {
         overflow-wrap: anywhere;
         font-size: 1.08rem;
         line-height: 1.65;
+
+        summary {
+            position: relative;
+            display: block;
+            padding-inline-start: 1.1em;
+            cursor: pointer;
+
+            &::before {
+                position: absolute;
+                inset-inline-start: 0;
+                content: '▸';
+            }
+
+            &::-webkit-details-marker {
+                display: none;
+            }
+        }
+
+        details[open] > summary::before {
+            content: '▾';
+        }
     }
 
     h2,

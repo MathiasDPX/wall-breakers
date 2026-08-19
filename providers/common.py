@@ -221,7 +221,7 @@ class CASClient:
                 if c.name == "mdpt_iam_sess":
                     self.expire_at = c.expires
                     return
-                
+            
             raise MediapartInvalidLogin
         
 
