@@ -121,6 +121,11 @@ ARTICLES = [
         NikkeiAsiaArticle,
         "https://asia.nikkei.com/spotlight/policy-asia/can-takaichi-s-2.3tn-bet-on-industrial-policy-revive-growth-in-japan",
         b64encode(b"/spotlight/policy-asia/can-takaichi-s-2.3tn-bet-on-industrial-policy-revive-growth-in-japan").decode()
+    ),
+    (
+        SCMPArticle,
+        "https://www.scmp.com/news/china/military/article/3365081/mainland-chinas-ship-activity-near-taiwan-hits-record-third-month-row?module=top_story&pgtype=homepage",
+        "46e392c0-adbb-445c-afc6-0ee9645d70cc" # found in the HTML, the UUID of the page
     )
 ]
 

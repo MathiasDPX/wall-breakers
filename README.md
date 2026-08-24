@@ -30,6 +30,7 @@
 - [Financial Times](https://www.ft.com/)
 - [Nikkei Asia](https://asia.nikkei.com/)
 - [The Athletic](https://www.nytimes.com/athletic/)
+- [South China Morning Post](https://www.scmp.com/)
 <!-- - [New York Times](https://www.nytimes.com/)-->
 
 ## Userscript

@@ -22,6 +22,7 @@ from .theathletic import TheAthleticArticle
 from .washingtonpost import WashingtonPostArticle
 from .financialtimes import FinancialTimesArticle
 from .nikkei_asia import NikkeiAsiaArticle
+from .scmp import SCMPArticle
 
 PROVIDERS:list[Article] = [
     LeParisienArticle,
@@ -47,6 +48,7 @@ PROVIDERS:list[Article] = [
     JDCArticle,
     FinancialTimesArticle,
     NikkeiAsiaArticle,
+    SCMPArticle,
 ]
 
 ARTICLES:dict[str, Article] = {provider.SLUG: provider for provider in PROVIDERS}
