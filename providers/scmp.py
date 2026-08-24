@@ -1,9 +1,10 @@
 import re
 import json
 
+from bs4 import BeautifulSoup
 import requests
 
-from .common import Article, add_figure
+from .common import Article, add_figure, fix_links
 
 _URL_ID_PATTERN = re.compile(
     r"https:\/\/www\.scmp\.com\/.+\/article\/(\d+)\/.+"
@@ -61,15 +62,17 @@ class SCMPArticle(Article):
         
         if len(data["images"]) > 0:
             image = data["images"][0]
-            if image.get("type") == "leading":
+            if image.get("isSlideshow"):
                 content = add_figure(image["url"], title=image.get("title", "")) + content
-            
+                
+        soup = BeautifulSoup(content, features="html.parser")
+        fix_links(soup)
 
         super().__init__(
             id=article_id,
             headline=data["headline"],
             subheadline=_build_blocks(data["subHeadline"]["json"]),
-            content=content,
+            content=soup.decode_contents(),
             url="https://www.scmp.com"+data["urlAlias"],
             image=image["url"]
         )
