@@ -1,5 +1,6 @@
 import re
 import json
+from functools import lru_cache
 
 from bs4 import BeautifulSoup
 import requests
@@ -76,19 +77,23 @@ class SCMPArticle(Article):
             url="https://www.scmp.com"+data["urlAlias"],
             image=image["url"]
         )
+        
+    @lru_cache()
+    def _get_uuid(url:str):
+        r = requests.get(url)
+                
+        match = _UUID_PATTERN.search(r.content.decode())
+        if match is None:
+            return None
+                
+        return match.group(1)
     
     def get_id_from_url(url: str):
         if _URL_ID_PATTERN.search(url) is None:
             return None
         
-        r = requests.get(url)
-        
-        match = _UUID_PATTERN.search(r.content.decode())
-        if match is None:
-            return None
-        
-        return match.group(1)
-        
+        return SCMPArticle._get_uuid(url)
+    
     def get_data(id):
         url = "https://apigw.scmp.com/content-delivery/v2"
 
