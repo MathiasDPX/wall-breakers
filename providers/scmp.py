@@ -61,6 +61,10 @@ class SCMPArticle(Article):
 
         content = _build_blocks(data["body"]["json"])
         
+        if len(data["articleSpeeches"]) > 0:
+            voice = data["articleSpeeches"][0]
+            content = f"<audio controls src=\"{voice['url']}\"></audio>" + content
+        
         if len(data["images"]) > 0:
             image = data["images"][0]
             if image.get("isSlideshow"):
