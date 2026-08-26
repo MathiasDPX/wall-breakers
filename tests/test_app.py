@@ -35,7 +35,16 @@ URLS = [
     "https://www.lejdc.fr/nevers-58000/sports/triathlon-de-nevers-vingtieme-de-la-course-alice-chevasson-finit-premiere-feminine-du-duathlon-m_15030796/",
     "https://www.ft.com/content/63a28eea-9d73-487b-bb46-34530e215fce",
     "https://asia.nikkei.com/spotlight/policy-asia/can-takaichi-s-2.3tn-bet-on-industrial-policy-revive-growth-in-japan",
-    "https://www.scmp.com/news/china/military/article/3365081/mainland-chinas-ship-activity-near-taiwan-hits-record-third-month-row?module=top_story&pgtype=homepage"
+    "https://www.scmp.com/news/china/military/article/3365081/mainland-chinas-ship-activity-near-taiwan-hits-record-third-month-row?module=top_story&pgtype=homepage",
+    "https://www.lejsl.com/economie/2026/08/24/un-duo-mere-fille-ouvre-une-boutique-de-seconde-main-pour-enfants",
+    "https://www.dna.fr/faits-divers-justice/2022/12/16/la-charte-des-dna",
+    "https://www.ledauphine.com/societe/2023/03/27/la-charte-editoriale-des-faits-divers-justice",
+    "https://www.estrepublicain.fr/societe/2021/01/31/les-grandes-histoires-de-l-est-le-podcast-des-grands-evenements-historiques-de-lorraine-et-de-franche-comte",
+    "https://www.republicain-lorrain.fr/sport/2026/08/26/je-donne-le-biberon-en-rentrant-la-preparation-pas-comme-les-autres-de-quentin-fillon-maillet",
+    "https://www.bienpublic.com/sport/2026/08/26/claire-tomaselli-dijon-a-un-savoir-faire",
+    "https://www.vosgesmatin.fr/economie/2026/08/26/gerardmer-face-a-l-afflux-de-touristes-les-agents-des-dechets-redoublent-d-efforts-tout-l-ete",
+    "https://www.leprogres.fr/economie/2026/08/26/agriculture-et-secheresse-la-pire-annee-depuis-quarante-ans",
+    "https://www.lalsace.fr/economie/2026/08/26/le-kougelhopf-d-or-pour-francis-jamm-decroche-lors-de-la-foire-aux-vins"
 ]
 
 
@@ -61,7 +70,7 @@ def test_article_pages(client, url):
         # If Ouest-France is disabled and the URL is Ouest-France, expect a 501 Not Implemented
         assert page_response.status_code == 501
     elif data['slug'] == MediapartArticle.SLUG and not MEDIAPART_ENABLED:
-        # If Mediapart is disabled and the URL is Mediapart, expect a 501 Not Implemented
+        # If Mediapart is disabled and the URL is Mediapart, expect a 501 Not Imtplemented
         assert page_response.status_code == 501
     else:
         print(data['slug'], OUESTFRANCE_ENABLED)

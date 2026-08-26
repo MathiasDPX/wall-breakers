@@ -126,6 +126,51 @@ ARTICLES = [
         SCMPArticle,
         "https://www.scmp.com/news/china/military/article/3365081/mainland-chinas-ship-activity-near-taiwan-hits-record-third-month-row?module=top_story&pgtype=homepage",
         "46e392c0-adbb-445c-afc6-0ee9645d70cc" # found in the HTML, the UUID of the page
+    ),
+    (
+        JSLArticle,
+        "https://www.lejsl.com/economie/2026/08/24/un-duo-mere-fille-ouvre-une-boutique-de-seconde-main-pour-enfants",
+        "0a3fae4b-f4f0-48d7-bb26-779ce2b93f21"
+    ),
+    (
+        DNAArticle,
+        "https://www.dna.fr/faits-divers-justice/2022/12/16/la-charte-des-dna",
+        "c549facd-967f-4030-b24b-c8e19847010e"
+    ),
+    (
+        DaupineArticle,
+        "https://www.ledauphine.com/societe/2023/03/27/la-charte-editoriale-des-faits-divers-justice",
+        "b8597164-5077-43c5-bff0-6bedbd547c27"
+    ),
+    (
+        EstRepuArticle,
+        "https://www.estrepublicain.fr/societe/2021/01/31/les-grandes-histoires-de-l-est-le-podcast-des-grands-evenements-historiques-de-lorraine-et-de-franche-comte",
+        "ab72fda6-c75c-49af-b7ce-35e3d08c06f3"
+    ),
+    (
+        RepuLorrainArticle,
+        "https://www.republicain-lorrain.fr/sport/2026/08/26/je-donne-le-biberon-en-rentrant-la-preparation-pas-comme-les-autres-de-quentin-fillon-maillet",
+        "93e86080-f0f9-4690-8cf9-a741f7ec96f0"
+    ),
+    (
+        BienPublicArticle,
+        "https://www.bienpublic.com/sport/2026/08/26/claire-tomaselli-dijon-a-un-savoir-faire",
+        "88c2d900-d1d8-470e-a287-8b0953b382f6"
+    ),
+    (
+        AlsaceArticle,
+        "https://www.lalsace.fr/economie/2026/08/26/le-kougelhopf-d-or-pour-francis-jamm-decroche-lors-de-la-foire-aux-vins",
+        "f7f4c8c2-c725-443e-9a6e-a4bdc7b6325d"
+    ),
+    (
+        VosgesMatinArticle,
+        "https://www.vosgesmatin.fr/economie/2026/08/26/gerardmer-face-a-l-afflux-de-touristes-les-agents-des-dechets-redoublent-d-efforts-tout-l-ete",
+        "f99fc7b9-a501-459f-ada5-c3bef56dbed8"
+    ),
+    (
+        ProgresArticle,
+        "https://www.leprogres.fr/economie/2026/08/26/agriculture-et-secheresse-la-pire-annee-depuis-quarante-ans",
+        "ccef0b3e-a543-4eaa-a468-03462999800c"
     )
 ]
 

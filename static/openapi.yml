@@ -53,7 +53,7 @@ paths:
           name: slug
           schema:
             type: string
-            enum: ["jdd", "lm", "lp", "le", "lt", "nyt", "ta", "wp", "lf", "lib", "ekip", "of", "ci", "mp", "af", "cl", "lx", "pm", "no", "tr", "jdc", "ft", "na", "scmp"]
+            enum: ["jdd", "lm", "lp", "le", "lt", "nyt", "ta", "wp", "lf", "lib", "ekip", "of", "ci", "mp", "af", "cl", "lx", "pm", "no", "tr", "jdc", "ft", "na", "scmp", "jsl", "dna", "ld", "er", "rl", "bp", "vm", "lpr", "als"]
           required: true
           description: |-
             Provider slug
@@ -83,6 +83,15 @@ paths:
               - `ft`: Financial Times
               - `na`: Nikkei Asia
               - `scmp`: South China Morning Post
+              - `jsl`: Le Journal de Saône-et-Loire
+              - `dna`: Dernières Nouvelles d'Alsace
+              - `ld`: Le Dauphiné Libéré
+              - `er`: L'Est Républicain
+              - `rl`: Le Républicain Lorrain
+              - `bp`: Le Bien Public
+              - `vm`: Vosges Matin
+              - `lpr`: Le Progrès
+              - `als`: L'Alsace
         - in: path
           name: id
           schema:

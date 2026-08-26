@@ -31,6 +31,7 @@
 - [Nikkei Asia](https://asia.nikkei.com/)
 - [The Athletic](https://www.nytimes.com/athletic/)
 - [South China Morning Post](https://www.scmp.com/)
+- [EBRA Médias](https://www.ebra.fr/ebra-medias)
 <!-- - [New York Times](https://www.nytimes.com/)-->
 
 ## Userscript
