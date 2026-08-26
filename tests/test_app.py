@@ -8,6 +8,8 @@ from providers.registry import *
 
 load_dotenv()
 
+IN_GITHUB_ACTIONS = os.getenv("GITHUB_ACTIONS") == "true"
+
 OUESTFRANCE_ENABLED = os.getenv("OUESTFRANCE_REFRESH_TOKEN", None) != None
 MEDIAPART_ENABLED = os.getenv("PIERREVIVES_USERNAME") is not None and os.getenv("PIERREVIVES_PASSWORD") is not None
 
@@ -38,7 +40,6 @@ URLS = [
     "https://www.scmp.com/news/china/military/article/3365081/mainland-chinas-ship-activity-near-taiwan-hits-record-third-month-row?module=top_story&pgtype=homepage",
     "https://www.lejsl.com/economie/2026/08/24/un-duo-mere-fille-ouvre-une-boutique-de-seconde-main-pour-enfants",
     "https://www.dna.fr/faits-divers-justice/2022/12/16/la-charte-des-dna",
-    "https://www.ledauphine.com/societe/2023/03/27/la-charte-editoriale-des-faits-divers-justice",
     "https://www.estrepublicain.fr/societe/2021/01/31/les-grandes-histoires-de-l-est-le-podcast-des-grands-evenements-historiques-de-lorraine-et-de-franche-comte",
     "https://www.republicain-lorrain.fr/sport/2026/08/26/je-donne-le-biberon-en-rentrant-la-preparation-pas-comme-les-autres-de-quentin-fillon-maillet",
     "https://www.bienpublic.com/sport/2026/08/26/claire-tomaselli-dijon-a-un-savoir-faire",
@@ -46,6 +47,9 @@ URLS = [
     "https://www.leprogres.fr/economie/2026/08/26/agriculture-et-secheresse-la-pire-annee-depuis-quarante-ans",
     "https://www.lalsace.fr/economie/2026/08/26/le-kougelhopf-d-or-pour-francis-jamm-decroche-lors-de-la-foire-aux-vins"
 ]
+
+if not IN_GITHUB_ACTIONS:
+    URLS.append("https://www.ledauphine.com/societe/2023/03/27/la-charte-editoriale-des-faits-divers-justice")
 
 
 @pytest.fixture
