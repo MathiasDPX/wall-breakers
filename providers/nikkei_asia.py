@@ -105,6 +105,6 @@ class NikkeiAsiaArticle(Article):
 
 
 if __name__ == "__main__":
-    article = NikkeiAsiaArticle.get_from_url("https://www.ft.com/content/32a70a3c-7d28-40b4-808e-36edb58c7d01")
+    article = NikkeiAsiaArticle.get_from_url("https://asia.nikkei.com/spotlight/cybersecurity/google-openai-meta-tiktok-team-up-with-japan-to-fight-scams")
     
     print(article)

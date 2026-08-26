@@ -130,6 +130,6 @@ class CourrierInternationalArticle(Article):
 
 
 if __name__ == "__main__":
-    article = CourrierInternationalArticle.get_from_url("https://www.lemonde.fr/planete/article/2026/07/18/au-canada-les-feux-a-repetition-bouleversent-la-foret-boreale_6724998_3244.html")
+    article = CourrierInternationalArticle.get_from_url("https://www.courrierinternational.com/article/vu-de-belgique-en-pleine-urgence-climatique-le-soutien-des-verts-dispute-avant-la-presidentielle-francaise_263808")
 
     print(article)
