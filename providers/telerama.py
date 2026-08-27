@@ -24,8 +24,14 @@ class TeleramaArticle(Article):
         data = TeleramaArticle.get_data(article_id)
 
         soup = BeautifulSoup(data["templates"]["raw_content"]["content"], features="html.parser")
-        subheadline = soup.select_one("p.article__chapeau").decode_contents()
+        subheadline = soup.select_one("p.article__chapeau")
+        if subheadline:
+            subheadline = subheadline.decode_contents()
+        else:
+            subheadline = ""
+            
         if soup.find_all("article", attrs={"class": "article__page-content"}):
+            print("aaa")
             soup = soup.find("article", attrs={"class": "article__page-content"})
 
         illustration = soup.select_one("header.article-header figure img")
