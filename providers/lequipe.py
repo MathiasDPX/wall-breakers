@@ -67,9 +67,14 @@ class EquipeArticle(Article):
             content += _build_block(block)
 
         if data["metas"]["sharing_image"]["ratio"] != -1:
-            image = _build_media(
-                data["metas"]["sharing_image"]["formats"]["landscape"], 1000
-            )
+            if data["metas"]["sharing_image"].get("formats") is None:
+                image = data["metas"]["sharing_image"]["url"].replace("{width}", str(int(1000 * data["metas"]["sharing_image"]["ratio"])))
+                image = image.replace("{height}", str(1000))
+                image = image.replace("{quality}", "80")
+            else:  
+                image = _build_media(
+                    data["metas"]["sharing_image"]["formats"]["landscape"], 1000
+                )
             content = (
                 add_figure(image, data["metas"]["sharing_image"].get("legende"))
                 + content
