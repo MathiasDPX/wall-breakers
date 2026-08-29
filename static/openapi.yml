@@ -53,7 +53,7 @@ paths:
           name: slug
           schema:
             type: string
-            enum: ["jdd", "lm", "lp", "le", "lt", "nyt", "ta", "wp", "lf", "lib", "ekip", "of", "ci", "mp", "af", "cl", "lx", "pm", "no", "tr", "jdc", "ft", "na", "scmp", "jsl", "dna", "ld", "er", "rl", "bp", "vm", "lpr", "als"]
+            enum: ["jdd", "lm", "lp", "le", "lt", "nyt", "ta", "wp", "lf", "lib", "ekip", "of", "ci", "mp", "af", "cl", "lx", "pm", "no", "tr", "jdc", "ft", "na", "scmp", "jsl", "dna", "ld", "er", "rl", "bp", "vm", "lpr", "als", "ce"]
           required: true
           description: |-
             Provider slug
@@ -92,6 +92,7 @@ paths:
               - `vm`: Vosges Matin
               - `lpr`: Le Progrès
               - `als`: L'Alsace
+              - `ce`: Le Canard Enchainé
         - in: path
           name: id
           schema:

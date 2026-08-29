@@ -15,6 +15,7 @@
 - [Courrier International](https://www.courrierinternational.com/)
 - [Ouest-France](https://www.ouest-france.fr/)
 - [Mediapart](https://www.mediapart.fr/)
+- [Le Canard Enchainé](https://www.lecanardenchaine.fr/)
 <!-- - [New York Times](https://www.nytimes.com/)-->
 
 <details>

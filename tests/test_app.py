@@ -45,7 +45,8 @@ URLS = [
     "https://www.bienpublic.com/sport/2026/08/26/claire-tomaselli-dijon-a-un-savoir-faire",
     "https://www.vosgesmatin.fr/economie/2026/08/26/gerardmer-face-a-l-afflux-de-touristes-les-agents-des-dechets-redoublent-d-efforts-tout-l-ete",
     "https://www.leprogres.fr/economie/2026/08/26/agriculture-et-secheresse-la-pire-annee-depuis-quarante-ans",
-    "https://www.lalsace.fr/economie/2026/08/26/le-kougelhopf-d-or-pour-francis-jamm-decroche-lors-de-la-foire-aux-vins"
+    "https://www.lalsace.fr/economie/2026/08/26/le-kougelhopf-d-or-pour-francis-jamm-decroche-lors-de-la-foire-aux-vins",
+    "https://www.lecanardenchaine.fr/environnement/54711-mais-qui-donc-aurait-pu-predire-toutes-ces-catastrophes"
 ]
 
 if not IN_GITHUB_ACTIONS:

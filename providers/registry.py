@@ -24,6 +24,7 @@ from .financialtimes import FinancialTimesArticle
 from .nikkei_asia import NikkeiAsiaArticle
 from .scmp import SCMPArticle
 from .ebra import AlsaceArticle, BienPublicArticle, DaupineArticle, DNAArticle, EstRepuArticle, ProgresArticle, JSLArticle, RepuLorrainArticle, VosgesMatinArticle
+from .canardenchaine import CanardEnchaineArticle
 
 PROVIDERS:list[Article] = [
     LeParisienArticle,
@@ -58,7 +59,8 @@ PROVIDERS:list[Article] = [
     EstRepuArticle,
     VosgesMatinArticle,
     ProgresArticle,
-    RepuLorrainArticle
+    RepuLorrainArticle,
+    CanardEnchaineArticle
 ]
 
 ARTICLES:dict[str, Article] = {provider.SLUG: provider for provider in PROVIDERS}

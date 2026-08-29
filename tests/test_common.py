@@ -171,6 +171,11 @@ ARTICLES = [
         ProgresArticle,
         "https://www.leprogres.fr/economie/2026/08/26/agriculture-et-secheresse-la-pire-annee-depuis-quarante-ans",
         "ccef0b3e-a543-4eaa-a468-03462999800c"
+    ),
+    (
+        CanardEnchaineArticle,
+        "https://www.lecanardenchaine.fr/environnement/54711-mais-qui-donc-aurait-pu-predire-toutes-ces-catastrophes",
+        b64encode(b"/environnement/54711-mais-qui-donc-aurait-pu-predire-toutes-ces-catastrophes").decode()
     )
 ]
 
