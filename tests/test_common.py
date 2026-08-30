@@ -176,6 +176,11 @@ ARTICLES = [
         CanardEnchaineArticle,
         "https://www.lecanardenchaine.fr/environnement/54711-mais-qui-donc-aurait-pu-predire-toutes-ces-catastrophes",
         b64encode(b"/environnement/54711-mais-qui-donc-aurait-pu-predire-toutes-ces-catastrophes").decode()
+    ),
+    (
+        CharlieHebdoArticle,
+        "https://charliehebdo.fr/2026/08/societe/faire-le-mont-blanc-pour-exister-comment-les-nouveaux-alpinistes-ruinent-la-montagne/",
+        "300558"
     )
 ]
 

@@ -16,6 +16,7 @@
 - [Ouest-France](https://www.ouest-france.fr/)
 - [Mediapart](https://www.mediapart.fr/)
 - [Le Canard Enchainé](https://www.lecanardenchaine.fr/)
+- [Charlie Hebdo](https://charliehebdo.fr/)
 <!-- - [New York Times](https://www.nytimes.com/)-->
 
 <details>

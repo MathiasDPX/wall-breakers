@@ -41,6 +41,7 @@
 // @match        https://*.leprogres.fr/*
 // @match        https://*.lalsace.fr/*
 // @match        https://*.lecanardenchaine.fr/*
+// @match        https://charliehebdo.fr/*
 // ==/UserScript==
 
 const BASE_URL = "https://news.mathiasd.fr";
