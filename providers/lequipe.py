@@ -5,7 +5,7 @@ from bs4 import BeautifulSoup
 
 from .common import Article, add_figure, fix_link, fix_links
 
-_URL_ID_PATTERN = re.compile(r"https:\/\/www\.lequipe\.fr\/.+\/(\d+)")
+_URL_ID_PATTERN = re.compile(r"https:\/\/www\.lequipe\.fr\/(?!explore\/video\/).+\/(\d+)")
 
 
 def _build_block(block):

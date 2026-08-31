@@ -26,6 +26,7 @@ from .scmp import SCMPArticle
 from .ebra import AlsaceArticle, BienPublicArticle, DaupineArticle, DNAArticle, EstRepuArticle, ProgresArticle, JSLArticle, RepuLorrainArticle, VosgesMatinArticle
 from .canardenchaine import CanardEnchaineArticle
 from .charliehebdo import CharlieHebdoArticle
+from .lequipe_video import EquipeVideoArticle
 
 PROVIDERS:list[Article] = [
     LeParisienArticle,
@@ -62,7 +63,8 @@ PROVIDERS:list[Article] = [
     ProgresArticle,
     RepuLorrainArticle,
     CanardEnchaineArticle,
-    CharlieHebdoArticle
+    CharlieHebdoArticle,
+    EquipeVideoArticle
 ]
 
 ARTICLES:dict[str, Article] = {provider.SLUG: provider for provider in PROVIDERS}
