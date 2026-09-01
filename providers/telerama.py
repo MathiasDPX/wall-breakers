@@ -31,7 +31,6 @@ class TeleramaArticle(Article):
             subheadline = ""
             
         if soup.find_all("article", attrs={"class": "article__page-content"}):
-            print("aaa")
             soup = soup.find("article", attrs={"class": "article__page-content"})
 
         illustration = soup.select_one("header.article-header figure img")

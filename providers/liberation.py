@@ -125,7 +125,4 @@ if __name__ == "__main__":
         "https://www.liberation.fr/sports/football/zidane-nouveau-selectionneur-de-lequipe-de-france-une-oeuvre-de-patience-et-un-effet-retard-20260728_XJNJUDMOGNHT3MBMVYYJU374XE/"
     )
     
-    article = LiberationArticle("681570")
-    print(article)
-
     print(article)

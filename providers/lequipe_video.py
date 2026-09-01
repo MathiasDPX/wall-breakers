@@ -82,7 +82,6 @@ class EquipeVideoArticle(Article):
         
         r = requests.get("https://api.dailymotion.com/video/kVFLID8LndBks0J5wlo", params=params)
         r.raise_for_status()
-        print(r.url)
         
         return r.json()
 
