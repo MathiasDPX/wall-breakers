@@ -253,6 +253,20 @@ article {
         aspect-ratio: 16 / 9;
     }
 
+    .video-wrapper {
+        position: relative;
+        width: 100%;
+        aspect-ratio: 16 / 9;
+        overflow: hidden;
+
+        iframe {
+            position: absolute;
+            inset: 0;
+            width: 100%;
+            height: 100%;
+        }
+    }
+
     audio {
         width: 100%;
         max-width: 100%;
@@ -263,17 +277,6 @@ article {
         display: block;
         max-width: 100%;
         overflow-x: auto;
-    }
-
-    .video-js {
-        width: 100%;
-        height: auto;
-        word-break: initial;
-        overflow-wrap: normal;
-
-        .vjs-time-tooltip {
-            white-space: nowrap;
-        }
     }
 }
 

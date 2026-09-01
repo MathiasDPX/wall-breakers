@@ -52,38 +52,8 @@ class EquipeVideoArticle(Article):
 
         return None
     
-    def _get_dm_token(channel):
-        r = requests.get("https://iphdata.lequipe.fr/v6/php/dailymotion/getTokens.php")
-        r.raise_for_status()
-        data = r.json()
-        
-        for token in data["dm_tokens"]:
-            if token["channel_name"] == channel:
-                return token["token"]
-        
-        return None
-    
-    def _get_dailymotion_data(token):
-        fields = [
-            "aspect_ratio",
-            "description",
-            "duration",
-            "id",
-            "stream_hls_url",
-            "thumbnail_url",
-            "title",
-            "mode"
-        ]
-        
-        params = {
-            "access_token": EquipeVideoArticle._get_dm_token("lequipe"),
-            "fields": ",".join(fields)
-        }
-        
-        r = requests.get("https://api.dailymotion.com/video/kVFLID8LndBks0J5wlo", params=params)
-        r.raise_for_status()
-        
-        return r.json()
+    def _get_dm_video_id(media):
+        return media.get("dm_id") or media.get("id")
 
     def __init__(self, article_id: str):
         data = EquipeVideoArticle.get_data(article_id)
@@ -97,23 +67,18 @@ class EquipeVideoArticle(Article):
             return abort(404)
         
         media = feature["media"]
-        dm_data = EquipeVideoArticle._get_dailymotion_data(media["token"])
-        
-        hls_url = dm_data["stream_hls_url"]
-        poster = dm_data["thumbnail_url"]
-        aspect_ratio = dm_data["aspect_ratio"]
-        
-        # Video
-        content = '<link href="https://cdn.jsdelivr.net/npm/video.js@8.23.8/dist/video-js.min.css" rel="stylesheet">'
-        content += '<video style="aspect-ratio:'+str(aspect_ratio)+';" class="video-js" data-setup="{}" controls poster="'+poster+'"><source src="'+hls_url+'" type="application/x-mpegURL" /></video>'
-        content += '<script src="https://cdn.jsdelivr.net/npm/video.js@8.23.8/dist/video.min.js"></script>'
+        dm_video_id = EquipeVideoArticle._get_dm_video_id(media)
 
+        content = f'<div class="video-wrapper"><iframe allowfullscreen frameborder="0" width="100%" src="//www.dailymotion.com/embed/video/{dm_video_id}"></iframe></div>'
+        
         # Download links
-        content += f"<p>Download <a href=\"{hls_url}\" target=\"_blank\">HLS</a> <a href=\"{poster}\" target=\"_blank\">Poster</a></p>"
+        content += f"<p><a href=\"https://www.dailymotion.com/video/{dm_video_id}\" target=\"_blank\">Dailymotion</a></p>"
         
         # Body
         for block in body["paragraphs"]:
             content += _build_block(block)
+            
+        sharing_image = _build_media(data["metas"]["sharing_image"], 1000)
 
         super().__init__(
             id=article_id,
@@ -121,7 +86,7 @@ class EquipeVideoArticle(Article):
             subheadline=metas["description"],
             content=content,
             url=metas["canonical"],
-            image="",
+            image=sharing_image,
         )
 
     def get_id_from_url(url: str):
