@@ -6,6 +6,7 @@ from random import choice
 import requests
 from bs4 import BeautifulSoup
 
+from .exceptions import sentry_block_error
 from .common import Article, add_figure, fix_links, make_figcaption
 
 _URL_ID_PATTERN = re.compile(r"(https:\/\/.+\.lefigaro\.fr\/.+-\d{8})")
@@ -31,6 +32,8 @@ def _build_block(block):
         return f"<blockquote>{block['text']}<br><br>- {block['credit']}</blockquote>"
     elif typename == "ParagraphWithPaywall":
         return "<p>" + _sanitize_html(block["paywall"]["text"]) + "</p>"
+    
+    sentry_block_error(typename)
     
     return ""
 

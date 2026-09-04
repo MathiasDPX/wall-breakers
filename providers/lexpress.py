@@ -3,6 +3,7 @@ import re
 import requests
 from bs4 import BeautifulSoup
 
+from .exceptions import sentry_block_error
 from .common import Article, add_figure, fix_links
 
 _URL_ID_PATTERN = re.compile(
@@ -24,6 +25,7 @@ def _build_block(block):
         level = block["level"]
         return f"<h{level}>" + _sanitize_html(block["content"]) + f"</h{level}>"
     
+    sentry_block_error(typename)
     return ""
 
 class ExpressArticle(Article):

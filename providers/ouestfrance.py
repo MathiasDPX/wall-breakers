@@ -42,6 +42,8 @@ def _build_block(block):
         hlevel = block["data"]["level"]
         return f"<h{hlevel}>" + block["data"]["content"] + f"</h{hlevel}>"
     
+    sentry_block_error(typename)
+    
     return ""
 
 class OuestFranceArticle(Article):

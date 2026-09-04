@@ -3,6 +3,7 @@ import re
 import requests
 from bs4 import BeautifulSoup
 
+from .exceptions import sentry_block_error
 from .common import Article, fix_links, add_figure, make_figcaption
 
 _URL_ID_PATTERN = re.compile(
@@ -34,6 +35,8 @@ def _build_block(block, references):
         r = requests.get("https://next-media-api.ft.com/v1/" + ref["id"])
         r.raise_for_status()
         return _add_video(r.json())
+    
+    sentry_block_error(typename)
     
     return ""
 

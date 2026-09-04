@@ -4,6 +4,7 @@ import requests
 from bs4 import BeautifulSoup
 from flask import abort
 
+from .exceptions import sentry_block_error
 from .common import Article, add_figure, fix_links, make_figcaption
 
 _URL_ID_PATTERN = re.compile(
@@ -34,6 +35,8 @@ def _build_content(content):
     
     if typename == "hardBreak":
         return "<br>"
+    
+    sentry_block_error(typename)
     
     return ""
 

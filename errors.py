@@ -1,6 +1,7 @@
 from flask import jsonify, render_template, request
 from requests import HTTPError
 from werkzeug.exceptions import HTTPException
+import sentry_sdk
 
 from providers.exceptions import *
 

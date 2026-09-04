@@ -5,6 +5,7 @@ from functools import lru_cache
 from bs4 import BeautifulSoup
 import requests
 
+from .exceptions import sentry_block_error
 from .common import Article, add_figure, fix_links
 
 _URL_ID_PATTERN = re.compile(
@@ -41,6 +42,8 @@ def _build_block(block):
     elif typename == "iframe":
         attrs = " ".join([f"{k}=\"{v}\"" for k,v in block.get("attribs", {}).items()])
         return f"<iframe {attrs}></iframe>"
+    
+    sentry_block_error(typename)
     
     return ""
 

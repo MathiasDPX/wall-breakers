@@ -3,6 +3,7 @@ import re
 import requests
 from bs4 import BeautifulSoup
 
+from .exceptions import sentry_block_error
 from .common import Article, add_figure, fix_links, make_figcaption
 
 _URL_ID_PATTERN = re.compile(
@@ -56,6 +57,8 @@ def _build_block(block):
             + f"</h{block['level']}>"
         )
 
+    sentry_block_error(typename)
+    
     return ""
 
 

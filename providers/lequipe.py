@@ -3,6 +3,7 @@ import re
 import requests
 from bs4 import BeautifulSoup
 
+from .exceptions import sentry_block_error
 from .common import Article, add_figure, fix_link, fix_links
 
 _URL_ID_PATTERN = re.compile(r"https:\/\/www\.lequipe\.fr\/(?!explore\/video\/).+\/(\d+)")
@@ -20,6 +21,8 @@ def _build_block(block):
         return add_figure(
             _build_media(block["media"], 1000), block["media"].get("legende")
         )
+
+    sentry_block_error(typename)
 
     return ""
 

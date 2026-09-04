@@ -6,8 +6,8 @@ import demjson3
 import requests
 from bs4 import BeautifulSoup
 
+from .exceptions import sentry_block_error
 from .common import Article, add_figure, fix_links
-from .exceptions import *
 
 _URL_ID_PATTERN = re.compile(r"https:\/\/(?:www\.)?nytimes\.com(\/.+\.html)")
 
@@ -44,6 +44,8 @@ def _build_inline(inline):
             content = f"<em>{content}</em>"
         elif typename == "UnderlineFormat":
             content = f"<u>{content}</u>"
+        
+        sentry_block_error("inline:"+typename)
 
     return content
 
@@ -136,6 +138,8 @@ def _build_block(block):
                 '<iframe class="interactive" '
                 f'src="{escape(url, quote=True)}" loading="lazy"></iframe>'
             )
+    
+    sentry_block_error(typename)
 
     return None
 

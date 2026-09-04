@@ -10,7 +10,6 @@ _URL_ID_PATTERN = re.compile(
 )
 
 
-
 class LeParisienArticle(Article):
     SLUG = "lp"
     PROVIDER = "Le Parisien"

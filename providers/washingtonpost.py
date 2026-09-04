@@ -5,6 +5,7 @@ from urllib.parse import urlparse, urlunparse
 import requests
 from bs4 import BeautifulSoup
 
+from .exceptions import sentry_block_error
 from .common import Article, add_figure, fix_links
 
 _URL_ID_PATTERN = re.compile(r"(https:\/\/www\.washingtonpost\.com/.+)")
@@ -43,6 +44,8 @@ def _build_block(block):
         return "<p>" + _sanitize_html(block["content"]) + "</p>"
     elif typename == "audio":
         return f"<audio controls src=\"{block['rawUrl']}\"></audio>"
+    
+    sentry_block_error(typename)
     
     return ""
 
