@@ -41,6 +41,10 @@ def _build_block(block):
     elif typename == "TEXT_HEADING":
         hlevel = block["data"]["level"]
         return f"<h{hlevel}>" + block["data"]["content"] + f"</h{hlevel}>"
+    elif typename == "MEDIA_VIDEO":
+        return f"<iframe src=\"{block['data']['url']}\" frameborder=\"0\"></iframe>"
+    elif typename in ["AD_DFP", "AD_TABOOLA_2", "EOC", "SECTION_LIST", "TEXT_LEADING"]:
+        return ""
     
     sentry_block_error(typename)
     
