@@ -56,6 +56,9 @@ def _build_block(block):
             + _sanitize_html(block["content"])
             + f"</h{block['level']}>"
         )
+    elif typename == "link_list":
+        # read also
+        return ""
 
     sentry_block_error(typename)
     

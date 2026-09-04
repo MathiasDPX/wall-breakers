@@ -18,6 +18,9 @@ def _build_block(block, references):
         return block["value"]
     elif typename == "break":
         return "<br>"
+    elif typename == "emphasis":
+        content = _build_blocks(block["children"], unsafe=True, references=references)
+        return f"<i>{content}</i>"
     elif typename == "link":
         content = _build_blocks(block["children"], unsafe=True, references=references)
         return f"<a href=\"{block['url']}\" title=\"{block['title']}\">{content}</a>"
@@ -35,6 +38,8 @@ def _build_block(block, references):
         r = requests.get("https://next-media-api.ft.com/v1/" + ref["id"])
         r.raise_for_status()
         return _add_video(r.json())
+    elif typename in ["main-image", "info-pair"]:
+        return ""
     
     sentry_block_error(typename)
     

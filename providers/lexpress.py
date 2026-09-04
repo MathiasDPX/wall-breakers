@@ -24,6 +24,9 @@ def _build_block(block):
     elif typename == "header":
         level = block["level"]
         return f"<h{level}>" + _sanitize_html(block["content"]) + f"</h{level}>"
+    elif typename == "link_list":
+        # read also
+        return ""
     
     sentry_block_error(typename)
     return ""

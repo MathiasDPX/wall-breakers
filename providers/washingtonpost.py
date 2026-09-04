@@ -44,6 +44,11 @@ def _build_block(block):
         return "<p>" + _sanitize_html(block["content"]) + "</p>"
     elif typename == "audio":
         return f"<audio controls src=\"{block['rawUrl']}\"></audio>"
+    elif typename in ["ad", "elevated_byline", "kicker", "title", "deck", "date", "byline", "toggle", "autorecirc_carousel", "author_info"]:
+        return ""
+    elif typename == "link":
+        if block.get("subtype") == "comments":
+            return ""
     
     sentry_block_error(typename)
     

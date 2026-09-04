@@ -32,6 +32,9 @@ def _build_block(block):
         return f"<blockquote>{block['text']}<br><br>- {block['credit']}</blockquote>"
     elif typename == "ParagraphWithPaywall":
         return "<p>" + _sanitize_html(block["paywall"]["text"]) + "</p>"
+    elif typename == "Link":
+        if "lire aussi" in block.get("prefix", "").lower():
+            return ""
     
     sentry_block_error(typename)
     
