@@ -20,8 +20,6 @@ class UnhandledBlockError(NotImplementedError):
     
     
 def sentry_block_error(typename:str):
-    print(f"Block `{typename}` isn't handled")
-    sentry_sdk.capture_exception(
-        UnhandledBlockError(f"Block of type `{typename}` isn't handled"),
-        tags={"block_type": typename}
-    )
+    with sentry_sdk.push_scope() as scope:
+        scope.level = "warning"
+        sentry_sdk.capture_exception(UnhandledBlockError(f"Block of type `{typename}` isn't handled"))
