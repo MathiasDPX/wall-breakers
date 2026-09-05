@@ -39,6 +39,7 @@
 - [The Athletic](https://www.nytimes.com/athletic/)
 - [South China Morning Post](https://www.scmp.com/)
 - [EBRA Médias](https://www.ebra.fr/ebra-medias)
+- [Science et Vie](https://www.science-et-vie.com/)
 </details>
 
 ## Userscript
