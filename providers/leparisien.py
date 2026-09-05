@@ -9,6 +9,9 @@ _URL_ID_PATTERN = re.compile(
     r".+leparisien\.fr\/.+-\d{2}-\d{2}-\d{4}-([A-Z0-9]{26})\.php"
 )
 
+_DAILYMOTION_ID_PATTERN = re.compile(
+    r"dailymotion-embed-player[\s\S]*?video:\s*[\"']([^\"']+)[\"']"
+)
 
 class LeParisienArticle(Article):
     SLUG = "lp"
@@ -25,6 +28,14 @@ class LeParisienArticle(Article):
         # Remove See Also
         for container in soup.select("div.article-read-also_container"):
             container.decompose()
+            
+        for video in soup.select("div.oembed-video_dm"):
+            dm_id_match = _DAILYMOTION_ID_PATTERN.search(video.decode_contents())
+            if dm_id_match is None:
+                continue
+            dm_id = dm_id_match.group(1)
+            
+            video.replace_with(BeautifulSoup(f'<div class="video-wrapper"><iframe allowfullscreen frameborder="0" width="100%" src="//www.dailymotion.com/embed/video/{dm_id}"></iframe></div>', features="html.parser"))
         
         for tag in soup.find_all():
             # Obliterate unwanted tags
@@ -33,8 +44,11 @@ class LeParisienArticle(Article):
                 continue
             
             # Keep only allowed tags
-            if tag.name not in ("figure", "figcaption", "p", "em", "a", "img", "h1", "h2", "h3", "h4", "h5", "h6", "b", "ul", "li"):
+            if tag.name not in ("figure", "figcaption", "p", "em", "a", "img", "h1", "h2", "h3", "h4", "h5", "h6", "b", "ul", "li", "iframe"):
                 tag.unwrap()
+                continue
+            
+            if tag.name == "iframe":
                 continue
             
             # Keep only allowed attributes
