@@ -181,6 +181,11 @@ ARTICLES = [
         CharlieHebdoArticle,
         "https://charliehebdo.fr/2026/08/societe/faire-le-mont-blanc-pour-exister-comment-les-nouveaux-alpinistes-ruinent-la-montagne/",
         "300558"
+    ),
+    (
+        ScienceEtVieArticle,
+        "https://www.science-et-vie.com/corps-et-sante/cancer/une-seule-boisson-sucree-par-jour-pourrait-augmenter-de-145-le-risque-de-cancer-de-lestomac-257643.html",
+        "257643"
     )
 ]
 
