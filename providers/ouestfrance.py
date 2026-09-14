@@ -43,7 +43,13 @@ def _build_block(block):
         return f"<h{hlevel}>" + block["data"]["content"] + f"</h{hlevel}>"
     elif typename == "MEDIA_VIDEO":
         return f"<iframe src=\"{block['data']['url']}\" frameborder=\"0\"></iframe>"
-    elif typename in ["AD_DFP", "AD_TABOOLA_2", "EOC", "SECTION_LIST", "TEXT_LEADING"]:
+    elif typename == "TEXT_LINK":
+        return f"<a href=\"{block['data']['url']}\">{block['data']['title']}</a>"
+    elif typename == "MEDIA_IMAGE":
+        return add_figure(block["data"]["binaryImage"]["url"], make_figcaption(block["data"].get("caption"), block["data"].get("credits")))
+    elif typename == "TEXT_HTML":
+        return block["data"]["html"]
+    elif typename in ["AD_DFP", "AD_TABOOLA_2", "EOC", "SECTION_LIST", "TEXT_LEADING", "TEXT_SCRIBBLE_LIVE", "ATOM_IFRAME"]:
         return ""
     
     sentry_block_error(typename)
