@@ -22,7 +22,13 @@ def _build_block(block):
             _build_media(block["media"], 1000), block["media"].get("legende")
         )
     elif typename == "article_paragraph_citation":
-        return f"<blockquote>{block['content']}<br>- {block['caption']}</blockquote>"
+        caption = block.get('caption')
+        if caption is None:
+            caption = ""
+        else:
+            caption = f"<br>- {caption}"
+            
+        return f"<blockquote>{block['content']}{caption}</blockquote>"
     elif typename in ["article_paragraph_pub", "article_paragraph_widget", "article_paragraph_placeholder_widget"]:
         return ""
 
