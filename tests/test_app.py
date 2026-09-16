@@ -48,7 +48,9 @@ URLS = [
     "https://www.lalsace.fr/economie/2026/08/26/le-kougelhopf-d-or-pour-francis-jamm-decroche-lors-de-la-foire-aux-vins",
     "https://www.lecanardenchaine.fr/environnement/54711-mais-qui-donc-aurait-pu-predire-toutes-ces-catastrophes",
     "https://charliehebdo.fr/2026/08/societe/faire-le-mont-blanc-pour-exister-comment-les-nouveaux-alpinistes-ruinent-la-montagne/",
-    "https://www.science-et-vie.com/corps-et-sante/cancer/une-seule-boisson-sucree-par-jour-pourrait-augmenter-de-145-le-risque-de-cancer-de-lestomac-257643.html"
+    "https://www.science-et-vie.com/corps-et-sante/cancer/une-seule-boisson-sucree-par-jour-pourrait-augmenter-de-145-le-risque-de-cancer-de-lestomac-257643.html",
+    "https://www.sudouest.fr/gironde/bordeaux/info-sud-ouest-romain-dupuy-de-retour-a-cadillac-dans-une-unite-fermee-apres-trois-ans-a-l-hopital-psychiatrique-de-bordeaux-30653312.php",
+    "https://www.larepubliquedespyrenees.fr/economie/transports/train/pyrenees-atlantiques-panne-d-electricite-geante-a-la-sncf-la-galere-des-usagers-video-30653617.php"
 ]
 
 if not IN_GITHUB_ACTIONS:

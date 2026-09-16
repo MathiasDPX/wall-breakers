@@ -25,7 +25,7 @@
 - [Le Télégramme](https://www.letelegramme.fr/)
 - [Libération](https://www.liberation.fr/)
 - [Actu.fr](https://actu.fr/)
-- [Charente Libre](https://www.charentelibre.fr/)
+- [Groupe Sud Ouest](https://groupesudouest.com/fr)
 - [Paris Match](https://www.parismatch.com/)
 - [L'Équipe](https://www.lequipe.fr/)
 - [L'Express](https://www.lexpress.fr/)

@@ -53,7 +53,7 @@ paths:
           name: slug
           schema:
             type: string
-            enum: ["jdd", "lm", "lp", "le", "lt", "nyt", "ta", "wp", "lf", "lib", "ekip", "of", "ci", "mp", "af", "cl", "lx", "pm", "no", "tr", "jdc", "ft", "na", "scmp", "jsl", "dna", "ld", "er", "rl", "bp", "vm", "lpr", "als", "ce", "ch", "sev"]
+            enum: ["jdd", "lm", "lp", "le", "lt", "nyt", "ta", "wp", "lf", "lib", "ekip", "of", "ci", "mp", "af", "cl", "lx", "pm", "no", "tr", "jdc", "ft", "na", "scmp", "jsl", "dna", "ld", "er", "rl", "bp", "vm", "lpr", "als", "ce", "ch", "sev", "so", "rep"]
           required: true
           description: |-
             Provider slug
@@ -95,6 +95,8 @@ paths:
               - `ce`: Le Canard Enchainé
               - `ch`: Charlie Hebdo
               - `sev`: Science et Vie
+              - `so`: Sud Ouest
+              - `rep`: La République des Pyrénées
         - in: path
           name: id
           schema:

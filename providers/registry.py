@@ -1,5 +1,4 @@
 from .actufr import ActuArticle
-from .charentelibre import CharenteLibreArticle
 from .common import Article
 from .courrierinternational import CourrierInternationalArticle
 from .lefigaro import FigaroArticle
@@ -24,6 +23,7 @@ from .washingtonpost import WashingtonPostArticle
 from .financialtimes import FinancialTimesArticle
 from .nikkei_asia import NikkeiAsiaArticle
 from .scmp import SCMPArticle
+from .gsoi import CharenteLibreArticle, SudOuestArticle, RepubliquePyreneesArticle
 from .ebra import AlsaceArticle, BienPublicArticle, DaupineArticle, DNAArticle, EstRepuArticle, ProgresArticle, JSLArticle, RepuLorrainArticle, VosgesMatinArticle
 from .canardenchaine import CanardEnchaineArticle
 from .charliehebdo import CharlieHebdoArticle
@@ -66,7 +66,9 @@ PROVIDERS:list[Article] = [
     CanardEnchaineArticle,
     CharlieHebdoArticle,
     EquipeVideoArticle,
-    ScienceEtVieArticle
+    ScienceEtVieArticle,
+    SudOuestArticle,
+    RepubliquePyreneesArticle
 ]
 
 ARTICLES:dict[str, Article] = {provider.SLUG: provider for provider in PROVIDERS}

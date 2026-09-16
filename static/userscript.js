@@ -43,6 +43,8 @@
 // @match        https://*.lecanardenchaine.fr/*
 // @match        https://charliehebdo.fr/*
 // @match        https://*.science-et-vie.com/*
+// @match        https://*.larepubliquedespyrenees.fr/*
+// @match        https://*.sudouest.fr/*
 // ==/UserScript==
 
 const BASE_URL = "https://news.mathiasd.fr";
