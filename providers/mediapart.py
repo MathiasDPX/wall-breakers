@@ -1,3 +1,4 @@
+from urllib.parse import urlparse, urlencode, parse_qs
 import base64
 import os
 import re
@@ -81,6 +82,20 @@ class MediapartArticle(Article):
 
         # Keep all attributes for descendants of Vimeo figures
         vimeo_descendants = {id(d) for f in soup.select("figure[data-path*='player.vimeo.com']") for d in f.find_all()}
+
+        for video in soup.find_all("iframe"):
+            src = video.get("src")
+            if "//cdn.embedly.com" not in src:
+                continue
+
+            parsed_url = urlparse(src)
+            vimeo_url = parse_qs(parsed_url.query).get("src")[0]
+            params = {
+                "url": vimeo_url,
+                "referer": url
+            }
+            video["src"] = "https://w.mathiasd.fr/cors/?" + urlencode(params)
+
 
         tags = soup.find_all()
         for tag in tags:
