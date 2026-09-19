@@ -1,4 +1,5 @@
 import re
+from datetime import datetime
 
 import requests
 from bs4 import BeautifulSoup
@@ -34,13 +35,16 @@ class JDDArticle(Article):
         content = soup.decode_contents()
         content = add_figure(data["image"]["url"], make_figcaption(data['image']['title'], data['image']['credits'])) + content
 
+        create_time = data.get("create_time")
+
         super().__init__(
             id=article_id,
             headline=data["title"],
             subheadline=data["intro"],
             content=content,
             url="https://www.lejdd.fr"+data["uri"],
-            image=data["image"]["url"]
+            image=data["image"]["url"],
+            publication_date=datetime.fromisoformat(create_time) if create_time else None
         )
     
     def get_id_from_url(url: str):

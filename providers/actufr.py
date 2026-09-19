@@ -1,4 +1,5 @@
 import re
+from datetime import datetime
 
 import requests
 from bs4 import BeautifulSoup
@@ -44,6 +45,7 @@ class ActuArticle(Article):
         content = soup.decode_contents()
         
         content = add_figure(data["photo"]["file"], data["photo"]["caption"]) + content
+        isodate = data.get("dateIso")
         
         super().__init__(
             id=article_id,
@@ -51,7 +53,8 @@ class ActuArticle(Article):
             subheadline=data["chapo"],
             content=content,
             url=data["permalink"],
-            image=data["photo"]["file"]
+            image=data["photo"]["file"],
+            publication_date=datetime.fromisoformat(isodate) if isodate else None
         )
     
     def get_id_from_url(url: str):

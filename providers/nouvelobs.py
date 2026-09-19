@@ -1,4 +1,5 @@
 import re
+from datetime import datetime
 
 import requests
 from bs4 import BeautifulSoup
@@ -66,13 +67,16 @@ class NouvelObsArticle(Article):
         content = soup.decode_contents()
         content = content.replace("{{{ scripts_bottom }}}", "")
 
+        publication_date = data["element"].get("publication_date")
+
         super().__init__(
             id=article_id,
             headline=data["element"]["title"],
             subheadline=data["element"]["subtitle"],
             content=content,
             url=data["sharing"]["configurations"]["default"]["url"],
-            image=image
+            image=image,
+            publication_date=datetime.fromisoformat(publication_date) if publication_date else None
         )
     
     def get_id_from_url(url: str):

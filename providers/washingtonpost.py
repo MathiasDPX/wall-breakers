@@ -1,6 +1,7 @@
 import base64
 import re
 from urllib.parse import urlparse, urlunparse
+from datetime import datetime
 
 import requests
 from bs4 import BeautifulSoup
@@ -75,13 +76,16 @@ class WashingtonPostArticle(Article):
         for block in data["items"]:
             content += _build_block(block)
 
+        first_publish = data.get("first_published")
+
         super().__init__(
             id=article_id,
             headline=data["title"],
             subheadline=data["blurb"],
             content=content,
             url=article_path,
-            image=data["socialImage"]
+            image=data["socialImage"],
+            publication_date=datetime.fromtimestamp(first_publish/1000) if first_publish else None
         )
     
     def get_id_from_url(url: str):

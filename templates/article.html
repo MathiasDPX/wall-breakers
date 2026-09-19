@@ -10,6 +10,10 @@
 <script src="{{ url_for('static', filename='js/print.js') }}"></script>
 <link href="{{ url_for('static', filename='css/lightbox.css') }}" rel="stylesheet">
 <title>{{ article.headline }} - Wall Breakers</title>
+
+{% if article.publication_date %}
+<meta property="article:published_time" content="{{ article.publication_date.isoformat() }}">
+{% endif %}
 {% endblock %}
 
 {% block content %}
@@ -17,6 +21,11 @@
     <header>
         <h1><a href="{{ article.url }}" target="_blank" rel="noreferrer">{% if article.FAVICON %}<img class="provider-icon" src="{{ article.FAVICON }}" title="{{ article.PROVIDER }}">{% endif %}{{ article.headline }}</a></h1>
         <div class="subheadline">{{ article.subheadline|safe }}</div>
+        <div class="metadata">
+            {% if article.publication_date %}
+                <time datetime="{{ article.publication_date.isoformat() }}">{{ article.publication_date.strftime("%B %d, %Y at %H:%M") }}</time>
+            {% endif %}
+        </div>
         {% if debug %}
         <div class="debug-section">
             <a target="_blank" href="./{{ article.raw_id }}/raw">↗</a>

@@ -1,4 +1,5 @@
 import re
+from datetime import datetime
 
 import requests
 from functools import lru_cache
@@ -49,6 +50,8 @@ class CharlieHebdoArticle(Article):
         fix_links(soup)
         content = figure + soup.decode_contents()
 
+        dateiso = data.get("date")
+
         super().__init__(
             id=article_id,
             headline=data["title"]["rendered"],
@@ -56,6 +59,7 @@ class CharlieHebdoArticle(Article):
             content=content,
             url=data["link"],
             image=media,
+            publication_date=datetime.fromisoformat(dateiso) if dateiso else None
         )
 
     @lru_cache()

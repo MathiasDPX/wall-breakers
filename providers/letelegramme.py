@@ -1,5 +1,6 @@
 import re
 
+from datetime import datetime
 import requests
 from bs4 import BeautifulSoup
 
@@ -74,6 +75,8 @@ class LeTelegrammeArticle(Article):
             image = f"https://media.letelegramme.fr/api/v1/images/view/{addon['idImg']}/web_golden_xxl/{addon['idImg']}.1"
             content = add_figure(image, make_figcaption(addon.get('title'), addon.get('credits'))) + content
 
+        date = data.get("creationDate")
+
         super().__init__(
             id=article_id,
             headline=data["title"],
@@ -81,6 +84,7 @@ class LeTelegrammeArticle(Article):
             content=content,
             url="https://www.letelegramme.fr" + data["url"],
             image=image,
+            publication_date=datetime.fromisoformat(date) if date else None
         )
 
     def get_id_from_url(url: str):

@@ -1,4 +1,5 @@
 import re
+from datetime import datetime
 
 import requests
 from bs4 import BeautifulSoup, NavigableString
@@ -86,6 +87,8 @@ class ScienceEtVieArticle(Article):
 
         subheadline = BeautifulSoup(data["excerpt"]["rendered"], features="html.parser").get_text(strip=True)
 
+        date = data.get("date")
+
         super().__init__(
             id=article_id,
             headline=data["title"]["rendered"],
@@ -93,6 +96,7 @@ class ScienceEtVieArticle(Article):
             content=content,
             url=data["link"],
             image=image["media"] if image else None,
+            publication_date=datetime.fromisoformat(date) if date else None
         )
 
     def get_id_from_url(url: str):

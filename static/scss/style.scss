@@ -175,6 +175,13 @@ article {
         }
     }
 
+    .metadata {
+        padding-top: 0.5em;
+        font: 1rem/1.5 $sans;
+
+        color: var(--muted);
+    }
+
     .debug-section {
         font: 1.1rem/1.5 $sans;
 

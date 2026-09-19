@@ -1,5 +1,6 @@
 import os
 import re
+from datetime import datetime
 
 from bs4 import BeautifulSoup
 
@@ -80,6 +81,8 @@ class OuestFranceArticle(Article):
         for block in data["body"]:
             content += _build_block(block)
 
+        published_at = data.get("lastPublicationDate")
+
         super().__init__(
             id=article_id,
             headline=data["title"],
@@ -87,6 +90,7 @@ class OuestFranceArticle(Article):
             content=content,
             url=data["url"],
             image=image["url"],
+            publication_date=datetime.fromisoformat(published_at) if published_at else None
         )
 
     def get_id_from_url(url: str):

@@ -1,3 +1,4 @@
+from datetime import datetime
 import re
 import json
 import base64
@@ -59,6 +60,7 @@ class NikkeiAsiaArticle(Article):
         
         fix_links(soup)
         content = soup.decode_contents()
+        unixts = data.get("displayDate")
 
         super().__init__(
             id=article_id,
@@ -67,6 +69,7 @@ class NikkeiAsiaArticle(Article):
             content=content,
             url=data["url"],
             image=data["image"]["imageUrl"],
+            publication_date=datetime.fromtimestamp(unixts) if unixts else None
         )
 
     def get_id_from_url(url: str):

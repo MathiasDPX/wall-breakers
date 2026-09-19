@@ -1,3 +1,4 @@
+from datetime import datetime
 import base64
 import json
 import re
@@ -73,6 +74,8 @@ class FigaroArticle(Article):
         
         for block in data["body"]["structured"]:
             content += _build_block(block)
+
+        published_at = data.get("publishedAt")
             
         super().__init__(
             id=article_id,
@@ -80,7 +83,8 @@ class FigaroArticle(Article):
             subheadline=data["standfirst"],
             content=content,
             url=data["url"],
-            image=thumbnail
+            image=thumbnail,
+            publication_date=datetime.fromisoformat(published_at) if published_at else None
         )
     
     def get_id_from_url(url: str):

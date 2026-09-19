@@ -1,4 +1,5 @@
 from urllib.parse import urlparse, urlencode, parse_qs
+from datetime import datetime
 import base64
 import os
 import re
@@ -38,6 +39,9 @@ class MediapartArticle(Article):
 
         soup = BeautifulSoup(data, features="html.parser")
         content_soup = soup.find("main", class_="news__body-wrapper")
+        heading = soup.select_one("div.news__heading__center")
+        time_tag = heading.select_one("time") if heading else None
+        timestamp = time_tag.get("datetime") if time_tag else None
 
         headline = soup.select_one("h1#page-title").decode_contents()
         subheadline = soup.find("p", class_="news__heading__top__intro").decode_contents()
@@ -160,7 +164,8 @@ class MediapartArticle(Article):
             subheadline=subheadline,
             content=content_soup.decode_contents(),
             url=url,
-            image=image
+            image=image,
+            publication_date=datetime.fromisoformat(timestamp) if timestamp else None
         )
     
     def get_id_from_url(url: str):

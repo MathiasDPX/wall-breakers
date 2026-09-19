@@ -1,5 +1,5 @@
 import re
-
+from datetime import datetime
 import requests
 from bs4 import BeautifulSoup
 from flask import abort
@@ -90,7 +90,8 @@ class JDCArticle(Article):
         blocks = article["contentJson"]["content"]
         for block in blocks:
             content += _build_block(block)
-            
+
+        published_at = article.get("publishedAt")
         
         super().__init__(
             id=article["id"],
@@ -98,7 +99,8 @@ class JDCArticle(Article):
             subheadline=article["hat"],
             content=content,
             url="https://www.lejdc.fr"+article["url"],
-            image=image
+            image=image,
+            publication_date=datetime.fromisoformat(published_at) if published_at else None
         )
     
     def get_id_from_url(url: str):

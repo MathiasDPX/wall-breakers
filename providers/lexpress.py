@@ -1,5 +1,6 @@
 import re
 
+from datetime import datetime
 import requests
 from bs4 import BeautifulSoup
 
@@ -46,13 +47,16 @@ class ExpressArticle(Article):
         # Add image
         content = add_figure(data["promo_items"]["basic"]["url"], data["promo_items"]["basic"].get("caption")) + content
 
+        date = data.get("publish_date")
+
         super().__init__(
             id=data["_id"],
             headline=data["headlines"]["basic"],
             subheadline=data["subheadlines"]["basic"],
             content=content,
             url="https://www.lexpress.fr"+data["website_url"],
-            image=data["promo_items"]["basic"]["url"]
+            image=data["promo_items"]["basic"]["url"],
+            publication_date=datetime.fromisoformat(date) if date else None
         )
     
     def get_id_from_url(url: str):

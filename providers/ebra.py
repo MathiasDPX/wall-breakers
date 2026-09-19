@@ -1,5 +1,5 @@
 import re
-
+from datetime import datetime
 from functools import lru_cache
 from urllib.parse import urlparse
 
@@ -62,6 +62,8 @@ class EbraArticle(Article):
             }
         
         fix_links(soup)
+
+        publication_date = (data.get("metadata") or {}).get("publication")
         
         super().__init__(
             id=article_id,
@@ -69,7 +71,8 @@ class EbraArticle(Article):
             subheadline=detail.get("standfirst") or "",
             content=soup.decode_contents(),
             url=metadata["weburl"],
-            image=image["url"] if image else "static/images/thumbnail.jpg"
+            image=image["url"] if image else "static/images/thumbnail.jpg",
+            publication_date=datetime.strptime(publication_date, "%m/%d/%Y %H:%M:%S") if publication_date else None
         )
     
     @classmethod

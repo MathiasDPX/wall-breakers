@@ -1,3 +1,4 @@
+from datetime import datetime
 import base64
 import re
 from urllib.parse import unquote
@@ -15,6 +16,10 @@ _URI_ID_PATTERN = re.compile(
     r"tlrm:\/\/element\?id=(.+).*"
 )
 
+_PUBLICATION_DATE_PATTERN = re.compile(
+    r"publishedAt: \"(\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}\+\d{2}:\d{2})\""
+)
+
 class TeleramaArticle(Article):
     SLUG = "tr"
     PROVIDER = "Telerama"
@@ -29,7 +34,7 @@ class TeleramaArticle(Article):
             subheadline = subheadline.decode_contents()
         else:
             subheadline = ""
-            
+
         if soup.find_all("article", attrs={"class": "article__page-content"}):
             soup = soup.find("article", attrs={"class": "article__page-content"})
 
@@ -68,13 +73,20 @@ class TeleramaArticle(Article):
         content = soup.decode_contents()
         content = content.replace("{{{ scripts_bottom }}}", "")
 
+        timestamp = _PUBLICATION_DATE_PATTERN.search(data["templates"]["raw_content"]["content"])
+        if timestamp:
+            timestamp = timestamp.group(1)
+        else:
+            timestamp = None
+
         super().__init__(
             id=article_id,
             headline=data["template_vars"]["share_title"],
             subheadline=subheadline,
             content=content,
-            url=data["template_vars"]["share_title"],
-            image=image
+            url=data["template_vars"]["share_link"],
+            image=image,
+            publication_date=datetime.fromisoformat(timestamp) if timestamp else None
         )
     
     def get_id_from_url(url: str):

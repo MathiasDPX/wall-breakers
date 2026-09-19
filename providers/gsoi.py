@@ -1,5 +1,5 @@
 import re
-
+from datetime import datetime
 import requests
 from bs4 import BeautifulSoup
 
@@ -37,6 +37,8 @@ class GSOIArticle(Article):
             author = media.get("author")
             
             content = add_figure(media["uri"], make_figcaption(legend, author)) + content
+
+        date = data.get("created_at")
         
         super().__init__(
             id=data["id"],
@@ -44,7 +46,8 @@ class GSOIArticle(Article):
             subheadline=data["head"],
             content=content,
             url=f"https://www.{self.DOMAIN}.fr{data['url']}",
-            image=image_url
+            image=image_url,
+            publication_date=datetime.fromisoformat(date) if date else None
         )
     
     @classmethod

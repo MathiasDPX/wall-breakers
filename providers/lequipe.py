@@ -1,5 +1,6 @@
 import re
 
+from datetime import datetime
 import requests
 from bs4 import BeautifulSoup
 
@@ -95,6 +96,8 @@ class EquipeArticle(Article):
         else:
             image = None
 
+        date = features["objet"].get("date")
+
         super().__init__(
             id=article_id,
             headline=features["objet"].get("long_title", features["objet"]["title"]),
@@ -102,6 +105,7 @@ class EquipeArticle(Article):
             content=content,
             url=data["urls"]["web"],
             image=image,
+            publication_date=datetime.fromisoformat(date) if date else None
         )
 
     def get_id_from_url(url: str):

@@ -1,5 +1,5 @@
 import re
-
+from datetime import datetime
 import requests
 from bs4 import BeautifulSoup
 
@@ -107,6 +107,8 @@ class FinancialTimesArticle(Article):
         content = add_figure(image["url"], make_figcaption(image["caption"], image["credit"]))
         content += _build_blocks(body["children"], data["body"]["structured"]["references"])
 
+        unixts = data.get("publishedTimestamp")
+
         super().__init__(
             id=article_id,
             headline=data["title"],
@@ -114,6 +116,7 @@ class FinancialTimesArticle(Article):
             content=content,
             url=data["url"],
             image=image["url"],
+            publication_date=datetime.fromtimestamp(unixts/1000) if unixts else None
         )
 
     def get_id_from_url(url: str):

@@ -1,4 +1,5 @@
 import re
+from datetime import datetime
 
 import requests
 from bs4 import BeautifulSoup
@@ -98,6 +99,8 @@ class LiberationArticle(Article):
                 + content
             )
 
+        publish_date = data.get("first_publish_date")
+
         super().__init__(
             id=article_id,
             headline=data["headlines"]["basic"],
@@ -105,6 +108,7 @@ class LiberationArticle(Article):
             content=content,
             url=url,
             image=image,
+            publication_date=datetime.fromisoformat(publish_date) if publish_date else None
         )
 
     def get_id_from_url(url: str):

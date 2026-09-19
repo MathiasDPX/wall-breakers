@@ -1,5 +1,6 @@
 import re
 
+from datetime import datetime
 import requests
 from bs4 import BeautifulSoup
 
@@ -31,13 +32,16 @@ class LesEchosArticle(Article):
         content = soup.decode_contents()
         content = add_figure(image, make_figcaption(data['image']['caption'], data['image']['credits'])) + content
 
+        date = data.get("publicationDate")
+
         super().__init__(
             id=article_id,
             headline=data["title"],
             subheadline=data["lead"],
             content=content,
             url="https://www.lesechos.fr"+data["path"],
-            image=image
+            image=image,
+            publication_date=datetime.fromisoformat(date) if date else None
         )
     
     def get_id_from_url(url: str):

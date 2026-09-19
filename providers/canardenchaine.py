@@ -1,6 +1,7 @@
 import re
 import base64
 from random import randint
+from datetime import datetime
 
 import requests
 from bs4 import BeautifulSoup
@@ -27,6 +28,9 @@ class CanardEnchaineArticle(Article):
         
         og_url = soup.find("meta", property="og:image")
         og_url = og_url.get("content") if og_url else f"https://archives.lecanardenchaine.fr/static/img/og/le-canard-enchaine-0{randint(1,4)}.jpg"
+
+        time_tag = heading.select_one("time") if heading else None
+        publication_date_iso = time_tag.get("datetime") if time_tag else None
         
         subheadline_element = editorial.select_one("h2.editorial__chapo")
         if subheadline_element is not None:
@@ -60,6 +64,7 @@ class CanardEnchaineArticle(Article):
             content=editorial.decode_contents(),
             url="https://www.lecanardenchaine.fr"+path,
             image=og_url,
+            publication_date=datetime.fromisoformat(publication_date_iso) if publication_date_iso else None
         )
 
     def get_id_from_url(url: str):

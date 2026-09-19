@@ -3,6 +3,7 @@ import os
 import re
 import threading
 import time
+from datetime import datetime
 from abc import ABC, abstractmethod
 from dataclasses import dataclass
 from hashlib import sha256
@@ -21,6 +22,8 @@ class Article(ABC):
     content: list
     url: str
     image: str
+    publication_date: datetime | None = None
+
 
     def __post_init__(self):
         self.raw_id = self.id
@@ -58,6 +61,7 @@ class Article(ABC):
             "content": self.content,
             "url": self.url,
             "image": self.image,
+            "publication_date": self.publication_date.isoformat() if self.publication_date else None,
         }
 
 

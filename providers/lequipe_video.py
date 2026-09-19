@@ -1,4 +1,5 @@
 import re
+from datetime import datetime
 
 import requests
 from flask import abort
@@ -83,6 +84,8 @@ class EquipeVideoArticle(Article):
             
         sharing_image = _build_media(data["metas"]["sharing_image"], 1000)
 
+        date = feature.get("date")
+
         super().__init__(
             id=article_id,
             headline=feature["title"],
@@ -90,6 +93,7 @@ class EquipeVideoArticle(Article):
             content=content,
             url=metas["canonical"],
             image=sharing_image,
+            publication_date=datetime.fromisoformat(date) if date else None
         )
 
     def get_id_from_url(url: str):

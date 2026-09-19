@@ -1,4 +1,5 @@
 import re
+from datetime import datetime
 
 import requests
 from bs4 import BeautifulSoup
@@ -88,13 +89,16 @@ class LeMondeArticle(Article):
                 image = tag["content"]
                 content = add_figure(image) + content
 
+        publication_date = data["element"].get("publication_date")
+
         super().__init__(
             id=article_id,
             headline=data["template_vars"]["seo_title"],
             subheadline=data["template_vars"]["share_kicker"],
             content=content,
             url=data["element"]["url"],
-            image=image
+            image=image,
+            publication_date=datetime.fromisoformat(publication_date) if publication_date else None
         )
     
     def get_id_from_url(url: str):

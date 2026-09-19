@@ -1,5 +1,6 @@
 import re
 import json
+from datetime import datetime
 from functools import lru_cache
 
 from bs4 import BeautifulSoup
@@ -76,13 +77,16 @@ class SCMPArticle(Article):
         soup = BeautifulSoup(content, features="html.parser")
         fix_links(soup)
 
+        date = data.get("publishedDate")
+
         super().__init__(
             id=article_id,
             headline=data["headline"],
             subheadline=_build_blocks(data["subHeadline"]["json"]),
             content=soup.decode_contents(),
             url="https://www.scmp.com"+data["urlAlias"],
-            image=image["url"]
+            image=image["url"],
+            publication_date=datetime.fromtimestamp(date/1000) if date else None
         )
         
     @lru_cache()

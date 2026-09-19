@@ -1,4 +1,5 @@
 import re
+from datetime import datetime
 
 import requests
 from bs4 import BeautifulSoup
@@ -60,6 +61,8 @@ class ParisMatchArticle(Article):
             + soup.decode_contents()
         )
 
+        published_at = data.get("publication_time")
+
         super().__init__(
             id=article_id,
             headline=data["title"],
@@ -67,6 +70,7 @@ class ParisMatchArticle(Article):
             content=content,
             url="https://www.parismatch.com"+data["uri"],
             image=image,
+            publication_date=datetime.fromisoformat(published_at) if published_at else None
         )
 
     def get_id_from_url(url: str):
