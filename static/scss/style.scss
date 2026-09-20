@@ -151,8 +151,30 @@ article {
 
     header {
         margin-bottom: 36px;
-        padding-bottom: 26px;
+        padding-bottom: 16px;
         border-bottom: 1px solid var(--border);
+    }
+
+    details.factuality_score {
+        padding-top: 0.5em;
+
+        div {
+            height: 1em;
+            width: 100%;
+            display: flex;
+
+            p {
+                margin: 0;
+                padding: 0;
+                height: 100%;
+
+                &.factuality_0 { background-color: #E74C3C; }
+                &.factuality_1 { background-color: #F39C12; }
+                &.factuality_2 { background-color: #F1C40F; }
+                &.factuality_3 { background-color: #A3D977; }
+                &.factuality_4 { background-color: #2ECC71; }
+            }
+        }
     }
 
     h1 {
@@ -358,7 +380,8 @@ footer {
     nav,
     footer,
     div.debug-section,
-    audio {
+    audio,
+    details.factuality_score {
         display: none !important;
     }
 

@@ -25,6 +25,18 @@
             {% if article.publication_date %}
                 <time datetime="{{ article.publication_date.isoformat() }}">{{ article.publication_date.strftime("%B %d, %Y at %H:%M") }}</time>
             {% endif %}
+            {% if article.factuality_score %}
+                <details class="factuality_score">
+                    <summary title="5: true, 0: false">Factuality score: {{ article.factuality_score.score }}, Confidence: {{ (article.factuality_score.confidence * 100) | int }}%</summary>
+                    <div>
+                        {% for idx in article.factuality_score.legend %}
+                            {% set probability = article.factuality_score.probabilities[idx] %}
+                            {% set legend = article.factuality_score.legend[idx] %}
+                            <p title="{{ legend }}: {{ (probability * 100) | int }}%" class="factuality_{{ loop.index0 }}" style="width: {{ probability*100 }}%;"></p>
+                        {% endfor%}
+                    </div>
+                </details>
+            {% endif %}
         </div>
         {% if debug %}
         <div class="debug-section">

@@ -9,10 +9,24 @@ from dataclasses import dataclass
 from hashlib import sha256
 from pathlib import Path
 
+from typesafe_sdk import Score, TypeSafeClient
 import requests
 
 from .exceptions import MediapartInvalidLogin
 
+
+JEV_QUESTIONS = {
+    "fake_news": Score(
+        instructions="Determine whether the article titled '`headline`' contains fake news. Analyze the article's factual claims, sourcing, internal consistency, attribution of allegations, and whether the wording clearly distinguishes verified facts from testimonies, allegations, opinions, or unresolved claims. Do not classify an article as fake news merely because it reports allegations or controversial claims. Consider the publication date and the information available at that time. If the article is broadly consistent with the available evidence and responsibly attributes unverified claims, return false. If the article contains one or more materially false, fabricated, or seriously misleading factual claims presented as facts, return true.",
+        criteria=[
+            "False",
+            "Misleading",
+            "Uncertain",
+            "Mostly accurate",
+            "Accurate"
+        ]
+    )
+}
 
 @dataclass
 class Article(ABC):
@@ -28,6 +42,12 @@ class Article(ABC):
     def __post_init__(self):
         self.raw_id = self.id
         self.id = f"{self.PROVIDER}:{self.id}"
+        
+        try:
+            self.factuality_score = self.get_factuality_score()
+        except:
+            # TODO: throw Sentry error
+            self.factuality_score = 0
 
     @classmethod
     def get_from_url(cls, url: str):
@@ -44,6 +64,25 @@ class Article(ABC):
     @abstractmethod
     def get_data(id: str):
         raise NotImplementedError
+    
+    def get_factuality_score(self):
+        if "TYPESAFE_API_KEY" not in os.environ:
+            return None
+        
+        with TypeSafeClient() as client:
+            response = client.system_one(
+                state={
+                    "headline": self.headline,
+                    "subheadline": self.subheadline,
+                    "body": self.content,
+                    "source": self.PROVIDER
+                },
+                questions=JEV_QUESTIONS
+            )
+            
+            return response.scores["fake_news"]
+        
+        return None
     
     def get_readable_data(id: str):
         raise NotImplementedError
