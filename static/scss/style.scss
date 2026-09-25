@@ -77,25 +77,66 @@ main {
 }
 
 .article-form {
-    position: relative;
+    .input-wrapper {
+        position: relative;
 
-    input {
-        display: block;
-        width: 100%;
-        padding: 15px 17px;
-        border: 1px solid var(--border);
-        border-radius: 6px;
-        outline: none;
-        background: transparent;
-        color: var(--text);
-        font: 1rem $sans;
+        input {
+            display: block;
+            width: 100%;
+            padding: 15px 46px 15px 17px;
+            border: 1px solid var(--border);
+            border-radius: 6px;
+            outline: none;
+            background: transparent;
+            color: var(--text);
+            font: 1rem $sans;
 
-        &::placeholder {
-            color: var(--placeholder);
+            &::placeholder {
+                color: var(--placeholder);
+            }
+
+            &:focus {
+                border-color: var(--accent);
+            }
         }
 
-        &:focus {
-            border-color: var(--accent);
+        #clearInput {
+            position: absolute;
+            top: 50%;
+            right: 8px;
+            display: grid;
+            place-items: center;
+            width: 30px;
+            height: 30px;
+            padding: 0;
+            transform: translateY(-50%);
+            border: none;
+            border-radius: 50%;
+            background: transparent;
+            color: var(--muted);
+            cursor: pointer;
+
+            &::before,
+            &::after {
+                grid-area: 1 / 1;
+                width: 13px;
+                height: 2px;
+                border-radius: 1px;
+                background: currentColor;
+                content: '';
+            }
+
+            &::before {
+                transform: rotate(45deg);
+            }
+
+            &::after {
+                transform: rotate(-45deg);
+            }
+
+            &[hidden] {
+                display: none;
+            }
         }
     }
 }

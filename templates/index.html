@@ -12,7 +12,10 @@
 {% block content %}
 <div class="main">
     <div class="article-form">
-        <input id="searchInput" name="url" placeholder="Link to the original article" type="url" inputmode="url" autocomplete="url" required autofocus>
+        <div class="input-wrapper">
+            <input id="searchInput" name="url" placeholder="Link to the original article" type="url" inputmode="url" autocomplete="url" required autofocus>
+            <button id="clearInput" type="button" aria-label="Clear the link" title="Clear the link" hidden></button>
+        </div>
         <p id="feedback" role="status" aria-live="polite"></p>
     </form>
 
@@ -66,7 +69,22 @@
 <script>
 const inputNode = document.getElementById("searchInput");
 const feedbackNode = document.getElementById("feedback");
+const clearNode = document.getElementById("clearInput");
 
+function toggleClearButton() {
+    clearNode.hidden = inputNode.value === "";
+}
+
+inputNode.addEventListener("input", toggleClearButton);
+toggleClearButton();
+
+clearNode.addEventListener("click", function () {
+    inputNode.value = "";
+    toggleClearButton();
+    feedbackNode.className = "";
+    feedbackNode.innerText = "";
+    inputNode.focus();
+});
 
 
 inputNode.addEventListener("keyup", function (event) {
