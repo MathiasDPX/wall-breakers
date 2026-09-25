@@ -1,5 +1,6 @@
 import re
 from datetime import datetime
+from html import escape
 import requests
 from bs4 import BeautifulSoup
 
@@ -9,6 +10,8 @@ from .common import Article, fix_links, add_figure, make_figcaption
 _URL_ID_PATTERN = re.compile(
     r"https:\/\/www\.ft\.com\/content\/([a-z0-9]{8}-[a-z0-9]{4}-[a-z0-9]{4}-[a-z0-9]{4}-[a-z0-9]{12}).*"
 )
+
+_FLOURISH_ID_PATTERN = re.compile(r"flourish\.studio(?:%2F|/)visualisation(?:%2F|/)(\d+)")
 
 def _build_block(block, references):
     # All subblocks are build with unsafe set to True cuz the body blocks will be builds safely
@@ -38,6 +41,10 @@ def _build_block(block, references):
         r = requests.get("https://next-media-api.ft.com/v1/" + ref["id"])
         r.raise_for_status()
         return _add_video(r.json())
+    elif typename == "flourish":
+        ref = references[block["data"]["referenceIndex"]]
+        
+        return _add_flourish(block, ref)
     elif typename in ["main-image", "info-pair"]:
         return ""
     
@@ -90,6 +97,30 @@ def _add_video(data):
         title_tag = f" title=\"{title}\""
         
     return f"<video controls><source src=\"{max_quality['url']}\"{poster_tag}{title_tag}>{captions_tag}</video>"
+
+
+def _add_flourish(block, ref):
+    fallback_image = ref.get("fallbackImage") or {}
+
+    visualisation_id = str(block.get("id") or "")
+    if not visualisation_id.isdigit():
+        match = _FLOURISH_ID_PATTERN.search(fallback_image.get("url", ""))
+        visualisation_id = match.group(1) if match else ""
+
+    if not visualisation_id:
+        fallback_url = fallback_image.get("url")
+        return add_figure(fallback_url) if fallback_url else ""
+
+    width = fallback_image.get("width")
+    height = fallback_image.get("height")
+    ratio = f"{width} / {height}" if width and height else "16 / 9"
+
+    title = escape(block.get("description") or "Flourish visualisation", quote=True)
+
+    return (
+        f'<figure><iframe src="https://public.flourish.studio/visualisation/{visualisation_id}/embed"'
+        f' frameborder="0" loading="lazy" title="{title}" style="aspect-ratio: {ratio};"></iframe></figure>'
+    )
 
 class FinancialTimesArticle(Article):
     SLUG = "ft"

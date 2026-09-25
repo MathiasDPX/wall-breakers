@@ -37,7 +37,7 @@ def _build_block(block):
         return f"<blockquote><h3>{block.get('subtitle', '')}</h3><p>{block.get('content', '')}</p></blockquote>"
     elif typename == "article_paragraph_note":
         return _build_note(block)
-    elif typename in ["article_paragraph_pub", "article_paragraph_widget", "article_paragraph_placeholder_widget"]:
+    elif typename in ["article_paragraph_pub", "article_paragraph_widget", "article_paragraph_placeholder_widget", "article_paragraph_playing_field"]:
         return ""
 
     sentry_block_error(typename)
