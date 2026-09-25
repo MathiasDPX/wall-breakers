@@ -81,13 +81,14 @@ class LeMondeArticle(Article):
                 
         content = soup.decode_contents()
                 
-        if "property=\"og:image\"" in data["template_vars"]["og_metas"] and not figure:
-            meta_soup = BeautifulSoup(data["template_vars"]["og_metas"], "html.parser")
-            tag = meta_soup.find("meta", property="og:image")
-            
-            if tag:
-                image = tag["content"]
-                content = add_figure(image) + content
+        if data["template_vars"].get("og_metas") is not None:
+            if "property=\"og:image\"" in data["template_vars"]["og_metas"] and not figure:
+                meta_soup = BeautifulSoup(data["template_vars"]["og_metas"], "html.parser")
+                tag = meta_soup.find("meta", property="og:image")
+                
+                if tag:
+                    image = tag["content"]
+                    content = add_figure(image) + content
 
         publication_date = data["element"].get("publication_date")
 
