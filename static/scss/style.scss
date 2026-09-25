@@ -3,6 +3,7 @@
 
 :root {
     --background: #0f0f0f;
+    --surface: #1a1a1a;
     --text: #e8e8e8;
     --muted: #999;
     --border: #2a2a2a;
@@ -16,6 +17,7 @@
 @media (prefers-color-scheme: light) {
     :root {
         --background: #ffffff;
+        --surface: #f6f6f6;
         --text: #1a1a1a;
         --muted: #555;
         --border: #d0d0d0;
@@ -320,6 +322,55 @@ article {
         max-width: 100%;
     }
 
+    .note {
+        --note-color: var(--accent);
+
+        margin: 1.5em 0;
+        padding: 1em 1.1em;
+        border-inline-start: 4px solid color-mix(in srgb, var(--note-color) 85%, var(--text));
+        border-radius: 4px;
+        background: color-mix(in srgb, var(--note-color) 12%, var(--surface));
+
+        p {
+            margin: .6em 0 0;
+        }
+    }
+
+    .note-team {
+        padding: 0;
+        border-inline-start: none;
+        background: none;
+    }
+
+    .note-header {
+        display: flex;
+        align-items: center;
+        gap: .75em;
+        font: 500 1rem $sans;
+    }
+
+    .note-label {
+        font-weight: 600;
+    }
+
+    .note-picture {
+        width: 48px;
+        height: 48px;
+        flex-shrink: 0;
+        border-radius: 50%;
+        object-fit: cover;
+    }
+
+    .note-rating {
+        margin-inline-start: auto;
+        padding: .1em .55em;
+        border-radius: 999px;
+        background: var(--note-color);
+        color: #fff;
+        font-size: .85em;
+        font-variant-numeric: tabular-nums;
+    }
+
     pre,
     table {
         display: block;
@@ -410,6 +461,17 @@ footer {
 
         figure, h2 {
             break-inside: avoid;
+        }
+
+        .note {
+            break-inside: avoid;
+            border: 1px solid var(--border);
+            background: none;
+        }
+
+        .note-rating {
+            border: 1px solid var(--border);
+            background: none;
         }
     }
 }

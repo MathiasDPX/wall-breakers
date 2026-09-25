@@ -1,6 +1,8 @@
 import re
 
 from datetime import datetime
+from html import escape
+
 import requests
 from bs4 import BeautifulSoup
 
@@ -8,6 +10,7 @@ from .exceptions import sentry_block_error
 from .common import Article, add_figure, fix_link, fix_links
 
 _URL_ID_PATTERN = re.compile(r"https:\/\/www\.lequipe\.fr\/(?!explore\/video\/).+\/(\d+)")
+_COLOR_PATTERN = re.compile(r"^#(?:[0-9a-fA-F]{3}|[0-9a-fA-F]{6})$")
 
 
 def _build_block(block):
@@ -30,12 +33,55 @@ def _build_block(block):
             caption = f"<br>- {caption}"
             
         return f"<blockquote>{block['content']}{caption}</blockquote>"
+    elif typename == "article_paragraph_focus":
+        return f"<blockquote><h3>{block.get('subtitle', '')}</h3><p>{block.get('content', '')}</p></blockquote>"
+    elif typename == "article_paragraph_note":
+        return _build_note(block)
     elif typename in ["article_paragraph_pub", "article_paragraph_widget", "article_paragraph_placeholder_widget"]:
         return ""
 
     sentry_block_error(typename)
 
     return ""
+
+
+def _build_note_picture(note, block, size=100):
+    picture = note.get("picture") or block.get("image") or {}
+    url = picture.get("url", "")
+
+    if not url:
+        return ""
+
+    url = url.replace("{width}", str(size)).replace("{height}", str(size)).replace("{quality}", "80")
+
+    return f'<img class="note-picture" src="{escape(url, quote=True)}" alt="">'
+
+
+def _build_note(block):
+    note = block.get("note") or {}
+
+    color = note.get("background_color", "")
+    if not _COLOR_PATTERN.match(color):
+        color = ""
+
+    rating = note.get("rating") or 0
+    rating = f'<span class="note-rating">{rating}/10</span>' if rating > 0 else ""
+
+    header = (
+        '<div class="note-header">'
+        f'{_build_note_picture(note, block)}'
+        f'<strong class="note-label">{escape(note.get("label", ""))}</strong>'
+        f"{rating}"
+        "</div>"
+    )
+
+    style = f' style="--note-color:{color}"' if color else ""
+    content = block.get("content")
+
+    if not content:
+        return f'<div class="note note-team"{style}>{header}</div>'
+
+    return f'<div class="note"{style}>{header}{_sanitize_html(content)}</div>'
 
 
 def _get_item(items, layout):
