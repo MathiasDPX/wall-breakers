@@ -1,5 +1,7 @@
 import sentry_sdk
 
+from metrics import record_unhandled_block
+
 class DataDomeCookieExpiredError(RuntimeError):
     pass
 
@@ -20,6 +22,8 @@ class UnhandledBlockError(NotImplementedError):
     
     
 def sentry_block_error(typename:str):
-    with sentry_sdk.push_scope() as scope:
-        scope.level = "warning"
-        sentry_sdk.capture_exception(UnhandledBlockError(f"Block of type `{typename}` isn't handled"))
+    record_unhandled_block(typename)
+    sentry_sdk.capture_exception(
+        UnhandledBlockError(f"Block of type `{typename}` isn't handled"),
+        level="warning",
+    )
