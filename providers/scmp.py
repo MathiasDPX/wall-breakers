@@ -91,7 +91,9 @@ class SCMPArticle(Article):
         
     @lru_cache()
     def _get_uuid(url:str):
-        r = requests.get(url)
+        r = requests.get(url, headers={
+            "User-Agent": "Mozilla/5.0 (X11; Linux x86_64; rv:156.0) Gecko/20100101 Firefox/156.0"
+        })
                 
         match = _UUID_PATTERN.search(r.content.decode())
         if match is None:
