@@ -66,8 +66,8 @@ class ActuArticle(Article):
     
     def get_data(id):
         r = requests.get(f"https://api.actu.fr/posts/{id}", headers={
-            "HX-Request": "true",
-            "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/150.0.0.0 Safari/537.36"
+            "Accept": "application/json",
+            "User-Agent": "ActuApp/2.0"
         })
         r.raise_for_status()
         
