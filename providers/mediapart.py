@@ -39,12 +39,15 @@ class MediapartArticle(Article):
 
         soup = BeautifulSoup(data, features="html.parser")
         content_soup = soup.find("main", class_="news__body-wrapper")
+        if content_soup is None:
+            content_soup = soup.find("div", class_="paywall-restricted-content")
+
         heading = soup.select_one("div.news__heading__center")
         time_tag = heading.select_one("time") if heading else None
         timestamp = time_tag.get("datetime") if time_tag else None
 
         headline = soup.select_one("h1#page-title").decode_contents()
-        subheadline = soup.find("p", class_="news__heading__top__intro").decode_contents()
+        subheadline = soup.find("meta", property="ownpage:description").get("content")
         url = soup.find("meta", property="og:url").get("content")
         image = soup.find("meta", property="og:image").get("content")
 
@@ -82,7 +85,9 @@ class MediapartArticle(Article):
                 container.insert_before(video.extract())
             container.decompose()
 
-        content_soup.find("div", class_="news__body").unwrap()
+        newsbody = content_soup.find("div", class_="news__body")
+        if newsbody:
+            newsbody.unwrap()
 
         # Keep all attributes for descendants of Vimeo figures
         vimeo_descendants = {id(d) for f in soup.select("figure[data-path*='player.vimeo.com']") for d in f.find_all()}
