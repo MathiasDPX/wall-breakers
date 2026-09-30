@@ -22,9 +22,12 @@ def _build_block(block):
 
         return "<p>" + _sanitize_html(block.get("content", "")) + "</p>"
     elif typename == "article_paragraph_media":
-        return add_figure(
-            _build_media(block["media"], 1000), block["media"].get("legende")
-        )
+        media = block["media"]
+
+        if media.get("__type") == "video":
+            return _build_video(media)
+
+        return add_figure(_build_media(media, 1000), media.get("legende"))
     elif typename == "article_paragraph_citation":
         caption = block.get('caption')
         if caption is None:
@@ -109,6 +112,30 @@ def _build_media(media, height):
     image = image.replace("{quality}", "80")
 
     return image
+
+
+def _build_video(media):
+    provider = media.get("provider")
+    video_id = media.get("token") or media.get("id")
+
+    if provider != "DAILYMOTION" or not video_id:
+        sentry_block_error(provider or "video")
+
+        return ""
+
+    legend = media.get("legend")
+    caption = f"<figcaption>{legend}</figcaption>" if legend else ""
+
+    return (
+        "<figure>"
+        '<div class="video-wrapper">'
+        '<iframe allowfullscreen frameborder="0" width="100%"'
+        f' src="https://www.dailymotion.com/embed/video/{escape(video_id, quote=True)}">'
+        "</iframe>"
+        "</div>"
+        f"{caption}"
+        "</figure>"
+    )
 
 
 class EquipeArticle(Article):
