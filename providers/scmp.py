@@ -43,6 +43,9 @@ def _build_block(block):
     elif typename == "iframe":
         attrs = " ".join([f"{k}=\"{v}\"" for k,v in block.get("attribs", {}).items()])
         return f"<iframe {attrs}></iframe>"
+    elif typename == "blockquote-quote":
+        subchildren = "<br>".join([_build_block(subblock) for subblock in block["children"]])
+        return f"<blockquote>{subchildren}</blockquote>"
     
     sentry_block_error(typename)
     
