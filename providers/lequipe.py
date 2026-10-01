@@ -153,21 +153,21 @@ class EquipeArticle(Article):
         for block in body["objet"]["paragraphs"]:
             content += _build_block(block)
 
-        if data["metas"]["sharing_image"]["ratio"] != -1:
-            if data["metas"]["sharing_image"].get("formats") is None:
-                image = data["metas"]["sharing_image"]["url"].replace("{width}", str(int(1000 * data["metas"]["sharing_image"]["ratio"])))
-                image = image.replace("{height}", str(1000))
-                image = image.replace("{quality}", "80")
-            else:  
-                image = _build_media(
-                    data["metas"]["sharing_image"]["formats"]["landscape"], 1000
+        image = None
+        if "sharing_image" in data["metas"]:
+            if data["metas"]["sharing_image"]["ratio"] != -1:
+                if data["metas"]["sharing_image"].get("formats") is None:
+                    image = data["metas"]["sharing_image"]["url"].replace("{width}", str(int(1000 * data["metas"]["sharing_image"]["ratio"])))
+                    image = image.replace("{height}", str(1000))
+                    image = image.replace("{quality}", "80")
+                else:  
+                    image = _build_media(
+                        data["metas"]["sharing_image"]["formats"]["landscape"], 1000
+                    )
+                content = (
+                    add_figure(image, data["metas"]["sharing_image"].get("legende"))
+                    + content
                 )
-            content = (
-                add_figure(image, data["metas"]["sharing_image"].get("legende"))
-                + content
-            )
-        else:
-            image = None
 
         date = features["objet"].get("date")
 
