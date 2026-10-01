@@ -1,7 +1,8 @@
 from datetime import datetime
 import base64
 import re
-from urllib.parse import unquote
+from html import escape
+from urllib.parse import unquote, urljoin
 
 import requests
 from bs4 import BeautifulSoup
@@ -20,6 +21,25 @@ _PUBLICATION_DATE_PATTERN = re.compile(
     r"publishedAt: \"(\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}\+\d{2}:\d{2})\""
 )
 
+
+def _build_notation(label: str, image: str) -> str:
+    if not label and not image:
+        return ""
+
+    stars = (
+        f'<img class="notation-stars" src="{escape(image, quote=True)}" alt="">'
+        if image
+        else ""
+    )
+
+    return (
+        '<div class="notation">'
+        f"{stars}"
+        f'<span class="notation-label">{escape(label)}</span>'
+        "</div>"
+    )
+
+
 class TeleramaArticle(Article):
     SLUG = "tr"
     PROVIDER = "Telerama"
@@ -34,6 +54,20 @@ class TeleramaArticle(Article):
             subheadline = subheadline.decode_contents()
         else:
             subheadline = ""
+
+        notation_container = soup.select_one("ul.sheet__notation-container")
+        if notation_container is not None:
+            notation_label = notation_container.select_one(".sheet__notation-label")
+            notation_image = notation_container.select_one(".sheet__notation img")
+            notation_label = notation_label.get_text(strip=True) if notation_label else ""
+            notation_image = (
+                urljoin("https://www.telerama.fr", notation_image["src"])
+                if notation_image and notation_image.get("src")
+                else ""
+            )
+        else:
+            notation_label = ""
+            notation_image = ""
 
         if soup.find_all("article", attrs={"class": "article__page-content"}):
             soup = soup.find("article", attrs={"class": "article__page-content"})
@@ -69,6 +103,14 @@ class TeleramaArticle(Article):
             img = figure.find("img")
             if img and image is None:
                 image = img.get("src")
+
+        notation = _build_notation(notation_label, notation_image)
+        if notation:
+            notation = BeautifulSoup(notation, features="html.parser")
+            if figure:
+                figure.insert_after(notation)
+            else:
+                soup.insert(0, notation)
 
         content = soup.decode_contents()
         content = content.replace("{{{ scripts_bottom }}}", "")

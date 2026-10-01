@@ -371,6 +371,28 @@ article {
         font-variant-numeric: tabular-nums;
     }
 
+    .notation {
+        display: flex;
+        align-items: center;
+        gap: .6em;
+        width: fit-content;
+        max-width: 100%;
+        margin: 0 0 1.5em;
+        padding: .45em .85em .45em .65em;
+        font: 500 1rem/1.4 $sans;
+    }
+
+    .notation-stars {
+        display: block;
+        flex-shrink: 0;
+        width: auto;
+        height: 1.15em;
+    }
+
+    .notation-label {
+        font-weight: 600;
+    }
+
     pre,
     table {
         display: block;
