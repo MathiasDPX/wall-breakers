@@ -10,7 +10,7 @@ _URL_ID_PATTERN = re.compile(
     r".+lemonde\.fr\/.+_(\d+)_\d+\.html"
 )
 _URI_ID_PATTERN = re.compile(
-    r"lmfr:\/\/element\/article\/(\d+).*"
+    r"lmfr:\/\/(?:en\/)?element\/article\/(\d+).*"
 )
 
 
@@ -73,11 +73,12 @@ class LeMondeArticle(Article):
                 
         if data["audio"]["enabled"]:
             audio = soup.new_tag("audio", controls=True)
-            audio["src"] = data["audio"]["audio_track"]["media_url"]
-            if figure:
-                figure.insert_after(audio)
-            else:
-                soup.insert(0, audio)
+            if "audio_track" in data["audio"]:
+                audio["src"] = data["audio"]["audio_track"]["media_url"]
+                if figure:
+                    figure.insert_after(audio)
+                else:
+                    soup.insert(0, audio)
                 
         content = soup.decode_contents()
                 
@@ -103,20 +104,24 @@ class LeMondeArticle(Article):
         )
     
     def get_id_from_url(url: str):
+        english = "_en" if "www.lemonde.fr/en" in url or "lmfr://en/" in url else ""
         match = _URL_ID_PATTERN.search(url)
         if match is not None:
-            return match.group(1)
+            return match.group(1) + english
         
         match = _URI_ID_PATTERN.search(url)
         if match is not None:
-            return match.group(1)
+            return match.group(1) + english
         
         return None
     
     def get_data(id):
+        english = "en/" if id.endswith("_en") else ""
+
         r = requests.get(
-            f"https://apps.lemonde.fr/aec/v1/premium-ios-tablet/article/{id}"
+            f"https://apps.lemonde.fr/aec/v1/{english}premium-ios-tablet/article/{id[:-3]}"
         )
+
         r.raise_for_status()
         return r.json()
     
