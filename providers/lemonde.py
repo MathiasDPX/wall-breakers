@@ -116,11 +116,15 @@ class LeMondeArticle(Article):
         return None
     
     def get_data(id):
-        english = "en/" if id.endswith("_en") else ""
+        if id.endswith("_en"):
+            r = requests.get(
+                f"https://apps.lemonde.fr/aec/v1/en/premium-ios-tablet/article/{id[:-3]}"
+            )
+        else:
+            r = requests.get(
+                f"https://apps.lemonde.fr/aec/v1/premium-ios-tablet/article/{id}"
+            )
 
-        r = requests.get(
-            f"https://apps.lemonde.fr/aec/v1/{english}premium-ios-tablet/article/{id[:-3]}"
-        )
 
         r.raise_for_status()
         return r.json()
