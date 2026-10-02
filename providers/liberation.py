@@ -8,7 +8,7 @@ from .exceptions import sentry_block_error
 from .common import Article, add_figure, fix_links, make_figcaption
 
 _URL_ID_PATTERN = re.compile(
-    r"https:\/\/www\.liberation\.fr\/.+-\d{8}_([A-Z0-9]+)(?:.+)?"
+    r"https:\/\/www\.liberation\.fr\/.+_([A-Z0-9]+)(?:.+)?"
 )
 
 _HEADERS = {"x-api-key": "a7X29mBvQeP1Ld98CgF2rK5uTzWY4h"}  # Mobile app apikey
