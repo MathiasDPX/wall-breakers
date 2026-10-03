@@ -107,6 +107,10 @@ class OuestFranceArticle(Article):
         r.raise_for_status()
         return r.json()
 
+    @classmethod
+    def is_enabled(cls) -> bool:
+        return REFRESH_TOKEN is not None
+
 
 if __name__ == "__main__":
     article = OuestFranceArticle.get_from_url("https://www.ouest-france.fr/societe/ruralites/tu-es-un-peu-le-maire-sans-lecharpe-les-secretaires-de-mairie-espece-en-voie-de-disparition-1b28e6b2-66d4-11f0-bb8e-c5b2af864a8a")

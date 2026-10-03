@@ -7,6 +7,7 @@ from .common import Article, add_figure, fix_links, make_figcaption
 
 
 class GSOIArticle(Article):
+    GROUP = "Groupe Sud Ouest"
     EDITION = None
 
     def __init__(self, article_id: str):

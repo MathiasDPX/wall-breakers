@@ -28,8 +28,6 @@ if SENTRY_DSN:
     )
     
 DEBUG = os.getenv("DEBUG", "false").lower() == "true"
-OUESTFRANCE_ENABLED = os.getenv("OUESTFRANCE_REFRESH_TOKEN", None) != None
-MEDIAPART_ENABLED = os.getenv("PIERREVIVES_USERNAME") is not None and os.getenv("PIERREVIVES_PASSWORD") is not None
 
 build_ts = datetime.now(timezone.utc)
 app = Flask(__name__)
@@ -43,8 +41,6 @@ def inject_context():
         "build_ts": build_ts,
         "git_sha": os.getenv("GITHUB_SHA", "development"),
         "debug": DEBUG,
-        "is_ouestfrance_enabled": OUESTFRANCE_ENABLED,
-        "is_mediapart_enabled": MEDIAPART_ENABLED
     }
     
 
@@ -144,7 +140,7 @@ def viewable_article_route(slug, id):
 
 @app.route("/")
 def index_route():
-    return render_template("index.html")
+    return render_template("index.html", sources=get_sources())
 
 
 if __name__ == "__main__":

@@ -22,46 +22,18 @@
     <section class="sources">
         <h1>Supported sources</h1>
         <ul>
-            <li>Le Parisien</li>
-            <li>Le Monde</li>
-            <li>Washington Post</li>
-            <li>Le Télégramme</li>
-            <li>Les Echos</li>
-            <li>L'Équipe</li>
-            <li>Le JDD</li>
-            <li>Le Figaro</li>
-            <li>Le Canard Enchainé</li>
-            <li>Charlie Hebdo</li>
-            <li>Libération</li>
-            <li>Courrier international</li>
-            <li>Actu.fr</li>
-            <li><abbr title="Sud Ouest, Charente Libre, La République des Pyrénées">Groupe Sud Ouest</abbr></li>
-            <li>L'Express</li>
-            <li>Paris Match</li>
-            <li>Le Nouvel Obs</li>
-            <li>Télérama</li>
-            <li>Le JDC</li>
-            <li>Financial Times</li>
-            <li>Nikkei Asia</li>
-            <li>South China Morning Post</li>
-            <li>Socialter</li>
-            <li><abbr title="JSL, DNA, Dauphiné Libéré, Républican Lorrain, L'Est Républicain, Bien Public, Le Progrès, L'Alsace, Vosges Matin">EBRA Médias</abbr></li>
-            <li>Science et Vie</li>
-            {% if is_mediapart_enabled %}
-            <li>Mediapart</li>
-            {% else %}
-            <li><s>Mediapart</s></li>
-            {% endif %}
-            {% if is_ouestfrance_enabled %}
-            <li>Ouest-France</li>
-            {% else %}
-            <li><s>Ouest-France</s></li>
-            {% endif %}
+            {% for source in sources %}
+            <li>
+                {%- if source.members -%}
+                <abbr title="{{ source.members|join(', ') }}">{{ source.name }}</abbr>
+                {%- elif not source.enabled -%}
+                <s>{{ source.name }}</s>
+                {%- else -%}
+                {{ source.name }}
+                {%- endif -%}
+            </li>
+            {% endfor %}
             <li><a href="https://github.com/MathiasDPX/wall-breakers/issues/new?template=media-request.md">Suggest a media</a></li>
-            <!--
-            <li>New York Times</li>
-            <li>The Athletic</li>
-            -->
         </ul>
     </section>
 </div>

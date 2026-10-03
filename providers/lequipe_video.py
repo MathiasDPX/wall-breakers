@@ -48,6 +48,7 @@ class EquipeVideoArticle(Article):
     SLUG = "ekipv"
     PROVIDER = "L'Équipe Vidéo"
     FAVICON = "https://www.lequipe.fr/favicons/favicon.svg"
+    LISTED = False
 
     def _get_item(items, layout):
         for item in items:

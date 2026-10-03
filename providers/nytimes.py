@@ -148,6 +148,7 @@ class NYTimesArticle(Article):
     SLUG = "nyt"
     PROVIDER = "New York Times"
     FAVICON = "https://static01.nyt.com/vi-assets/static-assets/assets/favicon-BfpYO4zl.svg"
+    LISTED = False
 
     def __init__(self, article_id: str):
         data = NYTimesArticle.get_data(article_id)

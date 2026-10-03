@@ -5,6 +5,11 @@ from dataclasses import dataclass
 
 @dataclass
 class Article(ABC):
+    # Providers sharing a GROUP are displayed as a single entry
+    GROUP = None
+    # Set to False to keep a provider out of the advertised source list
+    LISTED = True
+
     id: str
     headline: str
     subheadline: str
@@ -36,6 +41,11 @@ class Article(ABC):
     
     def get_readable_data(id: str):
         raise NotImplementedError
+
+    @classmethod
+    def is_enabled(cls) -> bool:
+        """Whether the provider can be used with the current configuration."""
+        return True
 
 
     def __repr__(self):

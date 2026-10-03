@@ -21,6 +21,7 @@ _URL_IN_CONTENT_PATTERN = re.compile(
 )
 
 class EbraArticle(Article):
+    GROUP = "EBRA Médias"
     DOMAIN = None
     APP = None
 

@@ -191,6 +191,10 @@ class MediapartArticle(Article):
     def get_readable_data(id):
         return redirect("./raw")
 
+    @classmethod
+    def is_enabled(cls) -> bool:
+        return client is not None
+
 
 if __name__ == "__main__":
     article = MediapartArticle.get_from_url("https://www.mediapart.fr/journal/international/020826/les-jours-comptes-de-gianni-infantino-la-tete-du-football-mondial")
