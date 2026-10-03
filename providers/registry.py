@@ -28,6 +28,7 @@ from .ebra import AlsaceArticle, BienPublicArticle, DaupineArticle, DNAArticle, 
 from .canardenchaine import CanardEnchaineArticle
 from .charliehebdo import CharlieHebdoArticle
 from .lequipe_video import EquipeVideoArticle
+from .socialter import SocialterArticle
 
 PROVIDERS:list[Article] = [
     LeParisienArticle,
@@ -68,7 +69,8 @@ PROVIDERS:list[Article] = [
     EquipeVideoArticle,
     ScienceEtVieArticle,
     SudOuestArticle,
-    RepubliquePyreneesArticle
+    RepubliquePyreneesArticle,
+    SocialterArticle
 ]
 
 ARTICLES:dict[str, Article] = {provider.SLUG: provider for provider in PROVIDERS}

@@ -154,6 +154,11 @@ ARTICLES = [
         RepubliquePyreneesArticle,
         "https://www.larepubliquedespyrenees.fr/economie/transports/train/pyrenees-atlantiques-panne-d-electricite-geante-a-la-sncf-la-galere-des-usagers-video-30653617.php",
         "30653617"
+    ),
+    (
+        SocialterArticle,
+        "https://www.socialter.fr/article/christophe-cassou-pourquoi-il-faut-politiser-les-canicules-climat-ete-rassurisme-adaptation",
+        b64encode(b"christophe-cassou-pourquoi-il-faut-politiser-les-canicules-climat-ete-rassurisme-adaptation").decode()
     )
 ]
 

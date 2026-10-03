@@ -53,7 +53,7 @@ paths:
           name: slug
           schema:
             type: string
-            enum: ["jdd", "lm", "lp", "le", "lt", "nyt", "ta", "wp", "lf", "lib", "ekip", "of", "ci", "mp", "af", "cl", "lx", "pm", "no", "tr", "jdc", "ft", "na", "scmp", "jsl", "dna", "ld", "er", "rl", "bp", "vm", "lpr", "als", "ce", "ch", "sev", "so", "rep"]
+            enum: ["jdd", "lm", "lp", "le", "lt", "nyt", "ta", "wp", "lf", "lib", "ekip", "of", "ci", "mp", "af", "cl", "lx", "pm", "no", "tr", "jdc", "ft", "na", "scmp", "jsl", "dna", "ld", "er", "rl", "bp", "vm", "lpr", "als", "ce", "ch", "sev", "so", "rep", "sa"]
           required: true
           description: |-
             Provider slug
@@ -97,6 +97,7 @@ paths:
               - `sev`: Science et Vie
               - `so`: Sud Ouest
               - `rep`: La République des Pyrénées
+              - `sa`: Socialter
         - in: path
           name: id
           schema:

@@ -17,6 +17,7 @@
 - [Mediapart](https://www.mediapart.fr/)
 - [Le Canard Enchainé](https://www.lecanardenchaine.fr/)
 - [Charlie Hebdo](https://charliehebdo.fr/)
+- [Socialter](https://www.socialter.fr/)
 <!-- - [New York Times](https://www.nytimes.com/)-->
 
 <details>

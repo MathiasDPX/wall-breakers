@@ -44,7 +44,8 @@ URLS = [
     "https://www.science-et-vie.com/corps-et-sante/cancer/une-seule-boisson-sucree-par-jour-pourrait-augmenter-de-145-le-risque-de-cancer-de-lestomac-257643.html",
     "https://www.sudouest.fr/gironde/bordeaux/info-sud-ouest-romain-dupuy-de-retour-a-cadillac-dans-une-unite-fermee-apres-trois-ans-a-l-hopital-psychiatrique-de-bordeaux-30653312.php",
     "https://www.larepubliquedespyrenees.fr/economie/transports/train/pyrenees-atlantiques-panne-d-electricite-geante-a-la-sncf-la-galere-des-usagers-video-30653617.php",
-    "https://www.lemonde.fr/en/france/article/2026/10/02/high-school-student-protests-spread-across-france-as-tensions-escalate_6758168_7.html"
+    "https://www.lemonde.fr/en/france/article/2026/10/02/high-school-student-protests-spread-across-france-as-tensions-escalate_6758168_7.html",
+    "https://www.socialter.fr/article/christophe-cassou-pourquoi-il-faut-politiser-les-canicules-climat-ete-rassurisme-adaptation"
 ]
 
 if not IN_GITHUB_ACTIONS:

@@ -54,6 +54,22 @@ def register_error_handlers(app):
     def handle_mediapart_invalidlogin_exception(e):
         return error_response(402, "Payment Required", "The Mediapart account does not has any active subscription.")
     
+    @app.errorhandler(SocialterMissingSubscriptionException)
+    def handle_socialter_missingsubscription_exception(e):
+        return error_response(402, "Payment Required", "The Socialter account does not has any active subscription.")
+    
+    @app.errorhandler(SocialterRegistrationError)
+    def handle_socialter_registration_exception(e):
+        return error_response(502, "Bad Gateway", f"Could not register a Socialter account: {e}")
+
+    @app.errorhandler(SocialterThrottledException)
+    def handle_socialter_throttled_exception(e):
+        return error_response(429, "Too Many Requests", f"Socialter is cooling down, no retry for now: {e}")
+
+    @app.errorhandler(SocialterLayoutError)
+    def handle_socialter_layout_exception(e):
+        return error_response(502, "Bad Gateway", f"Could not read the Socialter article: {e}")
+    
     @app.errorhandler(NotImplementedError)
     def handle_notimplemented_exception(e):
         return error_response(501, "Not Implemented", "This page isn't implemented yet")

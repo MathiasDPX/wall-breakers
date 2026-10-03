@@ -13,7 +13,6 @@ from flask_cors import CORS
 from prometheus_client import CONTENT_TYPE_LATEST
 from sentry_sdk.integrations.flask import FlaskIntegration
 
-import metrics
 from errors import register_error_handlers
 from providers.common import get_article_from_url
 from providers.registry import *
@@ -36,16 +35,7 @@ build_ts = datetime.now(timezone.utc)
 app = Flask(__name__)
 CORS(app)
 register_error_handlers(app)
-metrics.init_app(app)
 sass.compile(dirname=("./static/scss/", "./static/css"))
-
-metrics.set_build_info(
-    git_sha=os.getenv("GITHUB_SHA", "development"),
-    environment=os.getenv("SENTRY_ENVIRONMENT", "production"),
-    debug=str(DEBUG).lower(),
-    started_at=build_ts.isoformat(),
-)
-
 
 @app.context_processor
 def inject_context():
@@ -79,7 +69,6 @@ def openapi_route():
 def redirection_api_route():
     url = request.args.get("url")
     if url is None:
-        metrics.record_url_resolution("missing_url")
         return {"success": False, "message": "No URL provided"}, 400
 
     provider: Article = None
@@ -89,13 +78,11 @@ def redirection_api_route():
     provider, article_id = get_article_from_url(url)
 
     if article_id is None:
-        metrics.record_url_resolution("unknown_provider", time.perf_counter() - started_at)
         return {
             "success": False,
             "message": "No provider found available for this URL",
         }, 404
 
-    metrics.record_url_resolution("resolved", time.perf_counter() - started_at)
     article_url = f"/{provider.SLUG}/{article_id}"
 
     return {
@@ -114,9 +101,7 @@ def article_api_route(slug, id):
 
     article_cls = ARTICLES[slug]
 
-    with metrics.track_fetch(article_cls.PROVIDER) as fetch:
-        article = article_cls(id)
-        fetch.article(article)
+    article = article_cls(id)
 
     return article.asdict()
 
@@ -129,12 +114,9 @@ def article_route(slug, id):
 
     viewable = article_cls.get_readable_data != Article.get_readable_data
 
-    with metrics.track_fetch(article_cls.PROVIDER) as fetch:
-        article = article_cls(id)
-        fetch.article(article)
-        fetch.readable(viewable)
+    article = article_cls(id)
 
-        return render_template("article.html", article=article, viewable=viewable)
+    return render_template("article.html", article=article, viewable=viewable)
 
 @app.route("/<slug>/<id>/raw")
 def raw_article_route(slug, id):
@@ -145,8 +127,7 @@ def raw_article_route(slug, id):
     if article_cls is None:
         return abort(404)
 
-    with metrics.track_fetch(article_cls.PROVIDER):
-        article = article_cls.get_data(id)
+    article = article_cls.get_data(id)
     return article
 
 @app.route("/<slug>/<id>/view")
@@ -158,16 +139,8 @@ def viewable_article_route(slug, id):
     if article_cls is None:
         return abort(404)
 
-    with metrics.track_fetch(article_cls.PROVIDER):
-        article = article_cls.get_readable_data(id)
+    article = article_cls.get_readable_data(id)
     return article
-
-@app.route("/metrics")
-def metrics_route():
-    return Response(
-        metrics.render(),
-        mimetype=CONTENT_TYPE_LATEST
-    )
 
 @app.route("/")
 def index_route():
