@@ -89,11 +89,11 @@ class SocialterArticle(Article):
         for elem in soup.select('div.frame-donation, div.postfooter, [style*="text-align: center"]'):
             elem.decompose()
             
-        for image in content.select('img'):            
-            if not image["src"].startswith("/"):
+        for inline_image in content.select('img'):            
+            if not inline_image["src"].startswith("/"):
                 continue
             
-            image["src"] = "https://www.socialter.fr/" + image["src"]
+            inline_image["src"] = "https://www.socialter.fr/" + inline_image["src"]
             
         # Remove empty tags
         for tag in soup.find_all():
@@ -109,7 +109,7 @@ class SocialterArticle(Article):
         content = content.decode_contents()
 
         if image:
-            content = add_figure(image["src"], image_legend) + content
+            content = add_figure(image, image_legend) + content
 
         super().__init__(
             id=article_id,

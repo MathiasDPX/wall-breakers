@@ -23,7 +23,7 @@
         <div class="subheadline">{{ article.subheadline|safe }}</div>
         <div class="metadata">
             {% if article.publication_date %}
-                <time datetime="{{ article.publication_date.isoformat() }}">{{ article.publication_date.strftime("%B %d, %Y at %H:%M") }}</time>
+                <time datetime="{{ article.publication_date.isoformat() }}">{% if article.has_publication_time %}{{ article.local_publication_date.strftime("%B %d, %Y at %H:%M") }}{% else %}{{ article.local_publication_date.strftime("%B %d, %Y") }}{% endif %}</time>
             {% endif %}
         </div>
         {% if debug %}

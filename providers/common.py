@@ -23,6 +23,27 @@ class Article(ABC):
         self.raw_id = self.id
         self.id = f"{self.PROVIDER}:{self.id}"
 
+    @property
+    def local_publication_date(self) -> datetime | None:
+        """Publication date, timezone-aware dates converted to the server timezone."""
+        if self.publication_date is None:
+            return None
+
+        if self.publication_date.tzinfo is None:
+            return self.publication_date
+
+        return self.publication_date.astimezone()
+
+    @property
+    def has_publication_time(self) -> bool:
+        """False when the publication date only carries a day, i.e. it lands on midnight."""
+        publication_date = self.local_publication_date
+
+        if publication_date is None:
+            return False
+
+        return (publication_date.hour, publication_date.minute, publication_date.second, publication_date.microsecond) != (0, 0, 0, 0)
+
     @classmethod
     def get_from_url(cls, url: str):
         id = cls.get_id_from_url(url)
