@@ -1,9 +1,25 @@
 import os
+import re
 
 import pytest
 from dotenv import load_dotenv
+import requests
+from requests import HTTPError
 
 from main import app
+from metrics import map_exception_to_error_type, normalize_source
+from providers.exceptions import (
+    DataDomeCookieExpiredError,
+    MediapartDisabledException,
+    MediapartInvalidLogin,
+    OuestFranceDisabledException,
+    OuestFranceMissingSubscriptionException,
+    SocialterDisabledException,
+    SocialterLayoutError,
+    SocialterMissingSubscriptionException,
+    SocialterRegistrationError,
+    SocialterThrottledException,
+)
 from providers.registry import *
 
 load_dotenv()

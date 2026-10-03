@@ -69,7 +69,9 @@ inputNode.addEventListener("keyup", function (event) {
             'url': inputNode.value
         });
 
-        fetch(`/api/getId?${params}`)
+        fetch(`/api/getId?${params}`, {
+            headers: { "X-Wallbreakers-Client": "site" }
+        })
             .then(response => response.json())
             .then(data => {
                 if (data.success === false) {

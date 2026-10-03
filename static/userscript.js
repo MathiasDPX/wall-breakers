@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         Wall Breakers Redirect
 // @namespace    https://mathiasd.fr/
-// @version      1.1.12
+// @version      1.1.13
 // @description  Show a popup on article compatible with Wall Breakers
 // @author       MathiasDPX
 // @updateURL    https://news.mathiasd.fr/redirect.user.js
@@ -114,7 +114,11 @@ function add_banner(href) {
         "url": window.location.href
     });
 
-    fetch(`${BASE_URL}/api/getId?${params}`)
+    fetch(`${BASE_URL}/api/getId?${params}`, {
+            headers: {
+                "X-Wallbreakers-Client": "userscript",
+            }
+        })
         .then(response => response.json())
         .then(data => {
             if (data.success === false) {

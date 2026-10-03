@@ -8,12 +8,24 @@ load_dotenv()
 
 import sass
 import sentry_sdk
-from flask import Flask, Response, abort, render_template, request, send_file
+from flask import Flask, Response, abort, g, render_template, request, send_file
 from flask_cors import CORS
-from prometheus_client import CONTENT_TYPE_LATEST
+from prometheus_client import CONTENT_TYPE_LATEST, generate_latest
 from sentry_sdk.integrations.flask import FlaskIntegration
 
 from errors import register_error_handlers
+from metrics import (
+    ARTICLE_ENDPOINTS,
+    articles_served_total,
+    http_request_duration_seconds,
+    http_requests_total,
+    init_metrics,
+    normalize_endpoint,
+    normalize_source,
+    record_provider_error,
+    url_resolution_duration_seconds,
+    url_resolutions_total,
+)
 from providers.common import get_article_from_url
 from providers.registry import *
 
@@ -33,7 +45,37 @@ build_ts = datetime.now(timezone.utc)
 app = Flask(__name__)
 CORS(app)
 register_error_handlers(app)
+init_metrics(app)
 sass.compile(dirname=("./static/scss/", "./static/css"))
+
+@app.before_request
+def metrics_before_request():
+    g.wallbreakers_start = time.perf_counter()
+
+
+@app.after_request
+def metrics_after_request(response):
+    elapsed = time.perf_counter() - g.get("wallbreakers_start", time.perf_counter())
+    endpoint = normalize_endpoint(request.url_rule)
+    http_requests_total.labels(
+        method=request.method, endpoint=endpoint, status=str(response.status_code)
+    ).inc()
+    provider = ""
+    if (
+        request.url_rule is not None
+        and request.url_rule.endpoint in ARTICLE_ENDPOINTS
+        and (request.view_args or {}).get("slug") in ARTICLES
+    ):
+        provider = request.view_args["slug"]
+    http_request_duration_seconds.labels(endpoint=endpoint, provider=provider).observe(
+        elapsed
+    )
+    return response
+
+
+@app.route("/metrics")
+def metrics_route():
+    return Response(generate_latest(), mimetype=CONTENT_TYPE_LATEST)
 
 @app.context_processor
 def inject_context():
@@ -67,18 +109,26 @@ def redirection_api_route():
     if url is None:
         return {"success": False, "message": "No URL provided"}, 400
 
-    provider: Article = None
-    article_id = None
+    source = normalize_source(request.headers.get("X-Wallbreakers-Client", "unknown"))
 
     started_at = time.perf_counter()
     provider, article_id = get_article_from_url(url)
+    url_resolution_duration_seconds.labels(source=source).observe(
+        time.perf_counter() - started_at
+    )
 
     if article_id is None:
+        url_resolutions_total.labels(
+            provider="none", source=source, result="not_found"
+        ).inc()
         return {
             "success": False,
             "message": "No provider found available for this URL",
         }, 404
 
+    url_resolutions_total.labels(
+        provider=provider.SLUG, source=source, result="found"
+    ).inc()
     article_url = f"/{provider.SLUG}/{article_id}"
 
     return {
@@ -97,7 +147,13 @@ def article_api_route(slug, id):
 
     article_cls = ARTICLES[slug]
 
-    article = article_cls(id)
+    try:
+        article = article_cls(id)
+    except Exception as exc:
+        record_provider_error(slug, exc)
+        articles_served_total.labels(provider=slug, route="api", status="error").inc()
+        raise
+    articles_served_total.labels(provider=slug, route="api", status="success").inc()
 
     return article.asdict()
 
@@ -110,7 +166,13 @@ def article_route(slug, id):
 
     viewable = article_cls.get_readable_data != Article.get_readable_data
 
-    article = article_cls(id)
+    try:
+        article = article_cls(id)
+    except Exception as exc:
+        record_provider_error(slug, exc)
+        articles_served_total.labels(provider=slug, route="html", status="error").inc()
+        raise
+    articles_served_total.labels(provider=slug, route="html", status="success").inc()
 
     return render_template("article.html", article=article, viewable=viewable)
 
