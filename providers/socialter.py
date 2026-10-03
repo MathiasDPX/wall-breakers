@@ -1,18 +1,24 @@
 from functools import lru_cache
 from datetime import datetime
 import base64
+import os
 import re
 
 from bs4 import BeautifulSoup
 
 from .auth import SocialterClient
 from .common import Article, fix_links, add_figure
-from .exceptions import SocialterLayoutError
+from .exceptions import SocialterDisabledException, SocialterLayoutError
 
 _URL_ID_PATTERN = re.compile(r"https:\/\/www\.socialter\.fr\/article\/(.+)")
 
-client = SocialterClient()
-client.start_refresh_loop()
+ENABLED = os.getenv("ENABLE_SA", "false").lower() == "true"
+
+if ENABLED:
+    client = SocialterClient()
+    client.start_refresh_loop()
+else:
+    client = None
 
 months = {
     "janvier": 1,
@@ -62,6 +68,9 @@ class SocialterArticle(Article):
     FAVICON = "https://www.socialter.fr/theme/images/favicon.png"
 
     def __init__(self, article_id: str):
+        if client is None:
+            raise SocialterDisabledException()
+
         data = SocialterArticle.get_data(article_id)
         soup = BeautifulSoup(data, features="html.parser")
         article_path = base64.b64decode(article_id).decode()
@@ -115,11 +124,18 @@ class SocialterArticle(Article):
     
     @lru_cache(maxsize=64)
     def get_data(id):
+        if client is None:
+            raise SocialterDisabledException()
+
         article_path = base64.b64decode(id).decode()
         r = client.get(f"https://www.socialter.fr/article/{article_path}")
         r.raise_for_status()
 
         return r.content
+
+    @classmethod
+    def is_enabled(cls) -> bool:
+        return client is not None
 
 
 if __name__ == "__main__":

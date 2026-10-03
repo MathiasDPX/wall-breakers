@@ -16,6 +16,9 @@ class MediapartInvalidLogin(RuntimeError):
 class MediapartDisabledException(RuntimeError):
     pass
 
+class SocialterDisabledException(RuntimeError):
+    pass
+
 class SocialterRegistrationError(RuntimeError):
     pass
 

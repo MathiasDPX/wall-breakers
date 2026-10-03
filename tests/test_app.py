@@ -12,6 +12,7 @@ IN_GITHUB_ACTIONS = os.getenv("GITHUB_ACTIONS") == "true"
 
 OUESTFRANCE_ENABLED = os.getenv("OUESTFRANCE_REFRESH_TOKEN", None) != None
 MEDIAPART_ENABLED = os.getenv("PIERREVIVES_USERNAME") is not None and os.getenv("PIERREVIVES_PASSWORD") is not None
+SOCIALTER_ENABLED = os.getenv("ENABLE_SA", "false").lower() == "true"
 
 URLS = [
     "https://www.leparisien.fr/sports/football/coupe-du-monde/france-angleterre-la-composition-probable-des-bleus-avec-zaire-emery-cherki-olise-et-mbappe-18-07-2026-ZMLNSNIHBVGEPALOLJ3KGMBQAI.php",
@@ -84,6 +85,9 @@ def test_article_pages(client, url):
         assert page_response.status_code == 501
     elif data['slug'] == MediapartArticle.SLUG and not MEDIAPART_ENABLED:
         # If Mediapart is disabled and the URL is Mediapart, expect a 501 Not Imtplemented
+        assert page_response.status_code == 501
+    elif data['slug'] == SocialterArticle.SLUG and not SOCIALTER_ENABLED:
+        # If Socialter is disabled and the URL is Socialter, expect a 501 Not Implemented
         assert page_response.status_code == 501
     else:
         print(data['slug'], OUESTFRANCE_ENABLED)

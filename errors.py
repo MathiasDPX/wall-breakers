@@ -54,6 +54,10 @@ def register_error_handlers(app):
     def handle_mediapart_invalidlogin_exception(e):
         return error_response(402, "Payment Required", "The Mediapart account does not has any active subscription.")
     
+    @app.errorhandler(SocialterDisabledException)
+    def handle_socialter_disabled_exception(e):
+        return error_response(501, "Not Implemented", "Socialter is disabled because the <code>ENABLE_SA</code> environment variable is not set to true.")
+
     @app.errorhandler(SocialterMissingSubscriptionException)
     def handle_socialter_missingsubscription_exception(e):
         return error_response(402, "Payment Required", "The Socialter account does not has any active subscription.")
