@@ -4,7 +4,8 @@ from datetime import datetime
 
 from bs4 import BeautifulSoup
 
-from .common import Article, OAuthClient, add_figure, fix_links, make_figcaption
+from .auth import OAuthClient
+from .common import Article, add_figure, fix_links, make_figcaption
 from .exceptions import *
 
 _URL_ID_PATTERN = re.compile(

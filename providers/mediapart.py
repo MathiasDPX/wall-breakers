@@ -7,7 +7,8 @@ import re
 from bs4 import BeautifulSoup
 from flask import redirect
 
-from .common import Article, CASClient, fix_links
+from .auth import CASClient
+from .common import Article, fix_links
 from .exceptions import MediapartDisabledException
 
 _URL_ID_PATTERN = re.compile(
