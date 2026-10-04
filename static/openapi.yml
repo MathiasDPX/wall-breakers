@@ -53,7 +53,7 @@ paths:
           name: slug
           schema:
             type: string
-            enum: ["jdd", "lm", "lp", "le", "lt", "nyt", "ta", "wp", "lf", "lib", "ekip", "of", "ci", "mp", "af", "cl", "lx", "pm", "no", "tr", "jdc", "ft", "na", "scmp", "jsl", "dna", "ld", "er", "rl", "bp", "vm", "lpr", "als", "ce", "ch", "sev", "so", "rep", "sa"]
+            enum: ["jdd", "lm", "lp", "le", "lt", "nyt", "ta", "wp", "lf", "lib", "ekip", "of", "ci", "mp", "af", "cl", "lx", "pm", "no", "tr", "jdc", "ft", "na", "scmp", "jsl", "dna", "ld", "er", "rl", "bp", "vm", "lpr", "als", "ce", "ch", "sev", "so", "rep", "sa", "vdn", "lmsg", "ls", "nl", "pn", "si", "cp", "an", "ar", "ee", "lc", "un"]
           required: true
           description: |-
             Provider slug
@@ -98,6 +98,18 @@ paths:
               - `so`: Sud Ouest
               - `rep`: La République des Pyrénées
               - `sa`: Socialter
+              - `vdn`: La Voix du Nord
+              - `lmsg`: Le Messager
+              - `ls`: Le Soir
+              - `nl`: Nord Littoral
+              - `pn`: Paris Normandie
+              - `si`: SudInfo
+              - `cp`: Courrier Picard
+              - `an`: Aisne Nouvelle
+              - `ar`: L'Ardennais
+              - `ee`: L'Est éclair
+              - `lc`: Liberation Champagne
+              - `un`: L'Union
         - in: path
           name: id
           schema:

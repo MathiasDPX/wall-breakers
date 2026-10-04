@@ -159,6 +159,66 @@ ARTICLES = [
         SocialterArticle,
         "https://www.socialter.fr/article/christophe-cassou-pourquoi-il-faut-politiser-les-canicules-climat-ete-rassurisme-adaptation",
         b64encode(b"christophe-cassou-pourquoi-il-faut-politiser-les-canicules-climat-ete-rassurisme-adaptation").decode()
+    ),
+    (
+        VDNArticle,
+        "https://www.lavoixdunord.fr/1743127/article/2026-10-04/il-faut-compter-deux-heures-pour-faire-nos-courses-mais-au-moins-fait-des",
+        "1743127"
+    ),
+    (
+        LeMessagerArticle,
+        "https://www.lemessager.fr/649358523/article/2026-10-04/secheresse-un-terrain-de-foot-impraticable-met-en-difficulte-ce-club-de-haute",
+        "649358523"
+    ),
+    (
+        LeSoirArticle,
+        "https://www.lesoir.be/774467/article/2026-10-02/gisele-pelicot-lart-de-se-reconstruire-sur-un-champ-de-ruines",
+        "774467"
+    ),
+    (
+        NordLittArticle,
+        "https://www.nordlittoral.fr/299972/article/2026-10-03/basketball-n2-le-cauchemar-du-calais-basket-continue",
+        "299972"
+    ),
+    (
+        ParisNormandieArticle,
+        "https://www.paris-normandie.fr/id749777/article/2026-10-04/cout-des-carburants-infirmiere-agriculteur-plombier-transporteur-taxi-ces",
+        "749777"
+    ),
+    (
+        SudInfoArticle,
+        "https://www.sudinfo.be/id1203718/article/2026-10-04/incendie-rue-des-houilleurs-la-louviere-les-pompiers-rappeles-deux-fois-le-feu",
+        "1203718"
+    ),
+    (
+        CourrierPicardArticle,
+        "https://www.courrier-picard.fr/id749515/article/2026-10-02/amiens-la-grande-rederie-de-ce-dimanche-affiche-complet",
+        "749515"
+    ),
+    (
+        AisneNouvelleArticle,
+        "https://www.aisnenouvelle.fr/id749783/article/2026-10-04/tergnier-la-ferme-pedagogique-ouvre-et-recoit-un-premier-bel-accueil-des",
+        "749783"
+    ),
+    (
+        ArdennaisArticle,
+        "https://www.lardennais.fr/id831742/article/2026-10-04/video-photos-octobre-rose-le-defile-du-baraboobs-lapotheose-dune-journee-forte",
+        "831742"
+    ),
+    (
+        EstEclairArticle,
+        "https://www.lest-eclair.fr/id831579/article/2026-10-03/huguier-freres-un-magasin-pilote-pour-le-boucher-charcutier-traiteur-aux",
+        "831579"
+    ),
+    (
+        LibChampagneArticle,
+        "https://www.liberation-champagne.fr/id831634/article/2026-10-03/une-defense-de-gamins-qui-ne-sont-meme-pas-leur-poste-quand-les-minots-de-lestac",
+        "831634"
+    ),
+    (
+        UnionArticle,
+        "https://www.lunion.fr/id831720/article/2026-10-04/curieux-de-voir-comment-ca-va-se-passer-ils-sont-prets-pour-le-premier",
+        "831720"
     )
 ]
 

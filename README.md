@@ -26,6 +26,7 @@
 - [Le Télégramme](https://www.letelegramme.fr/)
 - [Libération](https://www.liberation.fr/)
 - [Actu.fr](https://actu.fr/)
+- [Groupe Rossel](https://www.rossel.be/)
 - [Groupe Sud Ouest](https://groupesudouest.com/fr)
 - [Paris Match](https://www.parismatch.com/)
 - [L'Équipe](https://www.lequipe.fr/)
@@ -37,10 +38,10 @@
 - [Le JDC](https://www.lejdc.fr/)
 - [Financial Times](https://www.ft.com/)
 - [Nikkei Asia](https://asia.nikkei.com/)
-- [The Athletic](https://www.nytimes.com/athletic/)
 - [South China Morning Post](https://www.scmp.com/)
 - [EBRA Médias](https://www.ebra.fr/ebra-medias)
 - [Science et Vie](https://www.science-et-vie.com/)
+<!-- - [The Athletic](https://www.nytimes.com/athletic/)-->
 </details>
 
 ## Userscript
