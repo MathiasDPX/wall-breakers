@@ -1,15 +1,7 @@
 import os
-import time
 
 from flask import Blueprint, abort, jsonify, request
 
-from metrics import (
-    articles_served_total,
-    normalize_source,
-    record_provider_error,
-    url_resolution_duration_seconds,
-    url_resolutions_total,
-)
 from providers.common import get_article_from_url
 from providers.registry import ARTICLES, PROVIDERS
 
@@ -49,23 +41,10 @@ def _extract_request_url():
 def redirection_api_route():
     url = _extract_request_url()
 
-    source = normalize_source(request.headers.get("X-Wallbreakers-Client", "unknown"))
-
-    started_at = time.perf_counter()
     provider, article_id = get_article_from_url(url)
-    url_resolution_duration_seconds.labels(source=source).observe(
-        time.perf_counter() - started_at
-    )
 
     if article_id is None:
-        url_resolutions_total.labels(
-            provider="none", source=source, result="not_found"
-        ).inc()
         abort(404, description="No provider found available for this URL")
-
-    url_resolutions_total.labels(
-        provider=provider.SLUG, source=source, result="found"
-    ).inc()
 
     return _api_success(
         {
@@ -89,13 +68,7 @@ def article_api_route(slug, id):
 
     article_cls = ARTICLES[slug]
 
-    try:
-        article = article_cls(id)
-    except Exception as exc:
-        record_provider_error(slug, exc)
-        articles_served_total.labels(provider=slug, route="api", status="error").inc()
-        raise
-    articles_served_total.labels(provider=slug, route="api", status="success").inc()
+    article = article_cls(id)
 
     return _api_success(
         article.asdict(),
