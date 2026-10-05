@@ -89,20 +89,24 @@ def test_article_pages(client, url):
     
     data = id_response.get_json()
     assert data['success'] is True
-    
+
     # We doesn't care if it's the correct ID/provider as it's test by test_article_regex in test_common.py
-    
-    page_response = client.get(data['url'])
-    
-    if data['slug'] == OuestFranceArticle.SLUG and not OUESTFRANCE_ENABLED:
+    slug = data['data']['provider']['slug']
+
+    page_response = client.get(data['data']['page_url'])
+
+    api_response = client.get(data['data']['api_url'])
+    assert api_response.status_code in (200, 402, 429, 500, 501, 502, 503)
+
+    if slug == OuestFranceArticle.SLUG and not OUESTFRANCE_ENABLED:
         # If Ouest-France is disabled and the URL is Ouest-France, expect a 501 Not Implemented
         assert page_response.status_code == 501
-    elif data['slug'] == MediapartArticle.SLUG and not MEDIAPART_ENABLED:
+    elif slug == MediapartArticle.SLUG and not MEDIAPART_ENABLED:
         # If Mediapart is disabled and the URL is Mediapart, expect a 501 Not Imtplemented
         assert page_response.status_code == 501
-    elif data['slug'] == SocialterArticle.SLUG and not SOCIALTER_ENABLED:
+    elif slug == SocialterArticle.SLUG and not SOCIALTER_ENABLED:
         # If Socialter is disabled and the URL is Socialter, expect a 501 Not Implemented
         assert page_response.status_code == 501
     else:
-        print(data['slug'], OUESTFRANCE_ENABLED)
+        print(slug, OUESTFRANCE_ENABLED)
         assert page_response.status_code == 200

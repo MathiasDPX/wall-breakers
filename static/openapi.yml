@@ -1,229 +1,486 @@
-openapi: 3.2.0
+openapi: 3.1.0
 info:
   title: Wall Breakers
   description: |-
-    Wall Breakers API documentation.
-  version: 1.0.0
+    Wall Breakers API
+  version: 1.1.0
 servers:
   - url: https://news.mathiasd.fr/api
     description: Production server
   - url: http://localhost:5000/api
     description: Local server
-
+tags:
+  - name: resolve
+    description: Turn a paywalled article URL into a Wall Breakers ID
+  - name: article
+    description: Read an article by provider slug and ID
+  - name: directory
+    description: Discover providers and service metadata
+  - name: system
+    description: Health and discovery
 paths:
   /getId:
     get:
-      summary: Get article information
-      description: Return information about an article from an URL
+      tags: [resolve]
+      summary: Resolve an article URL
+      description: Return the provider, article ID and Wall Breakers URLs for a paywalled article URL.
       operationId: getId
       parameters:
         - in: query
           name: url
           schema:
             type: string
+            format: uri
+            maxLength: 2048
           required: true
-          description: "The URL of the article to resolve"
+          description: "The paywalled article URL"
+          examples:
+            sample:
+              value: "https://www.lemonde.fr/planete/article/2026/07/18/au-canada-les-feux-a-repetition-bouleversent-la-foret-boreale_6724998_3244.html"
       responses:
         '200':
-          description: Successful operation
+          description: URL resolved
+          headers:
+            Cache-Control:
+              schema:
+                type: string
+              examples:
+                sample:
+                  value: "public, max-age=86400"
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/ArticleInfo'
+                $ref: '#/components/schemas/ResolveSuccess'
         '400':
-          description: Missing URL parameter
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/ErrorMissingUrl'
+          $ref: '#/components/responses/BadRequest'
         '404':
-          description: Article not found
+          description: No provider handles this URL
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/ErrorNotFound'
+                $ref: '#/components/schemas/ApiError'
+    post:
+      tags: [resolve]
+      summary: Resolve an article URL (JSON body)
+      description: Same as GET /getId but reads the URL from a JSON or form body, avoiding very long query strings.
+      operationId: postGetId
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [url]
+              properties:
+                url:
+                  type: string
+                  format: uri
+                  maxLength: 2048
+                  examples:
+                    - "https://www.lemonde.fr/planete/article/2026/07/18/au-canada-les-feux-a-repetition-bouleversent-la-foret-boreale_6724998_3244.html"
+          application/x-www-form-urlencoded:
+            schema:
+              type: object
+              required: [url]
+              properties:
+                url:
+                  type: string
+                  format: uri
+      responses:
+        '200':
+          description: URL resolved
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ResolveSuccess'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '404':
+          description: No provider handles this URL
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiError'
 
-  /article/{slug}:{id}:
+  /article/{slug}/{id}:
     get:
+      tags: [article]
       summary: Get article content and metadata
-      description: Return content and metadata of an article from its provider slug and id
+      description: |-
+        Return content and metadata of an article from its provider slug and ID.
       operationId: getArticle
       parameters:
         - in: path
           name: slug
           schema:
-            type: string
-            enum: ["jdd", "lm", "lp", "le", "lt", "nyt", "ta", "wp", "lf", "lib", "ekip", "of", "ci", "mp", "af", "cl", "lx", "pm", "no", "tr", "jdc", "ft", "na", "scmp", "jsl", "dna", "ld", "er", "rl", "bp", "vm", "lpr", "als", "ce", "ch", "sev", "so", "rep", "sa", "vdn", "lmsg", "ls", "nl", "pn", "si", "cp", "an", "ar", "ee", "lc", "un"]
+            $ref: '#/components/schemas/ProviderSlug'
           required: true
-          description: |-
-            Provider slug
-
-            Values:
-              - `lp`: Le Parisien
-              - `lm`: Le Monde
-              - `le`: Les Echos
-              - `lt`: Le Télégramme
-              - `ta`: The Athletic
-              - `jdd`: Le Journal du Dimanche
-              - `nyt`: New York Times
-              - `wp`: The Washington Post
-              - `lf`: Le Figaro
-              - `lib`: Libération
-              - `ekip`: L'Équipe
-              - `of`: Ouest-France
-              - `ci`: Courrier International
-              - `mp`: Mediapart
-              - `af`: Actu.fr
-              - `cl`: Charente Libre
-              - `lx`: L'Express
-              - `pm`: Paris Match
-              - `no`: Le Nouvel Obs
-              - `tr`: Télérama
-              - `jdc`: Le Journal du Centre
-              - `ft`: Financial Times
-              - `na`: Nikkei Asia
-              - `scmp`: South China Morning Post
-              - `jsl`: Le Journal de Saône-et-Loire
-              - `dna`: Dernières Nouvelles d'Alsace
-              - `ld`: Le Dauphiné Libéré
-              - `er`: L'Est Républicain
-              - `rl`: Le Républicain Lorrain
-              - `bp`: Le Bien Public
-              - `vm`: Vosges Matin
-              - `lpr`: Le Progrès
-              - `als`: L'Alsace
-              - `ce`: Le Canard Enchainé
-              - `ch`: Charlie Hebdo
-              - `sev`: Science et Vie
-              - `so`: Sud Ouest
-              - `rep`: La République des Pyrénées
-              - `sa`: Socialter
-              - `vdn`: La Voix du Nord
-              - `lmsg`: Le Messager
-              - `ls`: Le Soir
-              - `nl`: Nord Littoral
-              - `pn`: Paris Normandie
-              - `si`: SudInfo
-              - `cp`: Courrier Picard
-              - `an`: Aisne Nouvelle
-              - `ar`: L'Ardennais
-              - `ee`: L'Est éclair
-              - `lc`: Liberation Champagne
-              - `un`: L'Union
+          description: Provider slug (lowercase)
         - in: path
           name: id
           schema:
             type: string
+            minLength: 1
           required: true
-          description: "Article ID"
+          description: "Article ID as returned by /getId"
       responses:
         '200':
-          description: Successful operation
+          description: Article content
+          headers:
+            Cache-Control:
+              schema:
+                type: string
+              examples:
+                sample:
+                  value: "public, max-age=300, stale-while-revalidate=600"
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/ArticleContent'
+                $ref: '#/components/schemas/ArticleSuccess'
         '400':
+          $ref: '#/components/responses/BadRequest'
+        '404':
           description: Unknown provider slug
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/ErrorProviderNotFound'
-        default:
-          description: Any other HTTP error
+                $ref: '#/components/schemas/ApiError'
+        '429':
+          description: Provider is throttled
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/ErrorHttp'
+                $ref: '#/components/schemas/ApiError'
+        '5XX':
+          description: Upstream provider or parsing failure
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiError'
+
+  /providers:
+    get:
+      tags: [directory]
+      summary: List providers
+      description: All supported providers with their slug, name, group and availability.
+      operationId: listProviders
+      responses:
+        '200':
+          description: Provider directory
+          headers:
+            Cache-Control:
+              schema:
+                type: string
+              examples:
+                sample:
+                  value: "public, max-age=60"
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ProvidersSuccess'
+
+  /health:
+    get:
+      tags: [system]
+      summary: Service health
+      description: Liveness probe.
+      operationId: getHealth
+      responses:
+        '200':
+          description: Service is up
+          headers:
+            Cache-Control:
+              schema:
+                type: string
+              examples:
+                sample:
+                  value: "no-store"
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HealthSuccess'
 
 components:
-  schemas:
-    ArticleInfo:
-      type: object
-      properties:
-        success:
-          type: boolean
-          example: true
-        provider:
-          type: string
-          example: "Le Parisien"
-        slug:
-          type: string
-          example: "lp"
-        id:
-          type: string
-          example: "WKAXKKI5EVA5LER6TTK62VVSSU"
-        url:
-          type: string
-          example: "/lp/WKAXKKI5EVA5LER6TTK62VVSSU"
+  responses:
+    BadRequest:
+      description: Invalid request (missing URL, bad scheme, empty ID)
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/ApiError'
 
-    ArticleContent:
+  schemas:
+    ProviderSlug:
+      type: string
+      description: Provider slug, shown with its full provider name.
+      oneOf:
+        - const: "af"
+          title: Actu.fr
+        - const: "als"
+          title: L'Alsace
+        - const: "an"
+          title: Aisne Nouvelle
+        - const: "ar"
+          title: L'Ardennais
+        - const: "bp"
+          title: Le Bien Public
+        - const: "ce"
+          title: Le Canard Enchainé
+        - const: "ch"
+          title: Charlie Hebdo
+        - const: "ci"
+          title: Courrier International
+        - const: "cl"
+          title: Charente Libre
+        - const: "cp"
+          title: Courrier Picard
+        - const: "dna"
+          title: Dernières Nouvelles d'Alsace
+        - const: "ee"
+          title: L'Est éclair
+        - const: "ekip"
+          title: L'Équipe
+        - const: "ekipv"
+          title: L'Équipe Vidéo
+        - const: "er"
+          title: L'Est Républicain
+        - const: "ft"
+          title: Financial Times
+        - const: "jdc"
+          title: Le Journal du Centre
+        - const: "jdd"
+          title: Le Journal du Dimanche
+        - const: "jsl"
+          title: Le Journal de Saône-et-Loire
+        - const: "lc"
+          title: Liberation Champagne
+        - const: "ld"
+          title: Le Dauphiné Libéré
+        - const: "le"
+          title: Les Echos
+        - const: "lf"
+          title: Le Figaro
+        - const: "lib"
+          title: Libération
+        - const: "lm"
+          title: Le Monde
+        - const: "lmsg"
+          title: Le Messager
+        - const: "lp"
+          title: Le Parisien
+        - const: "lpr"
+          title: Le Progrès
+        - const: "ls"
+          title: Le Soir
+        - const: "lt"
+          title: Le Télégramme
+        - const: "lx"
+          title: L'Express
+        - const: "mp"
+          title: Mediapart
+        - const: "na"
+          title: Nikkei Asia
+        - const: "nl"
+          title: Nord Littoral
+        - const: "no"
+          title: Le Nouvel Obs
+        - const: "nyt"
+          title: New York Times
+        - const: "of"
+          title: Ouest-France
+        - const: "pm"
+          title: Paris Match
+        - const: "pn"
+          title: Paris Normandie
+        - const: "rep"
+          title: La République des Pyrénées
+        - const: "rl"
+          title: Le Républicain Lorrain
+        - const: "sa"
+          title: Socialter
+        - const: "scmp"
+          title: South China Morning Post
+        - const: "sev"
+          title: Science et Vie
+        - const: "si"
+          title: SudInfo
+        - const: "so"
+          title: Sud Ouest
+        - const: "ta"
+          title: The Athletic
+        - const: "tr"
+          title: Telerama
+        - const: "un"
+          title: L'Union
+        - const: "vdn"
+          title: La Voix du Nord
+        - const: "vm"
+          title: Vosges Matin
+        - const: "wp"
+          title: Washington Post
+
+    ProviderRef:
       type: object
+      required: [name, slug]
+      properties:
+        name:
+          type: string
+          examples:
+            - "Le Parisien"
+        slug:
+          $ref: '#/components/schemas/ProviderSlug'
+
+    ResolveSuccess:
+      type: object
+      required: [success, data]
       properties:
         success:
           type: boolean
-          example: true
+          examples:
+            - true
+        data:
+          type: object
+          required: [provider, id, page_url, api_url]
+          properties:
+            provider:
+              $ref: '#/components/schemas/ProviderRef'
+            id:
+              type: string
+              examples:
+                - "WKAXKKI5EVA5LER6TTK62VVSSU"
+            page_url:
+              type: string
+              examples:
+                - "/lp/WKAXKKI5EVA5LER6TTK62VVSSU"
+              description: "Human-readable article page on this site"
+            api_url:
+              type: string
+              examples:
+                - "/api/article/lp/WKAXKKI5EVA5LER6TTK62VVSSU"
+              description: "Canonical JSON endpoint for this article"
+
+    ArticleSuccess:
+      type: object
+      required: [success, data]
+      properties:
+        success:
+          type: boolean
+          examples:
+            - true
+        data:
+          $ref: '#/components/schemas/ArticleData'
+
+    ArticleData:
+      type: object
+      required: [provider, id, headline, subheadline, content, url, image]
+      properties:
+        provider:
+          $ref: '#/components/schemas/ProviderRef'
         id:
           type: string
-          example: "WKAXKKI5EVA5LER6TTK62VVSSU"
-        url:
-          type: string
-          example: "https://www.leparisien.fr/val-d-oise-95/...."
-        image:
-          type: string
-          example: "https://cloudfront-eu-central-1.images.arcpublishing.com/leparisien/UCR37O32VJDXBME7UVOTLNUCFA.jpg"
+          examples:
+            - "WKAXKKI5EVA5LER6TTK62VVSSU"
         headline:
           type: string
-          content: "« Guten tag mein Führer » : des professeurs dénoncent des dérives racistes et homophobes dans un lycée privé du Val-d’Oise"
+          examples:
+            - "« Guten tag mein Führer » : des professeurs dénoncent des dérives racistes dans un lycée du Val-d'Oise"
         subheadline:
           type: string
-          content: "Des enseignants et une élève du lycée Notre-Dame-de-Bury, à Margency (Val-d’Oise), indiquent avoir alerté la direction après avoir observé ces comportements lors des deux dernières années scolaires. La responsable de l’établissement dément."
+          examples:
+            - "Des enseignants indiquent avoir alerté la direction ces deux dernières années."
         content:
           type: string
-          content: "<p>Hello World!</p>"
           description: "Simplified HTML of the article content"
+          examples:
+            - "<p>Hello World!</p>"
+        url:
+          type: string
+          format: uri
+          examples:
+            - "https://www.leparisien.fr/val-d-oise-95/...."
+        image:
+          type: string
+          examples:
+            - "https://cloudfront-eu-central-1.images.arcpublishing.com/leparisien/UCR37O32VJDXBME7UVOTLNUCFA.jpg"
+        publication_date:
+          type: ["string", "null"]
+          format: date-time
+          examples:
+            - "2026-07-28T10:00:00+00:00"
 
-    ErrorBase:
+    ProvidersSuccess:
       type: object
+      required: [success, data]
       properties:
         success:
           type: boolean
-          example: false
-        message:
-          type: string
+          examples:
+            - true
+        data:
+          type: array
+          items:
+            type: object
+            required: [slug, name, group, enabled]
+            properties:
+              slug:
+                $ref: '#/components/schemas/ProviderSlug'
+              name:
+                type: string
+                examples:
+                  - "Le Monde"
+              group:
+                type: ["string", "null"]
+                examples:
+                  - null
+              enabled:
+                type: boolean
 
-    ErrorMissingUrl:
-      allOf:
-        - $ref: '#/components/schemas/ErrorBase'
-        - type: object
+    HealthSuccess:
+      type: object
+      required: [success, data]
+      properties:
+        success:
+          type: boolean
+          examples:
+            - true
+        data:
+          type: object
+          required: [status, version, git_sha]
           properties:
+            status:
+              type: string
+              examples:
+                - "ok"
+            version:
+              type: string
+              examples:
+                - "1.1.0"
+            git_sha:
+              type: string
+              examples:
+                - "development"
+
+    ApiError:
+      type: object
+      required: [success, error]
+      properties:
+        success:
+          type: boolean
+          examples:
+            - false
+        error:
+          type: object
+          required: [code, name, message]
+          properties:
+            code:
+              type: integer
+              examples:
+                - 404
+            name:
+              type: string
+              examples:
+                - "Not Found"
             message:
               type: string
-              example: "No URL provided"
-
-    ErrorProviderNotFound:
-      allOf:
-        - $ref: '#/components/schemas/ErrorBase'
-        - type: object
-          properties:
-            message:
-              type: string
-              example: "Provider not found"
-
-    ErrorNotFound:
-      allOf:
-        - $ref: '#/components/schemas/ErrorBase'
-        - type: object
-          properties:
-            message:
-              type: string
-              example: "No provider found available for this URL"
-
-    ErrorHttp:
-      allOf:
-        - $ref: '#/components/schemas/ErrorBase'
-        - type: object
-          properties:
-            message:
-              type: string
-              example: "Not Found"
+              examples:
+                - "No provider found available for this URL"

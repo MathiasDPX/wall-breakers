@@ -91,8 +91,10 @@ def normalize_source(raw) -> str:
 
 ENDPOINT_LABELS = {
     "index_route": "/",
-    "redirection_api_route": "/api/getId",
-    "article_api_route": "/api/article",
+    "api.redirection_api_route": "/api/getId",
+    "api.article_api_route": "/api/article",
+    "api.providers_api_route": "/api/providers",
+    "api.health_api_route": "/api/health",
     "article_route": "/article_page",
     "raw_article_route": "/article_raw",
     "viewable_article_route": "/article_view",
@@ -102,7 +104,7 @@ ENDPOINT_LABELS = {
     "openapi_route": "/openapi.yml",
 }
 
-ARTICLE_ENDPOINTS = {"article_api_route", "article_route"}
+ARTICLE_ENDPOINTS = {"api.article_api_route", "article_route"}
 
 
 def normalize_endpoint(url_rule) -> str:

@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         Wall Breakers Redirect
 // @namespace    https://mathiasd.fr/
-// @version      1.1.14
+// @version      1.2.0
 // @description  Show a popup on article compatible with Wall Breakers
 // @author       MathiasDPX
 // @updateURL    https://news.mathiasd.fr/redirect.user.js
@@ -126,18 +126,16 @@ function add_banner(href) {
         "url": window.location.href
     });
 
-    fetch(`${BASE_URL}/api/getId?${params}`, {
-            headers: {
-                "X-Wallbreakers-Client": "userscript",
+    fetch(`${BASE_URL}/api/getId?${params}`)
+        .then(async response => {
+            const body = await response.json();
+            if (!response.ok || body.success === false) {
+                throw new Error(body?.error?.message || "This link is not supported.");
             }
+            return body.data;
         })
-        .then(response => response.json())
         .then(data => {
-            if (data.success === false) {
-                throw new Error(data.message || "This link is not supported.");
-            } else {
-                add_banner(BASE_URL+data.url);
-            }
+            add_banner(BASE_URL + data.page_url);
         })
         .catch(error => {
             console.warn("This page isn't supported by Wall Breakers")

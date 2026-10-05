@@ -13,6 +13,7 @@ from flask_cors import CORS
 from prometheus_client import CONTENT_TYPE_LATEST, generate_latest
 from sentry_sdk.integrations.flask import FlaskIntegration
 
+from api import api_bp
 from errors import register_error_handlers
 from metrics import (
     ARTICLE_ENDPOINTS,
@@ -21,12 +22,8 @@ from metrics import (
     http_requests_total,
     init_metrics,
     normalize_endpoint,
-    normalize_source,
     record_provider_error,
-    url_resolution_duration_seconds,
-    url_resolutions_total,
 )
-from providers.common import get_article_from_url
 from providers.registry import *
 
 SENTRY_DSN = os.getenv("SENTRY_DSN")
@@ -46,6 +43,7 @@ app = Flask(__name__)
 CORS(app)
 register_error_handlers(app)
 init_metrics(app)
+app.register_blueprint(api_bp)
 sass.compile(dirname=("./static/scss/", "./static/css"))
 
 @app.before_request
@@ -103,63 +101,9 @@ def openapi_route():
     )
 
 
-@app.route("/api/getId")
-def redirection_api_route():
-    url = request.args.get("url")
-    if url is None:
-        return {"success": False, "message": "No URL provided"}, 400
-
-    source = normalize_source(request.headers.get("X-Wallbreakers-Client", "unknown"))
-
-    started_at = time.perf_counter()
-    provider, article_id = get_article_from_url(url)
-    url_resolution_duration_seconds.labels(source=source).observe(
-        time.perf_counter() - started_at
-    )
-
-    if article_id is None:
-        url_resolutions_total.labels(
-            provider="none", source=source, result="not_found"
-        ).inc()
-        return {
-            "success": False,
-            "message": "No provider found available for this URL",
-        }, 404
-
-    url_resolutions_total.labels(
-        provider=provider.SLUG, source=source, result="found"
-    ).inc()
-    article_url = f"/{provider.SLUG}/{article_id}"
-
-    return {
-        "success": True,
-        "provider": provider.PROVIDER,
-        "id": article_id,
-        "url": article_url,
-        "slug": provider.SLUG,
-    }
-
-
-@app.route("/api/article/<slug>:<id>")
-def article_api_route(slug, id):
-    if slug not in ARTICLES:
-        return {"success": False, "message": "Provider not found"}, 400
-
-    article_cls = ARTICLES[slug]
-
-    try:
-        article = article_cls(id)
-    except Exception as exc:
-        record_provider_error(slug, exc)
-        articles_served_total.labels(provider=slug, route="api", status="error").inc()
-        raise
-    articles_served_total.labels(provider=slug, route="api", status="success").inc()
-
-    return article.asdict()
-
-
-@app.route("/<slug>/<id>")
+@app.route("/<slug>/<path:id>")
 def article_route(slug, id):
+    slug = (slug or "").strip().lower()
     article_cls = ARTICLES.get(slug)
     if article_cls is None:
         return abort(404)
@@ -176,11 +120,12 @@ def article_route(slug, id):
 
     return render_template("article.html", article=article, viewable=viewable)
 
-@app.route("/<slug>/<id>/raw")
+@app.route("/<slug>/<path:id>/raw")
 def raw_article_route(slug, id):
     if not DEBUG:
         return abort(423)
-        
+
+    slug = (slug or "").strip().lower()
     article_cls = ARTICLES.get(slug)
     if article_cls is None:
         return abort(404)
@@ -188,11 +133,12 @@ def raw_article_route(slug, id):
     article = article_cls.get_data(id)
     return article
 
-@app.route("/<slug>/<id>/view")
+@app.route("/<slug>/<path:id>/view")
 def viewable_article_route(slug, id):
     if not DEBUG:
         return abort(423)
-        
+
+    slug = (slug or "").strip().lower()
     article_cls = ARTICLES.get(slug)
     if article_cls is None:
         return abort(404)

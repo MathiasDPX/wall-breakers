@@ -69,18 +69,18 @@ inputNode.addEventListener("keyup", function (event) {
             'url': inputNode.value
         });
 
-        fetch(`/api/getId?${params}`, {
-            headers: { "X-Wallbreakers-Client": "site" }
-        })
-            .then(response => response.json())
-            .then(data => {
-                if (data.success === false) {
-                    throw new Error(data.message || "This link is not supported.");
-                } else {
-                    feedbackNode.classList.add('success');
-                    feedbackNode.innerText = `Redirecting to ${data.provider}...`;
-                    window.location.assign(data.url)
+        fetch(`/api/getId?${params}`)
+            .then(async response => {
+                const body = await response.json();
+                if (!response.ok || body.success === false) {
+                    throw new Error(body?.error?.message || "This link is not supported.");
                 }
+                return body.data;
+            })
+            .then(data => {
+                feedbackNode.classList.add('success');
+                feedbackNode.innerText = `Redirecting to ${data.provider.name}...`;
+                window.location.assign(data.page_url)
             })
             .catch(error => {
                 feedbackNode.classList.add('error');

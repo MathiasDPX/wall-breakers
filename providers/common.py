@@ -20,12 +20,10 @@ class Article(ABC):
 
 
     def __post_init__(self):
-        self.raw_id = self.id
-        self.id = f"{self.PROVIDER}:{self.id}"
+        self.id = self.id
 
     @property
     def local_publication_date(self) -> datetime | None:
-        """Publication date, timezone-aware dates converted to the server timezone."""
         if self.publication_date is None:
             return None
 
@@ -36,7 +34,6 @@ class Article(ABC):
 
     @property
     def has_publication_time(self) -> bool:
-        """False when the publication date only carries a day, i.e. it lands on midnight."""
         publication_date = self.local_publication_date
 
         if publication_date is None:
@@ -65,7 +62,6 @@ class Article(ABC):
 
     @classmethod
     def is_enabled(cls) -> bool:
-        """Whether the provider can be used with the current configuration."""
         return True
 
 
@@ -74,7 +70,10 @@ class Article(ABC):
 
     def asdict(self):
         return {
-            "success": True,
+            "provider": {
+                "name": self.PROVIDER,
+                "slug": self.SLUG,
+            },
             "id": self.id,
             "headline": self.headline,
             "subheadline": self.subheadline,
