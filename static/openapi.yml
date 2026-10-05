@@ -113,7 +113,7 @@ paths:
         - in: path
           name: slug
           schema:
-            $ref: '#/components/schemas/ProviderSlug'
+            type: string
           required: true
           description: Provider slug (lowercase)
         - in: path
