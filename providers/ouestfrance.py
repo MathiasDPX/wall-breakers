@@ -31,6 +31,30 @@ def _sanitize_html(html):
     
     return soup.decode_contents()
 
+def _build_direct(block):
+    content = "<h2>Direct</h2>"
+    html = block["data"]["html"]
+    soup = BeautifulSoup(html, features="html.parser")
+    fix_links(soup)
+    
+    for post in soup.select('div[id^="live_post_"]'):
+        date = post.select_one(".post-date")
+        title = post.select_one(".post-title")
+        post_content = post.select_one(".post-content")
+
+        if not post_content:
+            continue
+
+        date = date.get_text(strip=True) if date else ""
+        title = title.get_text(strip=True) if title else ""
+        post_content = post_content.get_text(strip=True)
+
+        content += f"<b style=\"padding-bottom:1em;\">{date} - {title}</b><br><p>{post_content}</p><hr>"
+        
+    content = BeautifulSoup(content, features="html.parser")
+        
+    return content.decode_contents()
+
 def _build_block(block):
     typename = block["type"]
     
@@ -51,7 +75,9 @@ def _build_block(block):
         return add_figure(block["data"]["binaryImage"]["url"], make_figcaption(block["data"].get("caption"), block["data"].get("credits")))
     elif typename == "TEXT_HTML":
         return block["data"]["html"]
-    elif typename in ["AD_DFP", "AD_TABOOLA_2", "EOC", "SECTION_LIST", "TEXT_LEADING", "TEXT_SCRIBBLE_LIVE", "ATOM_IFRAME"]:
+    elif typename == "TEXT_SCRIBBLE_LIVE":
+        return _build_direct(block)
+    elif typename in ["AD_DFP", "AD_TABOOLA_2", "EOC", "SECTION_LIST", "TEXT_LEADING", "ATOM_IFRAME"]:
         return ""
     
     sentry_block_error(typename)
