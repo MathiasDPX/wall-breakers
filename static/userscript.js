@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         Wall Breakers Redirect
 // @namespace    https://mathiasd.fr/
-// @version      1.2.0
+// @version      1.3.0
 // @description  Show a popup on article compatible with Wall Breakers
 // @author       MathiasDPX
 // @updateURL    https://news.mathiasd.fr/redirect.user.js
@@ -63,61 +63,81 @@
 const BASE_URL = "https://news.mathiasd.fr";
 
 function add_banner(href) {
-    var banner = document.createElement("div");
-    var link = document.createElement("a");
-    var closeButton = document.createElement("button");
+    const host = document.createElement("wall-breakers-banner");
 
-    Object.assign(banner.style, {
-        position: "fixed",
-        top: "0",
-        left: "0",
-        width: "100%",
-        zIndex: "9999999999",
-        backgroundColor: "#000",
-        padding: "0.35em",
-        textAlign: "center",
-        boxSizing: "border-box",
-        "font-family": "Arial,Helvetica,sans-serif"
-    });
+    const hostStyles = {
+        "all": "initial",
+        "position": "fixed",
+        "top": "0",
+        "left": "0",
+        "width": "100%",
+        "z-index": "2147483647",
+        "display": "block"
+    };
+    for (const [prop, value] of Object.entries(hostStyles)) {
+        host.style.setProperty(prop, value, "important");
+    }
+
+    const shadow = host.attachShadow({ mode: "closed" });
+
+    shadow.innerHTML = `
+        <style>
+            :host { all: initial; }
+            .banner {
+                background: #000;
+                padding: 0.35em;
+                text-align: center;
+                box-sizing: border-box;
+                font-family: Arial, Helvetica, sans-serif;
+                font-size: 16px;
+                line-height: 1.4;
+                position: relative;
+            }
+            a {
+                color: #fff;
+                text-decoration: none;
+            }
+            a:hover { text-decoration: underline; }
+            button {
+                position: absolute;
+                right: 1em;
+                top: 50%;
+                transform: translateY(-50%);
+                border: none;
+                background: none;
+                color: #fff;
+                cursor: pointer;
+                font-size: 16px;
+            }
+        </style>
+        <div class="banner">
+            <a></a>
+            <button type="button" aria-label="Fermer">✖</button>
+        </div>
+    `;
+
+    const banner = shadow.querySelector(".banner");
+    const link = shadow.querySelector("a");
+    const closeButton = shadow.querySelector("button");
 
     link.href = href;
-    link.innerText = "Click on this banner to bypass the paywall!";
+    link.textContent = "Click on this banner to bypass the paywall!";
 
-    link.style.color = "#ffffff"
+    const previousPadding = document.body.style.paddingTop;
 
-    link.addEventListener("mouseenter", () => {
-        link.style.opacity = "1";
-        link.style.textDecoration = "underline";
+    closeButton.addEventListener("click", () => {
+        host.remove();
+        document.body.style.paddingTop = previousPadding;
     });
 
-    link.addEventListener("mouseleave", () => {
-        link.style.textDecoration = "none";
-    });
-
-    closeButton.innerText = "✖";
-    Object.assign(closeButton.style, {
-        position: "fixed",
-        right: "1em",
-        border: "none",
-        background: "none",
-        color: "white",
-        cursor: "pointer"
-    });
-
-    closeButton.onclick = () => {
-        banner.remove();
-    };
-
-    banner.appendChild(link);
-    banner.appendChild(closeButton)
-    document.body.prepend(banner);
+    document.documentElement.appendChild(host);
 
     requestAnimationFrame(() => {
-        if (!banner.isConnected) return;
-
-        document.body.style.paddingTop = `${banner.offsetHeight}px`;
-    })
+        if (!host.isConnected) return;
+        document.body.style.setProperty("padding-top", `${banner.offsetHeight}px`, "important");
+    });
 }
+
 
 (function() {
     'use strict';
@@ -135,9 +155,10 @@ function add_banner(href) {
             return body.data;
         })
         .then(data => {
+            console.log("[WALL-BREAKERS] Success, " + BASE_URL + data.page_url);
             add_banner(BASE_URL + data.page_url);
         })
         .catch(error => {
-            console.warn("This page isn't supported by Wall Breakers")
+            console.warn("[WALL-BREAKERS] This page isn't supported")
         })
 })();
