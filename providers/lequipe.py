@@ -5,6 +5,7 @@ from html import escape
 
 import requests
 from bs4 import BeautifulSoup
+from flask import abort
 
 from .exceptions import sentry_block_error
 from .common import Article, add_figure, fix_link, fix_links
@@ -149,6 +150,9 @@ class EquipeArticle(Article):
         content = ""
         body = _get_item(data["items"], "article_body")
         features = _get_item(data["items"], "article_feature")
+        
+        if body is None or features is None:
+            return abort(404)
 
         for block in body["objet"]["paragraphs"]:
             content += _build_block(block)
