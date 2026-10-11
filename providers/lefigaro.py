@@ -20,6 +20,15 @@ def _sanitize_html(html):
     return soup.decode_contents()
 
 
+def _build_video(block):
+    videos = FigaroArticle.get_videos(block["id"])
+    mp4s = [video for video in videos if video.get("type") == "MP4"]
+            
+    return add_figure(
+        choice(mp4s).get("url", ""),
+        make_figcaption(block['thumbnail']['caption'], block['thumbnail']['credit'])
+    )
+
 def _build_block(block):
     typename = block["__typename"]
     
@@ -33,6 +42,8 @@ def _build_block(block):
         return f"<blockquote>{block['text']}<br><br>- {block['credit']}</blockquote>"
     elif typename == "ParagraphWithPaywall":
         return "<p>" + _sanitize_html(block["paywall"]["text"]) + "</p>"
+    elif typename == "VideoFigaro":
+        return _build_video(block)
     elif typename == "Link":
         if "lire aussi" in block.get("prefix", "").lower():
             return ""
@@ -58,13 +69,7 @@ class FigaroArticle(Article):
             )
             thumbnail = data["mainMedia"]["image"]["url"]
         elif mainMediaType == "VideoFigaro":
-            videos = FigaroArticle.get_videos(data["mainMedia"]["id"])
-            mp4s = [video for video in videos if video.get("type") == "MP4"]
-            
-            content = add_figure(
-                choice(mp4s).get("url", ""),
-                make_figcaption(data['mainMedia']['thumbnail']['caption'], data['mainMedia']['thumbnail']['credit'])
-            )
+            content = _build_video(data["mainMedia"])
             thumbnail = data["mainMedia"]["thumbnail"]["image"]["url"]
         
         audio = data.get("audio")
