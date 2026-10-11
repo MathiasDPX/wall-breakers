@@ -176,7 +176,7 @@ class EquipeArticle(Article):
             headline=features["objet"].get("long_title", features["objet"]["title"]),
             subheadline=data["metas"].get("description", ""),
             content=content,
-            url=data["urls"]["web"],
+            url=data.get("urls", {}).get("web", ""),
             image=image,
             publication_date=datetime.fromisoformat(date) if date else None
         )
