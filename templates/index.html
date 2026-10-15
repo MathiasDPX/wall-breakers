@@ -23,15 +23,15 @@
         <h1>Supported sources</h1>
         <ul>
             {% for source in sources %}
+            {% if source.enabled %}
             <li>
                 {%- if source.members -%}
                 <abbr title="{{ source.members|join(', ') }}">{{ source.name }}</abbr>
-                {%- elif not source.enabled -%}
-                <s>{{ source.name }}</s>
                 {%- else -%}
                 {{ source.name }}
                 {%- endif -%}
             </li>
+            {% endif %}
             {% endfor %}
             <li><a href="https://github.com/MathiasDPX/wall-breakers/issues/new?template=media-request.md">Suggest a media</a></li>
         </ul>
