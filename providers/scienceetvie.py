@@ -115,6 +115,10 @@ class ScienceEtVieArticle(Article):
         })
         r.raise_for_status()
         return r.json()
+    
+    def is_enabled():
+        # "Access to the REST API is disabled"
+        return False
 
 
 if __name__ == "__main__":
