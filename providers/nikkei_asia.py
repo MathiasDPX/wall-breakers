@@ -7,6 +7,7 @@ from bs4 import BeautifulSoup
 import requests
 
 from .common import Article, fix_links, add_figure
+from metrics import upstream_request_timer
 
 _URL_ID_PATTERN = re.compile(
     r"https:\/\/asia\.nikkei\.com(\/.+)"
@@ -79,7 +80,9 @@ class NikkeiAsiaArticle(Article):
 
         return base64.b64encode(match.group(1).encode()).decode("ascii")
     
-    def get_data(id):
+    @classmethod
+    @upstream_request_timer
+    def get_data(cls, id):
         article_path = base64.b64decode(id).decode()
         
         params = {

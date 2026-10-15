@@ -5,6 +5,7 @@ import requests
 from bs4 import BeautifulSoup
 
 from .common import Article, add_figure, fix_links
+from metrics import upstream_request_timer
 
 _URL_ID_PATTERN = re.compile(
     r".+leparisien\.fr\/.+-\d{2}-\d{2}-\d{4}-([A-Z0-9]{26})\.php"
@@ -85,7 +86,9 @@ class LeParisienArticle(Article):
         
         return match.group(1)
         
-    def get_data(id):
+    @classmethod
+    @upstream_request_timer
+    def get_data(cls, id):
         r = requests.get(
             f"https://gateway-api.leparisien.fr/v1/contents/articles/{id}"
         )

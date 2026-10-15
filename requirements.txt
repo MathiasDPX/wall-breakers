@@ -1,3 +1,4 @@
+prometheus-client
 sentry-sdk[flask]
 beautifulsoup4
 python-dotenv

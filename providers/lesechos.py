@@ -5,6 +5,7 @@ import requests
 from bs4 import BeautifulSoup
 
 from .common import Article, add_figure, fix_links, make_figcaption
+from metrics import upstream_request_timer
 
 _URL_ID_PATTERN = re.compile(
     r".+lesechos.fr\/.+-(\d+)"
@@ -51,7 +52,9 @@ class LesEchosArticle(Article):
 
         return match.group(1)
     
-    def get_data(id):
+    @classmethod
+    @upstream_request_timer
+    def get_data(cls, id):
         r = requests.get(
             f"https://api.lesechos.fr/api/v2/posts/{id}",
             headers={

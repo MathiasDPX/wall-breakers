@@ -7,6 +7,7 @@ import requests
 from bs4 import BeautifulSoup
 
 from .common import Article, add_figure, fix_links
+from metrics import upstream_request_timer
 
 _ID_PATTERN = re.compile(
     r'<meta name="ArticleId" content="([a-z0-9-]{36})"'
@@ -97,6 +98,7 @@ class EbraArticle(Article):
         return article_id.group(1)
     
     @classmethod
+    @upstream_request_timer
     def get_data(cls, article_id: str):
         content_response = requests.get(f"https://{cls.DOMAIN}/services/grdc/detail?key={article_id}")
         content_response.raise_for_status()

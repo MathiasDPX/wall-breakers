@@ -5,6 +5,7 @@ from bs4 import BeautifulSoup
 import requests
 
 from .common import Article, fix_links
+from metrics import upstream_request_timer
 
 _ID_PATTERN = re.compile(r"\/(?:id)?(\d+)\/article\/\d{4}-\d{2}-\d{2}\/.+")
 
@@ -104,6 +105,7 @@ class RosselArticle(Article):
         return article_id.group(1)
     
     @classmethod
+    @upstream_request_timer
     def get_data(cls, article_id: str):
         headers = {
             "User-Agent": "Mozilla/5.0 (X11; Linux x86_64; rv:157.0) Gecko/20100101 Firefox/157.0"

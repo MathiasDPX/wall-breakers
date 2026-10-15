@@ -6,6 +6,7 @@ from bs4 import BeautifulSoup
 
 from .exceptions import sentry_block_error
 from .common import Article, add_figure, fix_links, make_figcaption
+from metrics import upstream_request_timer
 
 _URL_ID_PATTERN = re.compile(
     r"https:\/\/www\.parismatch\.com\/.+-(\d+)"
@@ -80,7 +81,9 @@ class ParisMatchArticle(Article):
 
         return match.group(1)
     
-    def get_data(id):
+    @classmethod
+    @upstream_request_timer
+    def get_data(cls, id):
         r = requests.get(
             f"https://api-cms.parismatch.com/lmn_api/v1/node/article/{id}"
         )

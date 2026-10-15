@@ -6,6 +6,7 @@ from flask import abort
 
 from .exceptions import sentry_block_error
 from .common import Article, add_figure, fix_links, make_figcaption
+from metrics import upstream_request_timer
 
 _URL_ID_PATTERN = re.compile(
     r"https:\/\/www\.lejdc\.fr\/.+_1(\d+)(?:\/?)"
@@ -110,7 +111,9 @@ class JDCArticle(Article):
         
         return match.group(1)
         
-    def get_data(id):
+    @classmethod
+    @upstream_request_timer
+    def get_data(cls, id):
         params = {
             "operationName": "articleDetail",
             "variables": '{"id":"'+id+'"}',

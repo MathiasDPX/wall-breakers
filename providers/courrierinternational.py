@@ -6,6 +6,7 @@ import requests
 from bs4 import BeautifulSoup
 
 from .common import Article, fix_links
+from metrics import upstream_request_timer
 
 _URL_ID_PATTERN = re.compile(
     r"https:\/\/www\.courrierinternational\.com\/[a-z\/-]+_(\d+).*"
@@ -121,7 +122,9 @@ class CourrierInternationalArticle(Article):
         
         return None
     
-    def get_data(id):
+    @classmethod
+    @upstream_request_timer
+    def get_data(cls, id):
         r = requests.get(
             f"https://apps.courrierinternational.com/cri/v1/premium-android-tablet/article?id={id}"
         )

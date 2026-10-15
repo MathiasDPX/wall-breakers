@@ -9,6 +9,7 @@ from bs4 import BeautifulSoup
 from .auth import SocialterClient
 from .common import Article, fix_links, add_figure
 from .exceptions import SocialterDisabledException, SocialterLayoutError
+from metrics import upstream_request_timer
 
 _URL_ID_PATTERN = re.compile(r"https:\/\/www\.socialter\.fr\/article\/(.+)")
 
@@ -128,8 +129,10 @@ class SocialterArticle(Article):
 
         return base64.b64encode(match.group(1).encode()).decode("ascii")
     
+    @classmethod
     @lru_cache(maxsize=64)
-    def get_data(id):
+    @upstream_request_timer
+    def get_data(cls, id):
         if client is None:
             raise SocialterDisabledException()
 

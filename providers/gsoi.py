@@ -4,6 +4,7 @@ import requests
 from bs4 import BeautifulSoup
 
 from .common import Article, add_figure, fix_links, make_figcaption
+from metrics import upstream_request_timer
 
 
 class GSOIArticle(Article):
@@ -60,6 +61,7 @@ class GSOIArticle(Article):
         return match.group(1)
 
     @classmethod
+    @upstream_request_timer
     def get_data(cls, id):
         r = requests.get(
             f"https://mag.gsoi.fr/articles/{id}?editor={cls.EDITION}"

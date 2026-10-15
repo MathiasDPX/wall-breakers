@@ -6,6 +6,7 @@ from bs4 import BeautifulSoup
 
 from .exceptions import sentry_block_error
 from .common import Article, add_figure, fix_links
+from metrics import upstream_request_timer
 
 _URL_ID_PATTERN = re.compile(
     r".+lexpress\.fr\/.+-([A-Z0-9]{26})(?:.+)?"
@@ -66,7 +67,9 @@ class ExpressArticle(Article):
         
         return match.group(1)
         
-    def get_data(id):
+    @classmethod
+    @upstream_request_timer
+    def get_data(cls, id):
         # Using Android app api key
         r = requests.get(
             f"https://www.lexpress.fr/arc/outboundfeeds/mobile/v1/article/{id}/?token=354e2674f3f34fcc9886d55fd8602a2b"

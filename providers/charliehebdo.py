@@ -6,6 +6,7 @@ from functools import lru_cache
 from bs4 import BeautifulSoup
 
 from .common import Article, fix_links, add_figure
+from metrics import upstream_request_timer
 
 _URL_PATTERN = re.compile(
     r"https:\/\/charliehebdo\.fr\/\d{4}\/\d{2}\/.+\/.+"
@@ -75,7 +76,9 @@ class CharlieHebdoArticle(Article):
 
         return article_id.group(1)
     
-    def get_data(id):
+    @classmethod
+    @upstream_request_timer
+    def get_data(cls, id):
         r = requests.get(f"https://charliehebdo.fr/wp-json/wp/v2/posts/{id}?appkey=JeSuisCharlie2023")
         r.raise_for_status()
         

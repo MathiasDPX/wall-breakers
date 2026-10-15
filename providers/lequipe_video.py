@@ -7,6 +7,7 @@ from bs4 import BeautifulSoup
 
 from .exceptions import sentry_block_error
 from .common import Article, fix_link, fix_links, add_figure
+from metrics import upstream_request_timer
 
 _URL_ID_PATTERN = re.compile(r"https:\/\/www\.lequipe\.fr\/explore\/video\/.+\/(\d+)")
 
@@ -104,7 +105,9 @@ class EquipeVideoArticle(Article):
 
         return match.group(1)
     
-    def get_data(id):
+    @classmethod
+    @upstream_request_timer
+    def get_data(cls, id):
         r = requests.get(f"https://dwh.lequipe.fr/api/video/media/{id}?version=2.1&platform=android")
 
         r.raise_for_status()

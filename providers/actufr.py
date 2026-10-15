@@ -5,11 +5,11 @@ import requests
 from bs4 import BeautifulSoup
 
 from .common import Article, add_figure, fix_links
+from metrics import upstream_request_timer
 
 _URL_ID_PATTERN = re.compile(
     r"https:\/\/actu\.fr\/.+_(\d+)\.html"
 )
-
 
 class ActuArticle(Article):
     SLUG = "af"
@@ -64,7 +64,9 @@ class ActuArticle(Article):
 
         return match.group(1)
     
-    def get_data(id):
+    @classmethod
+    @upstream_request_timer
+    def get_data(cls, id):
         r = requests.get(f"https://api.actu.fr/posts/{id}", headers={
             "Accept": "application/json",
             "User-Agent": "ActuApp/2.0"

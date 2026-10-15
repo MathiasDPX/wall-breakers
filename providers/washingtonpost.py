@@ -8,6 +8,7 @@ from bs4 import BeautifulSoup
 
 from .exceptions import sentry_block_error
 from .common import Article, add_figure, fix_links
+from metrics import upstream_request_timer
 
 _URL_ID_PATTERN = re.compile(r"(https:\/\/www\.washingtonpost\.com/.+)")
 
@@ -95,7 +96,9 @@ class WashingtonPostArticle(Article):
 
         return base64.b64encode(match.group(1).encode()).decode("ascii")
     
-    def get_data(id):
+    @classmethod
+    @upstream_request_timer
+    def get_data(cls, id):
         article_path = base64.b64decode(id).decode()
         r = requests.get("https://rainbowapi-a.wpdigital.net/rainbow-data-service/rainbow/content-by-url.json", params={"url": article_path+"&platform=iphoneclassic&followLinks=false"})
         

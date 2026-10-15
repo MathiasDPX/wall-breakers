@@ -7,6 +7,7 @@ from bs4 import BeautifulSoup
 from .auth import OAuthClient
 from .common import Article, add_figure, fix_links, make_figcaption
 from .exceptions import *
+from metrics import upstream_request_timer
 
 _URL_ID_PATTERN = re.compile(
     r"https:\/\/www\.ouest-france\.fr\/.+-([a-z0-9]{8}-[a-z0-9]{4}-[a-z0-9]{4}-[a-z0-9]{4}-[a-z0-9]{12})"
@@ -127,7 +128,9 @@ class OuestFranceArticle(Article):
 
         return match.group(1)
     
-    def get_data(id):
+    @classmethod
+    @upstream_request_timer
+    def get_data(cls, id):
         r = client.get("https://api-device.ouest-france.fr/app/OF/v1/contents/"+id)
         
         r.raise_for_status()

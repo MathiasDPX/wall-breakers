@@ -10,6 +10,7 @@ from flask import redirect
 from .auth import CASClient
 from .common import Article, fix_links
 from .exceptions import MediapartDisabledException
+from metrics import upstream_request_timer
 
 _URL_ID_PATTERN = re.compile(
     r"(https:\/\/www\.mediapart\.fr\/.+)"
@@ -181,7 +182,9 @@ class MediapartArticle(Article):
         
         return base64.b64encode(match.group(1).encode()).decode("ascii")
     
-    def get_data(id):
+    @classmethod
+    @upstream_request_timer
+    def get_data(cls, id):
         article_path = base64.b64decode(id)
         r = client.get(article_path)
         r.raise_for_status()

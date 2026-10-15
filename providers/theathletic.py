@@ -5,6 +5,7 @@ import requests
 from bs4 import BeautifulSoup
 
 from .common import Article, add_figure, fix_links, make_figcaption
+from metrics import upstream_request_timer
 
 _URL_ID_PATTERN = re.compile(
     r".+nytimes\.com\/athletic\/(\d+)(?:\/(?:.+)?)?"
@@ -67,7 +68,9 @@ class TheAthleticArticle(Article):
 
         return match.group(1)
     
-    def get_data(id):
+    @classmethod
+    @upstream_request_timer
+    def get_data(cls, id):
         r = requests.get(f"https://www.nytimes.com/athletic/{id}")
         r.raise_for_status()
         content = r.text

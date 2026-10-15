@@ -5,6 +5,7 @@ import requests
 from bs4 import BeautifulSoup
 
 from .common import Article, add_figure, fix_links
+from metrics import upstream_request_timer
 
 _URL_ID_PATTERN = re.compile(
     r".+lemonde\.fr\/.+_(\d+)_\d+\.html"
@@ -115,7 +116,9 @@ class LeMondeArticle(Article):
         
         return None
     
-    def get_data(id):
+    @classmethod
+    @upstream_request_timer
+    def get_data(cls, id):
         if id.endswith("_en"):
             r = requests.get(
                 f"https://apps.lemonde.fr/aec/v1/en/premium-ios-tablet/article/{id[:-3]}"

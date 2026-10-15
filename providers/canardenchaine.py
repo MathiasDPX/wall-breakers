@@ -8,6 +8,7 @@ from bs4 import BeautifulSoup
 from flask import redirect
 
 from .common import Article, fix_links
+from metrics import upstream_request_timer
 
 _URL_ID_PATTERN = re.compile(
     r"https:\/\/www\.lecanardenchaine\.fr(\/.+\/\d+-.+)"
@@ -74,7 +75,9 @@ class CanardEnchaineArticle(Article):
 
         return base64.b64encode(match.group(1).encode()).decode("ascii")
     
-    def get_data(id):
+    @classmethod
+    @upstream_request_timer
+    def get_data(cls, id):
         article_path = base64.b64decode(id).decode()
         r = requests.get("https://www.lecanardenchaine.fr"+article_path, headers={
             "User-Agent": "Mozilla/5.0 (compatible; Googlebot/2.1; +http://www.google.com/bot.html)",

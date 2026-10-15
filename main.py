@@ -7,11 +7,13 @@ load_dotenv()
 
 import sass
 import sentry_sdk
-from flask import Flask, abort, render_template, send_file
+from flask import Flask, abort, render_template, send_file, Response
 from flask_cors import CORS
 from sentry_sdk.integrations.flask import FlaskIntegration
+from prometheus_client import generate_latest, CONTENT_TYPE_LATEST
 
 from api import api_bp
+from metrics import *
 from errors import register_error_handlers
 from providers.registry import *
 
@@ -68,8 +70,10 @@ def article_route(slug, id):
         return abort(404)
 
     viewable = article_cls.get_readable_data != Article.get_readable_data
-
-    article = article_cls(id)
+    
+    ARTICLE_REQUEST_COUNT.labels(provider=article_cls.PROVIDER).inc()
+    with ARTICLE_PROCESSING_TIME.labels(provider=article_cls.PROVIDER).time():
+        article = article_cls(id)
 
     return render_template("article.html", article=article, viewable=viewable)
 
@@ -98,6 +102,14 @@ def viewable_article_route(slug, id):
 
     article = article_cls.get_readable_data(id)
     return article
+
+@app.route("/metrics")
+def metrics_route():
+    return Response(
+        generate_latest(),
+        status=200,
+        mimetype=CONTENT_TYPE_LATEST
+    )
 
 @app.route("/")
 def index_route():

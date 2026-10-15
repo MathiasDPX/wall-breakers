@@ -5,6 +5,8 @@ from flask import Blueprint, abort, jsonify, request
 from providers.common import get_article_from_url
 from providers.registry import ARTICLES, PROVIDERS
 
+from metrics import *
+
 api_bp = Blueprint("api", __name__, url_prefix="/api")
 
 
@@ -41,10 +43,14 @@ def _extract_request_url():
 def redirection_api_route():
     url = _extract_request_url()
 
-    provider, article_id = get_article_from_url(url)
+    with RESOLUTION_REQUEST_TIME.time():
+        provider, article_id = get_article_from_url(url)
 
     if article_id is None:
-        abort(404, description="No provider found available for this URL")
+        ARTICLE_RESOLUTION_REQUEST_COUNT.labels(outcome="none").inc()
+        return abort(404, description="No provider found available for this URL")
+
+    ARTICLE_RESOLUTION_REQUEST_COUNT.labels(outcome=provider.PROVIDER).inc()
 
     return _api_success(
         {

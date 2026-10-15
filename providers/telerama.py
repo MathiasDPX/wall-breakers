@@ -8,6 +8,7 @@ import requests
 from bs4 import BeautifulSoup
 
 from .common import Article, fix_links
+from metrics import upstream_request_timer
 
 _URL_ID_PATTERN = re.compile(
     r"https:\/\/www\.telerama\.fr(.+)"
@@ -142,7 +143,9 @@ class TeleramaArticle(Article):
         
         return None
     
-    def get_data(id):
+    @classmethod
+    @upstream_request_timer
+    def get_data(cls, id):
         article_path = base64.b64decode(id).decode()
         r = requests.get(
             "https://apps.telerama.fr/tlr/v1/premium-android-phone/element",

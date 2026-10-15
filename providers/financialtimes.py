@@ -6,6 +6,7 @@ from bs4 import BeautifulSoup
 
 from .exceptions import sentry_block_error
 from .common import Article, fix_links, add_figure, make_figcaption
+from metrics import upstream_request_timer
 
 _URL_ID_PATTERN = re.compile(
     r"https:\/\/www\.ft\.com\/content\/([a-z0-9]{8}-[a-z0-9]{4}-[a-z0-9]{4}-[a-z0-9]{4}-[a-z0-9]{12}).*"
@@ -157,7 +158,9 @@ class FinancialTimesArticle(Article):
 
         return match.group(1)
     
-    def get_data(id):
+    @classmethod
+    @upstream_request_timer
+    def get_data(cls, id):
         headers = {
             "Host": "app-api.ft.com",
             "User-Agent": "Mozilla/5.0 (Linux; Android 14; OXF-AN10 Build/UQ1A.240205.07131809; wv) AppleWebKit/537.36 (KHTML, like Gecko) Version/4.0 Chrome/124.0.6367.82 Mobile Safari/537.36 ft-app-android/2.297.0-snapshot.86.13390707531003.9209+5a63db4 fruitcake/2142297000 2.297.0-snapshot.86.13390707531003.9209+5a63db4 (640/640dpi ; 1440x2560 ; Build/UQ1A.240205.07131809 ; handset ; model: OXF-AN10 Build/UQ1A.240205.07131809 ; AndroidVersion: Android 14 ; manufacturer: Honor) sencha"

@@ -9,6 +9,7 @@ from bs4 import BeautifulSoup
 
 from .exceptions import sentry_block_error
 from .common import Article, add_figure, fix_links, make_figcaption
+from metrics import upstream_request_timer
 
 _URL_ID_PATTERN = re.compile(r"(https:\/\/.+\.lefigaro\.fr\/.+-\d{8})")
 
@@ -99,7 +100,9 @@ class FigaroArticle(Article):
 
         return base64.b64encode(match.group(1).encode()).decode("ascii")
     
-    def get_data(id):
+    @classmethod
+    @upstream_request_timer
+    def get_data(cls, id):
         article_path = base64.b64decode(id).decode()
         
         variables = json.dumps({

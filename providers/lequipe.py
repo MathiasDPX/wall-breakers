@@ -9,6 +9,7 @@ from flask import abort
 
 from .exceptions import sentry_block_error
 from .common import Article, add_figure, fix_link, fix_links
+from metrics import upstream_request_timer
 
 _URL_ID_PATTERN = re.compile(r"https:\/\/www\.lequipe\.fr\/(?!explore\/video\/).+\/(\d+)")
 _COLOR_PATTERN = re.compile(r"^#(?:[0-9a-fA-F]{3}|[0-9a-fA-F]{6})$")
@@ -192,7 +193,9 @@ class EquipeArticle(Article):
 
         return match.group(1)
     
-    def get_data(id):
+    @classmethod
+    @upstream_request_timer
+    def get_data(cls, id):
         r = requests.get("https://dwh.lequipe.fr/api/v9/efr/news/" + id)
 
         r.raise_for_status()

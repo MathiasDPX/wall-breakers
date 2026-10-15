@@ -8,6 +8,7 @@ import requests
 
 from .exceptions import sentry_block_error
 from .common import Article, add_figure, fix_links
+from metrics import upstream_request_timer
 
 _URL_ID_PATTERN = re.compile(
     r"https:\/\/www\.scmp\.com\/.+\/article\/(\d+)\/.+"
@@ -110,7 +111,9 @@ class SCMPArticle(Article):
         
         return SCMPArticle._get_uuid(url)
     
-    def get_data(id):
+    @classmethod
+    @upstream_request_timer
+    def get_data(cls, id):
         url = "https://apigw.scmp.com/content-delivery/v2"
 
         params = {
