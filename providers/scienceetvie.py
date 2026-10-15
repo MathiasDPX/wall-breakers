@@ -74,7 +74,7 @@ def _sanitize_html(html):
 class ScienceEtVieArticle(Article):
     SLUG = "sev"
     PROVIDER = "Science et Vie"
-    FAVICON = "https://www.science-et-vie.com/wp-content/themes/scienceetvie-v2/assets/images/favicons/favicon128.png"
+    FAVICON = "https://sf.science-et-vie.com/wp-content/themes/science-et-vie-v2/assets/images/favicons/favicon256.png"
 
     def __init__(self, article_id: str):
         data = ScienceEtVieArticle.get_data(article_id)

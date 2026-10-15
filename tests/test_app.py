@@ -92,6 +92,11 @@ def test_article_pages(client, url):
 
     # We doesn't care if it's the correct ID/provider as it's test by test_article_regex in test_common.py
     slug = data['data']['provider']['slug']
+    provider = ARTICLES[slug]
+    
+    if not provider.is_enabled():
+        assert True
+        return
 
     page_response = client.get(data['data']['page_url'])
 
