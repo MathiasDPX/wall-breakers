@@ -63,24 +63,28 @@ class FigaroArticle(Article):
     def __init__(self, article_id: str):
         data = FigaroArticle.get_data(article_id)
 
-        mainMediaType = data["mainMedia"]["__typename"]
         thumbnail = "static/images/thumbnail.jpg"
-        if mainMediaType == "Photo":
-            content = add_figure(
-                data["mainMedia"]["image"]["url"],
-                make_figcaption(data['mainMedia']['caption'], data['mainMedia']['credit'])
-            )
-            thumbnail = data["mainMedia"]["image"]["url"]
-        elif mainMediaType == "VideoFigaro":
-            content = _build_video(data["mainMedia"])
-            thumbnail = data["mainMedia"]["thumbnail"]["image"]["url"]
+        if "mainMedia" in data:
+            mainMediaType = data["mainMedia"]["__typename"]
+            if mainMediaType == "Photo":
+                content = add_figure(
+                    data["mainMedia"]["image"]["url"],
+                    make_figcaption(data['mainMedia']['caption'], data['mainMedia']['credit'])
+                )
+                thumbnail = data["mainMedia"]["image"]["url"]
+            elif mainMediaType == "VideoFigaro":
+                content = _build_video(data["mainMedia"])
+                thumbnail = data["mainMedia"]["thumbnail"]["image"]["url"]
+        if "videoMainMedia" in data:
+            content = _build_video(data["videoMainMedia"])
+            thumbnail = data["videoMainMedia"]["thumbnail"]["image"]["url"]
         
         audio = data.get("audio")
         if audio and "url" in audio:
             content += f"<audio controls src=\"{audio['url']}\"></audio>"
 
         
-        for block in data["body"]["structured"]:
+        for block in data.get("body", {}).get("structured", []):
             content += _build_block(block)
 
         published_at = data.get("publishedAt")
@@ -88,7 +92,7 @@ class FigaroArticle(Article):
         super().__init__(
             id=article_id,
             headline=data["headline"],
-            subheadline=data["standfirst"],
+            subheadline=data.get("standfirst", ""),
             content=content,
             url=data["url"],
             image=thumbnail,
