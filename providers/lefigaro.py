@@ -48,6 +48,8 @@ def _build_block(block):
     elif typename == "Link":
         if "lire aussi" in block.get("prefix", "").lower():
             return ""
+    elif typename == "FreeHtml":
+        return _sanitize_html(block.get("sourceCode", ""))
     
     sentry_block_error(typename)
     
