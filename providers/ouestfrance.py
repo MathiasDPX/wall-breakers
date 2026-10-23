@@ -78,6 +78,15 @@ def _build_block(block):
         return block["data"]["html"]
     elif typename == "TEXT_SCRIBBLE_LIVE":
         return _build_direct(block)
+    elif typename == "TEXT_QUOTE":
+        credits = block["data"].get("credits")
+        credits = "<br>- " + credits if credits is not None else ""
+        content = block["data"].get("content")
+        
+        if content is None:
+            return ""
+        
+        return f"<blockquote>{content}{credits}</blockquote>"
     elif typename in ["AD_DFP", "AD_TABOOLA_2", "EOC", "SECTION_LIST", "TEXT_LEADING", "ATOM_IFRAME"]:
         return ""
     
