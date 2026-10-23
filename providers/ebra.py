@@ -3,6 +3,7 @@ from datetime import datetime
 from functools import lru_cache
 from urllib.parse import urlparse
 
+from flask import abort
 import requests
 from bs4 import BeautifulSoup
 
@@ -119,6 +120,9 @@ class EbraArticle(Article):
         )
         metadata_response.raise_for_status()
         metadata = metadata_response.json()
+        
+        if metadata.get("success", False) is False:
+            return abort(404)
         
         return {
             "html": content_data,
