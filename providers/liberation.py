@@ -61,6 +61,9 @@ def _build_block(block):
     elif typename == "link_list":
         # read also
         return ""
+    elif typename == "oembed_response":
+        if block["subtype"] == "twitter":
+            return block["raw_oembed"]["html"]
 
     sentry_block_error(typename)
     
