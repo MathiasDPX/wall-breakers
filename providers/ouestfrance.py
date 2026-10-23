@@ -87,6 +87,9 @@ def _build_block(block):
             return ""
         
         return f"<blockquote>{content}{credits}</blockquote>"
+    elif typename == "TEXT_CARD":
+        data = block["data"]
+        return f"<div class=\"of-card\"><h3>{data.get('title','')}</h3>{data.get('content','')}</div>"
     elif typename in ["AD_DFP", "AD_TABOOLA_2", "EOC", "SECTION_LIST", "TEXT_LEADING", "ATOM_IFRAME"]:
         return ""
     
