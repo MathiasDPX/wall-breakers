@@ -42,7 +42,27 @@ def _build_block(block):
         return f"<blockquote><h3>{block.get('subtitle', '')}</h3><p>{block.get('content', '')}</p></blockquote>"
     elif typename == "article_paragraph_note":
         return _build_note(block)
-    elif typename in ["article_paragraph_pub", "article_paragraph_widget", "article_paragraph_placeholder_widget", "article_paragraph_playing_field"]:
+    elif typename == "article_paragraph_picto":
+        # ignore picto cause they usually doesn't work on darkmode
+        return f'<h2>{block.get("title", "")}</h2>'
+    elif typename == "article_paragraph_poll":
+        poll = block["poll"]
+        if poll["__type"] == "poll_question":
+            answers = poll.get("answers")
+            if answers is None:
+                return ""
+            
+            answers_count = sum([answer.get('hits', 0) for answer in answers])
+            
+            table = f"<table class=\"poll\">"
+            table += "".join([
+                f'<tr><td class="title">{answer.get("text", "")}</td><td class="hits" style="width:{round((answer.get("hits", 0) / answers_count) * 100)}%">{round((answer.get("hits", 0) / answers_count) * 100)}</td></tr>'
+                for answer in answers
+            ])
+            table += "</table>"
+            
+            return f"<h3>{poll.get('question', '')}</h3>{table}"
+    elif typename in ["article_paragraph_pub", "article_paragraph_widget", "article_paragraph_placeholder_widget", "article_paragraph_playing_field", "article_paragraph_provider", "article_paragraph_source"]:
         return ""
 
     sentry_block_error(typename)

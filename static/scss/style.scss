@@ -414,6 +414,26 @@ article {
         margin-left: auto;
         margin-right: auto;
     }
+
+    table.poll {
+        width: 100%;
+
+        tbody {
+            width: 100%;
+            display: block;
+        }
+
+        tr {
+            width: 100%;
+            display: inline-grid;
+        }
+
+        td.hits {
+            text-align: center;
+            background-color: #D61E00;
+            font-family: $sans;
+        }
+    }
 }
 
 .gallery {
