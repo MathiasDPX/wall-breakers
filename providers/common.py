@@ -66,10 +66,18 @@ class Article(ABC):
         raise NotImplementedError
     
     def get_factuality_score(self):
-        if "TYPESAFE_API_KEY" not in os.environ:
+        if "JEV_API_KEY" not in os.environ:
             return None
         
-        with TypeSafeClient() as client:
+        apikey = os.environ.get("JEV_API_KEY")
+        base_url = os.environ.get("JEV_BASE_URL", "https://api.typesafe.ai") 
+        model = os.environ.get("JEV_MODEL", "jev-latest")
+        
+        with TypeSafeClient(
+            api_key=apikey,
+            base_url=base_url,
+            model=model
+        ) as client:
             response = client.system_one(
                 state={
                     "headline": self.headline,

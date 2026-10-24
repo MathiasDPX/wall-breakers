@@ -27,7 +27,7 @@
             {% endif %}
             {% if article.factuality_score %}
                 <details class="factuality_score">
-                    <summary title="5: true, 0: false">Factuality score: {{ article.factuality_score.score }}, Confidence: {{ (article.factuality_score.confidence * 100) | int }}%</summary>
+                    <summary title="Scored with AI, based of: factual claims, sourcing, internal consistency, attribution of allegations, and whether the wording clearly distinguishes verified facts from testimonies, allegations, opinions, or unresolved claims.">Factuality score: {{ ((article.factuality_score.score / 5) * 100) | int }}%, Confidence: {{ (article.factuality_score.confidence * 100) | int }}%</summary>
                     <div>
                         {% for idx in article.factuality_score.legend %}
                             {% set probability = article.factuality_score.probabilities[idx] %}
