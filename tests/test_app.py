@@ -11,7 +11,7 @@ load_dotenv()
 IN_GITHUB_ACTIONS = os.getenv("GITHUB_ACTIONS") == "true"
 
 OUESTFRANCE_ENABLED = os.getenv("OUESTFRANCE_REFRESH_TOKEN", None) != None
-MEDIAPART_ENABLED = os.getenv("PIERREVIVES_USERNAME") is not None and os.getenv("PIERREVIVES_PASSWORD") is not None
+MEDIAPART_ENABLED = os.getenv("ENABLE_MP", "false").lower() == "true"
 SOCIALTER_ENABLED = os.getenv("ENABLE_SA", "false").lower() == "true"
 
 URLS = [

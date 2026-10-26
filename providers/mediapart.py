@@ -7,7 +7,7 @@ import re
 from bs4 import BeautifulSoup
 from flask import redirect
 
-from .auth import CASClient
+from .auth import MediapartClient
 from .common import Article, fix_links
 from .exceptions import MediapartDisabledException
 from metrics import upstream_request_timer
@@ -16,14 +16,10 @@ _URL_ID_PATTERN = re.compile(
     r"(https:\/\/www\.mediapart\.fr\/.+)"
 )
 
-PIERREVIVES_USERNAME = os.getenv("PIERREVIVES_USERNAME")
-PIERREVIVES_PASSWORD = os.getenv("PIERREVIVES_PASSWORD")
+ENABLED = os.getenv("ENABLE_MP", "false").lower() == "true"
 
-if PIERREVIVES_USERNAME and PIERREVIVES_PASSWORD:
-    client = CASClient(
-        PIERREVIVES_USERNAME,
-        PIERREVIVES_PASSWORD,
-    )
+if ENABLED:
+    client = MediapartClient()
     client.start_refresh_loop()
 else:
     client = None

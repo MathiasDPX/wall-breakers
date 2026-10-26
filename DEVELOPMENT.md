@@ -17,7 +17,7 @@ Ouest-France requires you to have an account with an active subscriptions. Set `
 
 ## Mediapart
 
-🤫 You need to create an account on the [Pierre Vives library](https://mediatheque-departementale.herault.fr/mediatheque-numerique/nos-ressources/lire/mediapart) and set `PIERREVIVES_USERNAME` and `PIERREVIVES_PASSWORD`
+Mediapart is disabled by default, set `ENABLE_MP=true` to enable it. The provider registers throwaway accounts to read articles, so it stays off unless you explicitly opt in.
 
 ## Socialter
 

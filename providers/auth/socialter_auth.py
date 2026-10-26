@@ -292,7 +292,6 @@ class SocialterClient:
         return True
 
     def create_account(self):
-        print("create account")
         self._reserve_registration()
 
         email = sha256(str(time.time()).encode()).hexdigest()[:10] + "@gmail.com"

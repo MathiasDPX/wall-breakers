@@ -13,6 +13,12 @@ class OuestFranceMissingSubscriptionException(RuntimeError):
 class MediapartInvalidLogin(RuntimeError):
     pass
 
+class MediapartRegistrationError(RuntimeError):
+    pass
+
+class MediapartThrottledException(RuntimeError):
+    pass
+
 class MediapartDisabledException(RuntimeError):
     pass
 

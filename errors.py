@@ -48,11 +48,19 @@ def register_error_handlers(app):
     
     @app.errorhandler(MediapartDisabledException)
     def handle_mediapart_disabled_exception(e):
-        return error_response(501, "Not Implemented", "Mediapart is disabled because the <code>PIERREVIVES_USERNAME</code> or  <code>PIERREVIVES_PASSWORD</code> environment variable is not set.")
+        return error_response(501, "Not Implemented", "Mediapart is disabled because the <code>ENABLE_MP</code> environment variable is not set to true.")
     
     @app.errorhandler(MediapartInvalidLogin)
     def handle_mediapart_invalidlogin_exception(e):
         return error_response(402, "Payment Required", "The Mediapart account does not has any active subscription.")
+
+    @app.errorhandler(MediapartRegistrationError)
+    def handle_mediapart_registration_exception(e):
+        return error_response(502, "Bad Gateway", f"Could not register a Mediapart account: {e}")
+
+    @app.errorhandler(MediapartThrottledException)
+    def handle_mediapart_throttled_exception(e):
+        return error_response(429, "Too Many Requests", f"Mediapart is cooling down, no retry for now: {e}")
     
     @app.errorhandler(SocialterDisabledException)
     def handle_socialter_disabled_exception(e):
