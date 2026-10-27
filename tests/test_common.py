@@ -97,8 +97,8 @@ ARTICLES = [
     ),
     (
         ParisMatchArticle,
-        "https://www.parismatch.com/actu/politique/claude-chirac-on-a-tout-fait-des-cafes-aux-photocopies-273699",
-        "273699"
+        "https://www.parismatch.com/kylian-mbappe-dans-tourmente-footballeur-boycotte-en-chine-lache-par-plusieurs-marques-361f4jvWBAZp3DMblOb9HQ",
+        "361f4jvWBAZp3DMblOb9HQ"
     ),
     (
         NouvelObsArticle,
