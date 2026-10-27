@@ -61,9 +61,23 @@ def _build_block(block):
     elif typename == "link_list":
         # read also
         return ""
+    elif typename == "custom_embed":
+        if block["subtype"] == "live-timestamp":
+            date = datetime.fromisoformat(block["embed"]["config"]["displayTimestamp"])
+            return "<h2>" + date.strftime("Le %d/%m à %Hh%M") + "</h2>"
     elif typename == "oembed_response":
         if block["subtype"] == "twitter":
             return block["raw_oembed"]["html"]
+        elif block["subtype"] == "youtube":
+            return block["raw_oembed"]["html"]
+    elif typename == "image":
+        return add_figure(block["url"], make_figcaption(block.get("copyright"), block.get("caption")))
+    elif typename == "raw_html":
+        return block["content"]
+    elif typename == "quote":
+        return "<blockquote>" + "".join([_build_block(block) for block in block["content_elements"]]) + "</blockquote>"
+    elif typename == "correction":
+        return "<p>" + block["text"] + "</p>"
 
     sentry_block_error(typename)
     
