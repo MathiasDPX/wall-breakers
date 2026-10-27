@@ -46,8 +46,15 @@ def _build_block(block):
     elif typename == "VideoFigaro":
         return _build_video(block)
     elif typename == "Link":
-        if "lire aussi" in block.get("prefix", "").lower():
+        prefix = block.get("prefix", "").lower()
+        if "lire aussi" in prefix or "voir aussi" in prefix:
             return ""
+    elif typename == "File":
+        return f'<a target="_blank" href="{block['url']}">{block['title']}</a>'
+    elif typename == "Tweet":
+        return block["sourceCode"] + block["script"]
+    elif typename == "HorizontalRule":
+        return "<hr>"
     elif typename == "FreeHtml":
         return _sanitize_html(block.get("sourceCode", ""))
     
