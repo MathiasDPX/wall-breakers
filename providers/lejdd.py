@@ -34,7 +34,9 @@ class JDDArticle(Article):
             container.decompose()
         
         content = soup.decode_contents()
-        content = add_figure(data["image"]["url"], make_figcaption(data['image']['title'], data['image']['credits'])) + content
+        
+        if data["image"] is not None:
+            content = add_figure(data["image"]["url"], make_figcaption(data['image']['title'], data['image']['credits'])) + content
 
         create_time = data.get("create_time")
 
@@ -44,7 +46,7 @@ class JDDArticle(Article):
             subheadline=data["intro"],
             content=content,
             url="https://www.lejdd.fr"+data["uri"],
-            image=data["image"]["url"],
+            image=data["image"]["url"] if data["image"] is not None else "",
             publication_date=datetime.fromisoformat(create_time) if create_time else None
         )
     
