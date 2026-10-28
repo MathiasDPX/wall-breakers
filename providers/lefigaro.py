@@ -50,7 +50,7 @@ def _build_block(block):
         if "lire aussi" in prefix or "voir aussi" in prefix:
             return ""
     elif typename == "File":
-        return f'<a target="_blank" href="{block['url']}">{block['title']}</a>'
+        return f'<a target="_blank" href="{block["url"]}">{block["title"]}</a>'
     elif typename == "Tweet":
         return block["sourceCode"] + block["script"]
     elif typename == "HorizontalRule":
