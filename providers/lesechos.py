@@ -59,7 +59,7 @@ class LesEchosArticle(Article):
             f"https://api.lesechos.fr/api/v2/posts/{id}",
             headers={
                 "Host": "api.lesechos.fr",
-                "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:152.0) Gecko/20100101 Firefox/152.0"
+                "User-Agent": "Mozilla/5.0 (Linux; Android 14; K) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/128.0.0.0 Mobile Safari/537.36"
             }
         )
         r.raise_for_status()
