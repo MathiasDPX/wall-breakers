@@ -34,6 +34,10 @@ def register_error_handlers(app):
     def handle_api_exception(e):
         return error_response(e.response.status_code, e.response.reason, e.response.reason)
 
+    @app.errorhandler(InvalidArticleIdError)
+    def handle_invalid_article_id_exception(e):
+        return error_response(400, "Bad Request", "The article id is malformed.")
+
     @app.errorhandler(DataDomeCookieExpiredError)
     def handle_datadome_exception(e):
         return error_response(503, "Service Unavailable", "The service is temporarily unavailable due to an expired DataDome token.")

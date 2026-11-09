@@ -7,7 +7,7 @@ import requests
 from bs4 import BeautifulSoup
 from flask import redirect
 
-from .common import Article, fix_links
+from .common import Article, decode_id, fix_links
 from metrics import upstream_request_timer
 
 _URL_ID_PATTERN = re.compile(
@@ -20,7 +20,7 @@ class CanardEnchaineArticle(Article):
     FAVICON = "https://www.lecanardenchaine.fr/static/favicon/icon.svg"
 
     def __init__(self, article_id: str):
-        path = base64.b64decode(article_id).decode()
+        path = decode_id(article_id)
         data = CanardEnchaineArticle.get_data(article_id)
         
         soup = BeautifulSoup(data, features="html.parser")
@@ -78,7 +78,7 @@ class CanardEnchaineArticle(Article):
     @classmethod
     @upstream_request_timer
     def get_data(cls, id):
-        article_path = base64.b64decode(id).decode()
+        article_path = decode_id(id)
         r = requests.get("https://www.lecanardenchaine.fr"+article_path, headers={
             "User-Agent": "Mozilla/5.0 (compatible; Googlebot/2.1; +http://www.google.com/bot.html)",
             "X-Forwarded-For": "66.249.66.1"

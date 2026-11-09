@@ -39,6 +39,9 @@ class SocialterLayoutError(RuntimeError):
 
 class UnhandledBlockError(NotImplementedError):
     pass
+
+class InvalidArticleIdError(ValueError):
+    pass
     
     
 def sentry_block_error(typename:str):

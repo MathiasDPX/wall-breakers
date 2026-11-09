@@ -8,7 +8,7 @@ from bs4 import BeautifulSoup
 from flask import redirect
 
 from .auth import MediapartClient
-from .common import Article, fix_links
+from .common import Article, decode_id, fix_links
 from .exceptions import MediapartDisabledException
 from metrics import upstream_request_timer
 
@@ -182,7 +182,7 @@ class MediapartArticle(Article):
     @classmethod
     @upstream_request_timer
     def get_data(cls, id):
-        article_path = base64.b64decode(id)
+        article_path = decode_id(id, as_bytes=True)
         r = client.get(article_path)
         r.raise_for_status()
         

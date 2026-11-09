@@ -7,7 +7,7 @@ import requests
 from bs4 import BeautifulSoup
 
 from .exceptions import sentry_block_error
-from .common import Article, add_figure, fix_link, fix_links
+from .common import Article, add_figure, decode_id, fix_link, fix_links
 from metrics import upstream_request_timer
 
 _URL_ID_PATTERN = re.compile(r"(https:\/\/www\.washingtonpost\.com/.+)")
@@ -109,7 +109,7 @@ class WashingtonPostArticle(Article):
     FAVICON = "https://www.washingtonpost.com/favicon.svg"
     
     def __init__(self, article_id: str):
-        article_path = base64.b64decode(article_id).decode()
+        article_path = decode_id(article_id)
         data = WashingtonPostArticle.get_data(article_id)
 
         content = ""
@@ -145,7 +145,7 @@ class WashingtonPostArticle(Article):
     @classmethod
     @upstream_request_timer
     def get_data(cls, id):
-        article_path = base64.b64decode(id).decode()
+        article_path = decode_id(id)
         r = requests.get("https://rainbowapi-a.wpdigital.net/rainbow-data-service/rainbow/content-by-url.json", params={"url": article_path+"&platform=iphoneclassic&followLinks=false"})
         
         r.raise_for_status()

@@ -1,6 +1,10 @@
+import base64
+import binascii
 from datetime import datetime
 from abc import ABC, abstractmethod
 from dataclasses import dataclass
+
+from .exceptions import InvalidArticleIdError
 
 
 @dataclass
@@ -82,6 +86,15 @@ class Article(ABC):
             "image": self.image,
             "publication_date": self.publication_date.isoformat() if self.publication_date else None,
         }
+
+
+def decode_id(id, as_bytes=False):
+    """Decode a base64 article id, rejecting ids that aren't valid base64."""
+    try:
+        decoded = base64.b64decode(id, validate=True)
+        return decoded if as_bytes else decoded.decode()
+    except (binascii.Error, UnicodeDecodeError, ValueError) as error:
+        raise InvalidArticleIdError(f"`{id}` is not a valid article id") from error
 
 
 def add_figure(url:str, caption="", title=""):

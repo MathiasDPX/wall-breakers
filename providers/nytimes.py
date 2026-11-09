@@ -7,7 +7,7 @@ import requests
 from bs4 import BeautifulSoup
 
 from .exceptions import DataDomeCookieExpiredError, sentry_block_error
-from .common import Article, add_figure, fix_links
+from .common import Article, add_figure, decode_id, fix_links
 from metrics import upstream_request_timer
 
 _URL_ID_PATTERN = re.compile(r"https:\/\/(?:www\.)?nytimes\.com(\/.+\.html)")
@@ -200,7 +200,7 @@ class NYTimesArticle(Article):
     @classmethod
     @upstream_request_timer
     def get_data(cls, id):
-        article_path = base64.b64decode(id).decode()
+        article_path = decode_id(id)
         r = requests.get(
             f"https://www.nytimes.com{article_path}", headers=_HEADERS, cookies=_COOKIES
         )

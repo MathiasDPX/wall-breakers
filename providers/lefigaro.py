@@ -8,7 +8,7 @@ import requests
 from bs4 import BeautifulSoup
 
 from .exceptions import sentry_block_error
-from .common import Article, add_figure, fix_links, make_figcaption
+from .common import Article, add_figure, decode_id, fix_links, make_figcaption
 from metrics import upstream_request_timer
 
 _URL_ID_PATTERN = re.compile(r"(https:\/\/.+\.lefigaro\.fr\/.+-\d{8})")
@@ -116,7 +116,7 @@ class FigaroArticle(Article):
     @classmethod
     @upstream_request_timer
     def get_data(cls, id):
-        article_path = base64.b64decode(id).decode()
+        article_path = decode_id(id)
         
         variables = json.dumps({
             "url": article_path

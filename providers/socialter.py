@@ -7,7 +7,7 @@ import re
 from bs4 import BeautifulSoup
 
 from .auth import SocialterClient
-from .common import Article, fix_links, add_figure
+from .common import Article, decode_id, fix_links, add_figure
 from .exceptions import SocialterDisabledException, SocialterLayoutError
 from metrics import upstream_request_timer
 
@@ -74,7 +74,7 @@ class SocialterArticle(Article):
 
         data = SocialterArticle.get_data(article_id)
         soup = BeautifulSoup(data, features="html.parser")
-        article_path = base64.b64decode(article_id).decode()
+        article_path = decode_id(article_id)
 
         headline = select_or_raise(soup, "div.entry-title").get_text().strip()
         subheadline = select_text(soup, "p.lead")
@@ -136,7 +136,7 @@ class SocialterArticle(Article):
         if client is None:
             raise SocialterDisabledException()
 
-        article_path = base64.b64decode(id).decode()
+        article_path = decode_id(id)
         r = client.get(f"https://www.socialter.fr/article/{article_path}")
         r.raise_for_status()
 

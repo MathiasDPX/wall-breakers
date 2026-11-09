@@ -6,7 +6,7 @@ import base64
 from bs4 import BeautifulSoup
 import requests
 
-from .common import Article, fix_links, add_figure
+from .common import Article, decode_id, fix_links, add_figure
 from metrics import upstream_request_timer
 
 _URL_ID_PATTERN = re.compile(
@@ -83,7 +83,7 @@ class NikkeiAsiaArticle(Article):
     @classmethod
     @upstream_request_timer
     def get_data(cls, id):
-        article_path = base64.b64decode(id).decode()
+        article_path = decode_id(id)
         
         params = {
             "operationName": "GetPage",

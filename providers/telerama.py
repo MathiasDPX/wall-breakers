@@ -7,7 +7,7 @@ from urllib.parse import unquote, urljoin
 import requests
 from bs4 import BeautifulSoup
 
-from .common import Article, fix_links
+from .common import Article, decode_id, fix_links
 from metrics import upstream_request_timer
 
 _URL_ID_PATTERN = re.compile(
@@ -146,7 +146,7 @@ class TeleramaArticle(Article):
     @classmethod
     @upstream_request_timer
     def get_data(cls, id):
-        article_path = base64.b64decode(id).decode()
+        article_path = decode_id(id)
         r = requests.get(
             "https://apps.telerama.fr/tlr/v1/premium-android-phone/element",
             params={"id": article_path}
