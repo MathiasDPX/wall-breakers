@@ -8,7 +8,7 @@ import requests
 from bs4 import BeautifulSoup
 
 from .exceptions import ArticleNotFoundError, sentry_block_error
-from .common import Article, add_figure, decode_id, fix_links, make_figcaption
+from .common import Article, add_figure, decode_id, fix_link, fix_links, make_figcaption
 from metrics import upstream_request_timer
 
 _URL_ID_PATTERN = re.compile(r"(https:\/\/.+\.lefigaro\.fr\/.+-\d{8})")
@@ -21,14 +21,31 @@ def _sanitize_html(html):
     return soup.decode_contents()
 
 
+def _thumbnail_figcaption(block):
+    thumbnail = block.get("thumbnail") or {}
+
+    return make_figcaption(thumbnail.get("caption"), thumbnail.get("credit"))
+
+def _thumbnail_url(block):
+    return ((block.get("thumbnail") or {}).get("image") or {}).get("url")
+
 def _build_video(block):
     videos = FigaroArticle.get_videos(block["id"])
     mp4s = [video for video in videos if video.get("type") == "MP4"]
-            
-    return add_figure(
-        choice(mp4s).get("url", ""),
-        make_figcaption(block['thumbnail']['caption'], block['thumbnail']['credit'])
-    )
+
+    if not mp4s:
+        thumbnail = _thumbnail_url(block)
+        return add_figure(thumbnail, _thumbnail_figcaption(block)) if thumbnail else ""
+
+    return add_figure(choice(mp4s).get("url", ""), _thumbnail_figcaption(block))
+
+def _build_brightcove(block):
+    # Brightcove no longer serves the raw streams, so embed the player instead
+    player = f"https://players.brightcove.net/{block['accountId']}/{block['playerId']}_default/index.html?videoId={block['id']}"
+    caption = _thumbnail_figcaption(block)
+    caption = f"<figcaption>{caption}</figcaption>" if caption else ""
+
+    return f'<figure><iframe src="{player}" allowfullscreen loading="lazy"></iframe>{caption}</figure>'
 
 def _build_block(block):
     typename = block["__typename"]
@@ -51,8 +68,15 @@ def _build_block(block):
             return ""
     elif typename == "File":
         return f'<a target="_blank" href="{block["url"]}">{block["title"]}</a>'
-    elif typename == "Tweet":
-        return block["sourceCode"] + block["script"]
+    elif typename in ["Tweet", "Instagram"]:
+        return (block.get("sourceCode") or "") + (block.get("script") or "")
+    elif typename == "Brightcove":
+        return _build_brightcove(block)
+    elif typename == "Frame":
+        return f"<aside><h3>{block['title']}</h3><p>{_sanitize_html(block['text'])}</p></aside>"
+    elif typename == "CTALink":
+        link = block["link"]
+        return f'<p><a target="_blank" href="{fix_link(link["url"])}">{link["title"]}</a></p>'
     elif typename == "HorizontalRule":
         return "<hr>"
     elif typename == "FreeHtml":
@@ -75,20 +99,27 @@ class FigaroArticle(Article):
 
         content = ""
         thumbnail = "static/images/thumbnail.jpg"
-        if "mainMedia" in data:
-            mainMediaType = data["mainMedia"]["__typename"]
+
+        main_media = data.get("mainMedia")
+        if main_media:
+            mainMediaType = main_media["__typename"]
             if mainMediaType == "Photo":
                 content = add_figure(
-                    data["mainMedia"]["image"]["url"],
-                    make_figcaption(data['mainMedia']['caption'], data['mainMedia']['credit'])
+                    main_media["image"]["url"],
+                    make_figcaption(main_media['caption'], main_media['credit'])
                 )
-                thumbnail = data["mainMedia"]["image"]["url"]
+                thumbnail = main_media["image"]["url"]
             elif mainMediaType == "VideoFigaro":
-                content = _build_video(data["mainMedia"])
-                thumbnail = data["mainMedia"]["thumbnail"]["image"]["url"]
-        if "videoMainMedia" in data:
-            content = _build_video(data["videoMainMedia"])
-            thumbnail = data["videoMainMedia"]["thumbnail"]["image"]["url"]
+                content = _build_video(main_media)
+                thumbnail = _thumbnail_url(main_media) or thumbnail
+            elif mainMediaType == "Brightcove":
+                content = _build_brightcove(main_media)
+                thumbnail = _thumbnail_url(main_media) or thumbnail
+
+        video_main_media = data.get("videoMainMedia")
+        if video_main_media:
+            content = _build_video(video_main_media)
+            thumbnail = _thumbnail_url(video_main_media) or thumbnail
         
         audio = data.get("audio")
         if audio and "url" in audio:
