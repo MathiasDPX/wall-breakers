@@ -4,10 +4,9 @@ from datetime import datetime
 from functools import lru_cache
 
 from bs4 import BeautifulSoup
-from flask import abort
 import requests
 
-from .exceptions import sentry_block_error
+from .exceptions import ArticleNotFoundError, sentry_block_error
 from .common import Article, add_figure, fix_links
 from metrics import upstream_request_timer
 
@@ -143,7 +142,7 @@ class SCMPArticle(Article):
 
         content = r.json()["data"]["content"]
         if content is None:
-            return abort(404)
+            raise ArticleNotFoundError(f"SCMP has no article for `{id}`")
 
         return content
 

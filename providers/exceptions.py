@@ -42,6 +42,12 @@ class UnhandledBlockError(NotImplementedError):
 
 class InvalidArticleIdError(ValueError):
     pass
+
+class ArticleNotFoundError(RuntimeError):
+    pass
+
+class UpstreamResponseError(RuntimeError):
+    pass
     
     
 def sentry_block_error(typename:str):

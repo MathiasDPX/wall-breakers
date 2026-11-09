@@ -9,7 +9,7 @@ from flask import redirect
 
 from .auth import MediapartClient
 from .common import Article, decode_id, fix_links
-from .exceptions import MediapartDisabledException
+from .exceptions import ArticleNotFoundError, MediapartDisabledException
 from metrics import upstream_request_timer
 
 _URL_ID_PATTERN = re.compile(
@@ -23,6 +23,12 @@ if ENABLED:
     client.start_refresh_loop()
 else:
     client = None
+
+def _meta_content(soup, property):
+    tag = soup.find("meta", property=property)
+
+    return tag.get("content") if tag else None
+
 
 class MediapartArticle(Article):
     SLUG = "mp"
@@ -40,14 +46,18 @@ class MediapartArticle(Article):
         if content_soup is None:
             content_soup = soup.find("div", class_="paywall-restricted-content")
 
+        title_tag = soup.select_one("h1#page-title")
+        if content_soup is None or title_tag is None:
+            raise ArticleNotFoundError(f"`{article_id}` isn't a readable Mediapart article")
+
         heading = soup.select_one("div.news__heading__center")
         time_tag = heading.select_one("time") if heading else None
         timestamp = time_tag.get("datetime") if time_tag else None
 
-        headline = soup.select_one("h1#page-title").decode_contents()
-        subheadline = soup.find("meta", property="ownpage:description").get("content")
-        url = soup.find("meta", property="og:url").get("content")
-        image = soup.find("meta", property="og:image").get("content")
+        headline = title_tag.decode_contents()
+        subheadline = _meta_content(soup, "ownpage:description")
+        url = _meta_content(soup, "og:url")
+        image = _meta_content(soup, "og:image")
 
 
         summary_block = soup.find("aside", attrs={"aria-describedby": "a11y-summary-widget-title"})

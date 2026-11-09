@@ -1,5 +1,5 @@
 from flask import jsonify, render_template, request
-from requests import HTTPError
+from requests import HTTPError, RequestException
 from werkzeug.exceptions import HTTPException
 import sentry_sdk
 
@@ -34,9 +34,21 @@ def register_error_handlers(app):
     def handle_api_exception(e):
         return error_response(e.response.status_code, e.response.reason, e.response.reason)
 
+    @app.errorhandler(RequestException)
+    def handle_request_exception(e):
+        return error_response(502, "Bad Gateway", "Could not reach the provider.")
+
     @app.errorhandler(InvalidArticleIdError)
     def handle_invalid_article_id_exception(e):
         return error_response(400, "Bad Request", "The article id is malformed.")
+
+    @app.errorhandler(ArticleNotFoundError)
+    def handle_article_notfound_exception(e):
+        return error_response(404, "Not Found", "This article does not exist.")
+
+    @app.errorhandler(UpstreamResponseError)
+    def handle_upstream_response_exception(e):
+        return error_response(502, "Bad Gateway", "The provider returned an unexpected response.")
 
     @app.errorhandler(DataDomeCookieExpiredError)
     def handle_datadome_exception(e):

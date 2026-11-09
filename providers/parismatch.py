@@ -4,7 +4,7 @@ from datetime import datetime
 import requests
 from bs4 import BeautifulSoup
 
-from .exceptions import sentry_block_error
+from .exceptions import ArticleNotFoundError, sentry_block_error
 from .common import Article, add_figure, fix_links, make_figcaption
 from metrics import upstream_request_timer
 
@@ -101,9 +101,14 @@ class ParisMatchArticle(Article):
             "Authorization": "Bearer intz0VmdRbcy-Ivsx-NJA7Ld1-Y_U8HO_Jd7Ur6NXko" # mobile app api key
         }
         
-        r = requests.post("https://graphql.contentful.com/content/v1/spaces/iatfclnjf6rx/environments/master", json=query, headers=headers)
+        r = requests.post("https://graphql.contentful.com/content/v1/spaces/iatfclnjf6rx/environments/master", json=query, headers=headers, timeout=30)
         r.raise_for_status()
-        return r.json()["data"]["articleCollection"]["items"][0]
+
+        items = r.json()["data"]["articleCollection"]["items"]
+        if not items:
+            raise ArticleNotFoundError(f"Paris Match has no article for `{id}`")
+
+        return items[0]
 
 
 if __name__ == "__main__":

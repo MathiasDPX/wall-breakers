@@ -4,6 +4,7 @@ from datetime import datetime
 import requests
 from bs4 import BeautifulSoup
 
+from .exceptions import UpstreamResponseError
 from .common import Article, add_figure, fix_links
 from metrics import upstream_request_timer
 
@@ -90,10 +91,16 @@ class LeParisienArticle(Article):
     @upstream_request_timer
     def get_data(cls, id):
         r = requests.get(
-            f"https://gateway-api.leparisien.fr/v1/contents/articles/{id}"
+            f"https://gateway-api.leparisien.fr/v1/contents/articles/{id}",
+            timeout=30
         )
         r.raise_for_status()
-        return r.json()["story"]
+
+        body = r.json()
+        if not isinstance(body, dict) or "story" not in body:
+            raise UpstreamResponseError(f"Le Parisien returned no story for `{id}`")
+
+        return body["story"]
 
 
 if __name__ == "__main__":

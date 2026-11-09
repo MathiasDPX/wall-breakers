@@ -7,7 +7,7 @@ from random import choice
 import requests
 from bs4 import BeautifulSoup
 
-from .exceptions import sentry_block_error
+from .exceptions import ArticleNotFoundError, sentry_block_error
 from .common import Article, add_figure, decode_id, fix_links, make_figcaption
 from metrics import upstream_request_timer
 
@@ -70,6 +70,10 @@ class FigaroArticle(Article):
     def __init__(self, article_id: str):
         data = FigaroArticle.get_data(article_id)
 
+        if data is None:
+            raise ArticleNotFoundError(f"Le Figaro has no article for `{article_id}`")
+
+        content = ""
         thumbnail = "static/images/thumbnail.jpg"
         if "mainMedia" in data:
             mainMediaType = data["mainMedia"]["__typename"]
