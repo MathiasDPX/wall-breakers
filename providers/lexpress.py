@@ -5,7 +5,7 @@ import requests
 from bs4 import BeautifulSoup
 
 from .exceptions import sentry_block_error
-from .common import Article, add_figure, fix_links
+from .common import Article, add_figure, fix_links, make_figcaption
 from metrics import upstream_request_timer
 
 _URL_ID_PATTERN = re.compile(
@@ -29,6 +29,21 @@ def _build_block(block):
     elif typename == "link_list":
         # read also
         return ""
+    elif typename == "image":
+        return add_figure(block["url"], make_figcaption(block.get("caption"), block.get("copyright")))
+    elif typename == "quote":
+        quote = "".join(_build_block(element) for element in block.get("content_elements", []))
+        citation = (block.get("citation") or {}).get("content")
+        if citation:
+            quote += f"<br><br>- {citation}"
+
+        return f"<blockquote>{quote}</blockquote>"
+    elif typename == "raw_html":
+        return block["content"]
+    elif typename == "oembed_response":
+        return block.get("raw_oembed", {}).get("html", "")
+    elif typename == "custom_embed":
+        return block.get("embed", {}).get("config", {}).get("html", "")
     
     sentry_block_error(typename)
     return ""
