@@ -13,7 +13,7 @@ from .exceptions import ArticleNotFoundError, MediapartDisabledException
 from metrics import upstream_request_timer
 
 _URL_ID_PATTERN = re.compile(
-    r"(https:\/\/www\.mediapart\.fr\/.+)"
+    r"(https:\/\/www\.mediapart\.fr\/.+?)(?:\/(?:commentaires|prolonger))?\/?$"
 )
 
 ENABLED = os.getenv("ENABLE_MP", "false").lower() == "true"
