@@ -62,14 +62,26 @@ def _build_block(block):
         # read also
         return ""
     elif typename == "custom_embed":
-        if block["subtype"] == "live-timestamp":
-            date = datetime.fromisoformat(block["embed"]["config"]["displayTimestamp"])
+        subtype = block.get("subtype")
+        config = block.get("embed", {}).get("config", {})
+
+        if subtype == "live-timestamp":
+            date = datetime.fromisoformat(config["displayTimestamp"])
             return "<h2>" + date.strftime("Le %d/%m à %Hh%M") + "</h2>"
+        elif subtype == "encadre":
+            title = config.get("title")
+            heading = f"<h3>{title}</h3>" if title else ""
+            return f"<aside>{heading}<p>{_sanitize_html(config.get('content', ''))}</p></aside>"
+
+        sentry_block_error(f"{typename}/{subtype}")
+
+        return ""
     elif typename == "oembed_response":
-        if block["subtype"] == "twitter":
-            return block["raw_oembed"]["html"]
-        elif block["subtype"] == "youtube":
-            return block["raw_oembed"]["html"]
+        return block.get("raw_oembed", {}).get("html", "")
+    elif typename == "reference":
+        # An oembed the API didn't resolve, we only get the source URL
+        url = block.get("referent", {}).get("id")
+        return f'<p><a target="_blank" href="{url}">{url}</a></p>' if url else ""
     elif typename == "image":
         return add_figure(block["url"], make_figcaption(block.get("copyright"), block.get("caption")))
     elif typename == "raw_html":
