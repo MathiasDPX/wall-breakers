@@ -5,6 +5,7 @@ ARG GITHUB_SHA=development
 ENV PYTHONDONTWRITEBYTECODE=1 \
     PYTHONUNBUFFERED=1 \
     DATA_DIR=/data \
+    PROMETHEUS_MULTIPROC_DIR=/tmp/prometheus-multiproc \
     GITHUB_SHA=${GITHUB_SHA}
 
 WORKDIR /app
@@ -17,4 +18,4 @@ COPY . .
 
 EXPOSE 8000
 
-CMD ["gunicorn", "--bind", "0.0.0.0:8000", "--access-logfile", "-", "--error-logfile", "-", "main:app"]
+CMD ["gunicorn", "--config", "gunicorn.conf.py", "main:app"]

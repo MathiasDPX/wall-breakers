@@ -106,7 +106,7 @@ def viewable_article_route(slug, id):
 @app.route("/metrics")
 def metrics_route():
     return Response(
-        generate_latest(),
+        generate_latest(build_registry()),
         status=200,
         mimetype=CONTENT_TYPE_LATEST
     )
