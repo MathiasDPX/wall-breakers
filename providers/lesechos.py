@@ -28,10 +28,14 @@ class LesEchosArticle(Article):
         
         fix_links(soup)
 
-        image = f"https://media.lesechos.com/api/v1/images/view/{data['image']['id']}/976x549-webp/{data['image']['filename']}"
-        
         content = soup.decode_contents()
-        content = add_figure(image, make_figcaption(data['image']['caption'], data['image']['credits'])) + content
+
+        picture = data.get("image")
+        if picture:
+            image = f"https://media.lesechos.com/api/v1/images/view/{picture['id']}/976x549-webp/{picture['filename']}"
+            content = add_figure(image, make_figcaption(picture['caption'], picture['credits'])) + content
+        else:
+            image = "static/images/thumbnail.jpg"
 
         date = data.get("publicationDate")
 
