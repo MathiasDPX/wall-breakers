@@ -7,7 +7,7 @@ import requests
 from bs4 import BeautifulSoup
 
 from .exceptions import sentry_block_error
-from .common import Article, add_figure, fix_links
+from .common import Article, add_figure, fix_link, fix_links
 from metrics import upstream_request_timer
 
 _URL_ID_PATTERN = re.compile(r"(https:\/\/www\.washingtonpost\.com/.+)")
@@ -37,20 +37,66 @@ def _sanitize_html(html):
             
     return soup.decode_contents()
 
+def _build_video(block):
+    mp4s = block.get("streams", {}).get("mp4") or []
+    best = max(mp4s, key=lambda stream: stream.get("bitrate", 0), default={})
+    url = best.get("url") or block.get("mediaURL")
+
+    if not url:
+        return add_figure(block.get("imageURL", ""), caption=block.get("fullcaption", ""))
+
+    return add_figure(url, caption=block.get("fullcaption", ""), title=block.get("blurb", ""))
+
+def _build_list(block):
+    tag = "ol" if block.get("subtype") == "ordered" else "ul"
+    items = "".join(f"<li>{_sanitize_html(item)}</li>" for item in block.get("content", []))
+
+    return f"<{tag}>{items}</{tag}>"
+
+def _build_context_box(block):
+    headline = block.get("headline")
+    content = f"<h3>{headline}</h3>" if headline else ""
+
+    for page in block.get("content_pages", []):
+        for element in page.get("content_elements", []):
+            content += _build_block(element)
+
+    return f"<aside>{content}</aside>"
+
 def _build_block(block):
     typename = block.get("type")
     
     if typename == "image":
-        return add_figure(block['imageURL'], caption=block['fullcaption'], title=block["blurb"])
+        return add_figure(block['imageURL'], caption=block.get('fullcaption', ''), title=block.get("blurb", ""))
     elif typename == "sanitized_html":
         return "<p>" + _sanitize_html(block["content"]) + "</p>"
     elif typename == "audio":
         return f"<audio controls src=\"{block['rawUrl']}\"></audio>"
-    elif typename in ["ad", "elevated_byline", "kicker", "title", "deck", "date", "byline", "toggle", "autorecirc_carousel", "author_info"]:
+    elif typename == "video":
+        return _build_video(block)
+    elif typename == "list":
+        return _build_list(block)
+    elif typename == "context_box":
+        return _build_context_box(block)
+    elif typename == "element_group":
+        return "".join(_build_block(element) for element in block.get("content_elements", []))
+    elif typename == "correction":
+        return f"<aside><em>{block.get('content', '')}</em></aside>"
+    elif typename == "interstitial_link":
+        return f'<p><a target="_blank" href="{fix_link(block["url"])}">{block.get("content", block["url"])}</a></p>'
+    elif typename == "web_embed":
+        oembed = block.get("oembed")
+        if oembed:
+            return oembed
+        url = block.get("url")
+        return f'<p><a target="_blank" href="{url}">{url}</a></p>' if url else ""
+    elif typename == "divider":
+        return "<hr>"
+    elif typename in ["ad", "elevated_byline", "kicker", "title", "deck", "date", "byline", "toggle", "autorecirc_carousel", "author_info", "expand_card"]:
         return ""
     elif typename == "link":
-        if block.get("subtype") == "comments":
-            return ""
+        # Anchors and the comments section carry no readable content
+        return ""
     
     sentry_block_error(typename)
     
