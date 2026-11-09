@@ -25,6 +25,9 @@ def _build_block(block, references):
     elif typename == "emphasis":
         content = _build_blocks(block["children"], unsafe=True, references=references)
         return f"<i>{content}</i>"
+    elif typename == "strong":
+        content = _build_blocks(block["children"], unsafe=True, references=references)
+        return f"<strong>{content}</strong>"
     elif typename == "link":
         content = _build_blocks(block["children"], unsafe=True, references=references)
         return f"<a href=\"{block['url']}\" title=\"{block['title']}\">{content}</a>"
@@ -42,10 +45,24 @@ def _build_block(block, references):
         r = requests.get("https://next-media-api.ft.com/v1/" + ref["id"])
         r.raise_for_status()
         return _add_video(r.json())
+    elif typename == "clip-set":
+        ref = references[block["data"]["referenceIndex"]]
+
+        return _add_clip_set(ref)
     elif typename == "flourish":
         ref = references[block["data"]["referenceIndex"]]
         
         return _add_flourish(block, ref)
+    elif typename == "recommended":
+        ref = references[block["data"]["referenceIndex"]]
+        teaser = ref.get("teaser") or {}
+        url = teaser.get("url")
+        title = block.get("teaserTitleOverride") or teaser.get("title")
+
+        if not url:
+            return ""
+
+        return f'<aside><p><a href="{url}">{title}</a></p></aside>'
     elif typename in ["main-image", "info-pair"]:
         return ""
     
@@ -100,6 +117,22 @@ def _add_video(data):
     return f"<video controls><source src=\"{max_quality['url']}\"{poster_tag}{title_tag}>{captions_tag}</video>"
 
 
+def _add_clip_set(ref):
+    sources = [
+        source
+        for clip in ref.get("clips", [])
+        for source in clip.get("dataSource", [])
+        if source.get("binaryUrl")
+    ]
+
+    if not sources:
+        return ""
+
+    best = max(sources, key=lambda source: source.get("pixelWidth", 0) * source.get("pixelHeight", 0))
+
+    return add_figure(best["binaryUrl"], make_figcaption(ref.get("caption"), ref.get("credits")))
+
+
 def _add_flourish(block, ref):
     fallback_image = ref.get("fallbackImage") or {}
 
@@ -131,12 +164,13 @@ class FinancialTimesArticle(Article):
     def __init__(self, article_id: str):
         data = FinancialTimesArticle.get_data(article_id)
         
-        image = "static/images/thumbnail.jpg"
-        if "mainImage" in data:
-            image = data["mainImage"]
-            
+        main_image = data.get("mainImage")
+        image = main_image["url"] if main_image else "static/images/thumbnail.jpg"
+
         body = data["body"]["structured"]["tree"]
-        content = add_figure(image["url"], make_figcaption(image["caption"], image["credit"]))
+        content = ""
+        if main_image:
+            content = add_figure(image, make_figcaption(main_image["caption"], main_image["credit"]))
         content += _build_blocks(body["children"], data["body"]["structured"]["references"])
 
         unixts = data.get("publishedTimestamp")
@@ -147,7 +181,7 @@ class FinancialTimesArticle(Article):
             subheadline=data["standfirst"],
             content=content,
             url=data["url"],
-            image=image["url"],
+            image=image,
             publication_date=datetime.fromtimestamp(unixts/1000) if unixts else None
         )
 
