@@ -6,7 +6,7 @@ import demjson3
 import requests
 from bs4 import BeautifulSoup
 
-from .exceptions import sentry_block_error
+from .exceptions import DataDomeCookieExpiredError, sentry_block_error
 from .common import Article, add_figure, fix_links
 from metrics import upstream_request_timer
 
