@@ -4,6 +4,7 @@ from datetime import datetime
 from functools import lru_cache
 
 from bs4 import BeautifulSoup
+from flask import abort
 import requests
 
 from .exceptions import sentry_block_error
@@ -14,9 +15,10 @@ _URL_ID_PATTERN = re.compile(
     r"https:\/\/www\.scmp\.com\/.+\/article\/(\d+)\/.+"
 )
 
-_UUID_PATTERN = re.compile(
-    r'"entityId":"\d+","entityUuid":"([a-z0-9]{8}-[a-z0-9]{4}-[a-z0-9]{4}-[a-z0-9]{4}-[a-z0-9]{12})"'
-)
+def _build_uuid_pattern(article_id: str):
+    return re.compile(
+        r'"entityId":"' + re.escape(article_id) + r'","entityUuid":"([a-z0-9]{8}-[a-z0-9]{4}-[a-z0-9]{4}-[a-z0-9]{4}-[a-z0-9]{12})"'
+    )
 
 _HEADERS = {
     "User-Agent": "SCMP-V5/7.2.1(2000386) (Android 9; HD1900)",
@@ -73,6 +75,7 @@ class SCMPArticle(Article):
             voice = data["articleSpeeches"][0]
             content = f"<audio controls src=\"{voice['url']}\"></audio>" + content
         
+        image = None
         if len(data["images"]) > 0:
             image = data["images"][0]
             if image.get("isSlideshow"):
@@ -89,27 +92,28 @@ class SCMPArticle(Article):
             subheadline=_build_blocks(data["subHeadline"]["json"]),
             content=soup.decode_contents(),
             url="https://www.scmp.com"+data["urlAlias"],
-            image=image["url"],
+            image=image["url"] if image else None,
             publication_date=datetime.fromtimestamp(date/1000) if date else None
         )
         
     @lru_cache()
-    def _get_uuid(url:str):
+    def _get_uuid(url:str, article_id:str):
         r = requests.get(url, headers={
             "User-Agent": "Mozilla/5.0 (X11; Linux x86_64; rv:156.0) Gecko/20100101 Firefox/156.0"
         })
                 
-        match = _UUID_PATTERN.search(r.content.decode())
+        match = _build_uuid_pattern(article_id).search(r.content.decode())
         if match is None:
             return None
                 
         return match.group(1)
     
     def get_id_from_url(url: str):
-        if _URL_ID_PATTERN.search(url) is None:
+        match = _URL_ID_PATTERN.search(url)
+        if match is None:
             return None
         
-        return SCMPArticle._get_uuid(url)
+        return SCMPArticle._get_uuid(url, match.group(1))
     
     @classmethod
     @upstream_request_timer
@@ -136,7 +140,12 @@ class SCMPArticle(Article):
         }
         r = requests.get(url, params=params, headers=_HEADERS)
         r.raise_for_status()
-        return r.json()["data"]["content"]
+
+        content = r.json()["data"]["content"]
+        if content is None:
+            return abort(404)
+
+        return content
 
 
 if __name__ == "__main__":
