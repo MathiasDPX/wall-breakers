@@ -65,8 +65,15 @@ class LeParisienArticle(Article):
             
         content = soup.decode_contents()
 
-        # Add image
-        content = add_figure(data["promo_items"]["basic"]["url"], data["promo_items"]["basic"].get("caption")) + content
+        # Add image, the promo item isn't always a resolved image (can be an
+        # unresolved reference without a url, e.g. for video-led articles)
+        promo_image = data.get("promo_items", {}).get("basic", {})
+        image = promo_image.get("url")
+
+        if image:
+            content = add_figure(image, promo_image.get("caption")) + content
+        else:
+            image = "static/images/thumbnail.jpg"
 
         created_date = data.get("created_date")
 
@@ -76,7 +83,7 @@ class LeParisienArticle(Article):
             subheadline=data["subheadlines"]["basic"],
             content=content,
             url="https://www.leparisien.fr"+data["canonical_url"],
-            image=data["promo_items"]["basic"]["url"],
+            image=image,
             publication_date=datetime.fromisoformat(created_date) if created_date else None
         )
     
