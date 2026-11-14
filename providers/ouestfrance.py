@@ -119,9 +119,10 @@ class OuestFranceArticle(Article):
         if data["paywall"]["paid"] != data["paywall"]["paying"]:
             raise OuestFranceMissingSubscriptionException()
 
-        image = data["photos"][0]
+        photos = data.get("photos") or []
+        image = photos[0] if photos else None
 
-        content = add_figure(image["url"], make_figcaption(image['caption'], image['credits']))
+        content = add_figure(image["url"], make_figcaption(image['caption'], image['credits'])) if image else ""
 
         for block in data["body"]:
             content += _build_block(block)
@@ -134,7 +135,7 @@ class OuestFranceArticle(Article):
             subheadline=data["lead"],
             content=content,
             url=data["url"],
-            image=image["url"],
+            image=image["url"] if image else "static/images/thumbnail.jpg",
             publication_date=datetime.fromisoformat(published_at) if published_at else None
         )
 
