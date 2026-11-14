@@ -90,6 +90,11 @@ def _build_block(block):
     elif typename == "TEXT_CARD":
         data = block["data"]
         return f"<div class=\"of-card\"><h3>{data.get('title','')}</h3>{data.get('content','')}</div>"
+    elif typename == "TEXT_LIST":
+        data = block["data"]
+        items = data.get("items") or data.get("list") or []
+        tag = "ol" if str(data.get("listType", "")).lower() == "ordered" else "ul"
+        return f"<{tag}>" + "".join(f"<li>{_sanitize_html(item)}</li>" for item in items) + f"</{tag}>"
     elif typename in ["AD_DFP", "AD_TABOOLA_2", "EOC", "SECTION_LIST", "TEXT_LEADING", "ATOM_IFRAME"]:
         return ""
     
