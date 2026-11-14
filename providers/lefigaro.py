@@ -81,6 +81,14 @@ def _build_block(block):
         return "<hr>"
     elif typename == "FreeHtml":
         return _sanitize_html(block.get("sourceCode", ""))
+    elif typename == "List":
+        tag = "ol" if block.get("listType") == "ORDERED" else "ul"
+        items = "".join(f"<li>{_sanitize_html(item)}</li>" for item in block.get("list", []))
+        return f"<{tag}>{items}</{tag}>"
+    elif typename == "Table":
+        return f"<table>{_sanitize_html(block.get('text', ''))}</table>"
+    elif typename == "VideoIframe":
+        return f'<figure><iframe src="{block["src"]}" allowfullscreen frameborder="0" loading="lazy"></iframe></figure>'
     
     sentry_block_error(typename)
     
