@@ -65,6 +65,22 @@ def _build_block(block, references):
         return f'<aside><p><a href="{url}">{title}</a></p></aside>'
     elif typename in ["main-image", "info-pair"]:
         return ""
+    elif typename == "heading":
+        return "<h2>" + _build_blocks(block["children"], unsafe=True, references=references) + "</h2>"
+    elif typename == "pullquote":
+        source = block.get("source")
+        citation = f"<br>- {source}" if source else ""
+        return f"<blockquote>{block.get('text', '')}{citation}</blockquote>"
+    elif typename == "image-pair":
+        return "<div class=\"image-pair\">" + _build_blocks(block["children"], unsafe=True, references=references) + "</div>"
+    elif typename == "thematic-break":
+        return "<hr>"
+    elif typename == "info-box":
+        return "<aside>" + _build_blocks(block["children"], unsafe=True, references=references) + "</aside>"
+    elif typename == "card":
+        title = block.get("title")
+        heading = f"<h3>{title}</h3>" if title else ""
+        return heading + _build_blocks(block["children"], unsafe=True, references=references)
     
     sentry_block_error(typename)
     
