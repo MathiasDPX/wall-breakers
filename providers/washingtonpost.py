@@ -92,6 +92,12 @@ def _build_block(block):
         return f'<p><a target="_blank" href="{url}">{url}</a></p>' if url else ""
     elif typename == "divider":
         return "<hr>"
+    elif typename == "podcast":
+        caption = block.get("episodeName") or block.get("seriesName") or ""
+        caption = f"<figcaption>{caption}</figcaption>" if caption else ""
+        return f"<figure><audio controls src=\"{block['completeUrl']}\"></audio>{caption}</figure>"
+    elif typename == "block_quote":
+        return "<blockquote>" + _sanitize_html(block.get("content", "")) + "</blockquote>"
     elif typename in ["ad", "elevated_byline", "kicker", "title", "deck", "date", "byline", "toggle", "autorecirc_carousel", "author_info", "expand_card"]:
         return ""
     elif typename == "link":
