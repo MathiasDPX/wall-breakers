@@ -72,10 +72,23 @@ def _build_block(block):
             title = config.get("title")
             heading = f"<h3>{title}</h3>" if title else ""
             return f"<aside>{heading}<p>{_sanitize_html(config.get('content', ''))}</p></aside>"
+        elif subtype == "claimreview":
+            claim = config.get("claimReviewed", {})
+            conclusion = config.get("alternateName", {})
+            content = ""
+            if claim.get("value"):
+                content += f"<p><strong>{claim.get('label', '')}</strong><br>{claim['value']}</p>"
+            if conclusion.get("value"):
+                content += f"<p><strong>{conclusion.get('label', '')}</strong><br>{conclusion['value']}</p>"
+            return f"<aside>{content}</aside>"
 
         sentry_block_error(f"{typename}/{subtype}")
 
         return ""
+    elif typename == "list":
+        tag = "ol" if block.get("list_type") == "ordered" else "ul"
+        items = "".join(f"<li>{_build_block(item)}</li>" for item in block.get("items", []))
+        return f"<{tag}>{items}</{tag}>"
     elif typename == "oembed_response":
         return block.get("raw_oembed", {}).get("html", "")
     elif typename == "reference":
