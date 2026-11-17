@@ -88,6 +88,40 @@ def _build_block(block, references):
         title = block.get("title")
         heading = f"<h3>{title}</h3>" if title else ""
         return heading + _build_blocks(block["children"], unsafe=True, references=references)
+    elif typename == "table":
+        footers = [child for child in block["children"] if child["type"] == "table-footer"]
+        rows = [child for child in block["children"] if child["type"] != "table-footer"]
+        return (
+            "<table>" + _build_blocks(rows, unsafe=True, references=references) + "</table>"
+            + _build_blocks(footers, unsafe=True, references=references)
+        )
+    elif typename == "table-caption":
+        return "<caption>" + _build_blocks(block["children"], unsafe=True, references=references) + "</caption>"
+    elif typename == "table-body":
+        return "<tbody>" + _build_blocks(block["children"], unsafe=True, references=references) + "</tbody>"
+    elif typename == "table-row":
+        return "<tr>" + _build_blocks(block["children"], unsafe=True, references=references) + "</tr>"
+    elif typename == "table-cell":
+        tag = "th" if block.get("heading") else "td"
+        return f"<{tag}>" + _build_blocks(block["children"], unsafe=True, references=references) + f"</{tag}>"
+    elif typename == "table-footer":
+        return "<p><small>" + _build_blocks(block["children"], unsafe=True, references=references) + "</small></p>"
+    elif typename == "list":
+        tag = "ol" if block.get("ordered") else "ul"
+        return f"<{tag}>" + _build_blocks(block["children"], unsafe=True, references=references) + f"</{tag}>"
+    elif typename == "list-item":
+        return "<li>" + _build_blocks(block["children"], unsafe=True, references=references) + "</li>"
+    elif typename == "in-numbers":
+        title = block.get("title")
+        heading = f"<h3>{title}</h3>" if title else ""
+        return "<aside>" + heading + "<dl>" + _build_blocks(block["children"], unsafe=True, references=references) + "</dl></aside>"
+    elif typename == "definition":
+        return f"<dt>{block.get('term', '')}</dt><dd>{block.get('description', '')}</dd>"
+    elif typename in ["scrolly-block", "scrolly-section", "scrolly-copy"]:
+        return _build_blocks(block["children"], unsafe=True, references=references)
+    elif typename == "scrolly-image":
+        picture = references[block["data"]["referenceIndex"]]["picture"]
+        return add_figure(_picture_url(picture), make_figcaption(picture["caption"], picture["credit"]))
     
     sentry_block_error(typename)
     
