@@ -95,7 +95,8 @@ class NouvelObsArticle(Article):
     @upstream_request_timer
     def get_data(cls, id):
         r = requests.get(
-            f"https://apps.nouvelobs.com/obs/v1/premium-android-phone/article/{id}"
+            f"https://apps.nouvelobs.com/obs/v1/premium-android-phone/article/{id}",
+            timeout=30
         )
         r.raise_for_status()
         return r.json()
