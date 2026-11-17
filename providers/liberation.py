@@ -12,6 +12,8 @@ _URL_ID_PATTERN = re.compile(
     r"https:\/\/www\.liberation\.fr\/.+_([A-Z0-9]+)(?:.+)?"
 )
 
+_DAILYMOTION_ID_PATTERN = re.compile(r"(?:dai\.ly/|dailymotion\.com/(?:embed/)?video/)([a-zA-Z0-9]+)")
+
 _HEADERS = {"x-api-key": "a7X29mBvQeP1Ld98CgF2rK5uTzWY4h"}  # Mobile app apikey
 
 
@@ -81,6 +83,13 @@ def _build_block(block):
             if conclusion.get("value"):
                 content += f"<p><strong>{conclusion.get('label', '')}</strong><br>{conclusion['value']}</p>"
             return f"<aside>{content}</aside>"
+        elif subtype == "dailymotion":
+            url = config.get("url", "")
+            match = _DAILYMOTION_ID_PATTERN.search(url)
+            if match is None:
+                return f'<p><a target="_blank" href="{url}">{url}</a></p>' if url else ""
+
+            return f'<figure><iframe src="https://www.dailymotion.com/embed/video/{match.group(1)}" allowfullscreen frameborder="0" loading="lazy"></iframe></figure>'
 
         sentry_block_error(f"{typename}/{subtype}")
 
