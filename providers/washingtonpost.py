@@ -98,7 +98,7 @@ def _build_block(block):
         return f"<figure><audio controls src=\"{block['completeUrl']}\"></audio>{caption}</figure>"
     elif typename == "block_quote":
         return "<blockquote>" + _sanitize_html(block.get("content", "")) + "</blockquote>"
-    elif typename in ["ad", "elevated_byline", "kicker", "title", "deck", "date", "byline", "toggle", "autorecirc_carousel", "author_info", "expand_card"]:
+    elif typename in ["ad", "elevated_byline", "kicker", "title", "deck", "date", "byline", "toggle", "autorecirc_carousel", "author_info", "expand_card", "sub_nav"]:
         return ""
     elif typename == "link":
         # Anchors and the comments section carry no readable content
