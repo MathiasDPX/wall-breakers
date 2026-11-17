@@ -81,7 +81,10 @@ class EbraArticle(Article):
     @classmethod
     @lru_cache()
     def get_id_from_url(cls, url: str):
-        parsed = urlparse(url)
+        try:
+            parsed = urlparse(url)
+        except ValueError:
+            return None
         
         if parsed.netloc.removeprefix("www.") != cls.DOMAIN.removeprefix("www."):
             return None
