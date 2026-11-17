@@ -51,7 +51,8 @@ class RosselArticle(Article):
     def __init__(self, article_id: str):
         data = self.get_data(article_id)
         
-        content = data["body"]
+        # Galleries come without a body
+        content = data.get("body") or ""
         soup = BeautifulSoup(content, features="html.parser")
         
         for elem in soup.select(_UNWANTED_SELECTORS):
