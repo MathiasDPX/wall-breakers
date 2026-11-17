@@ -44,6 +44,8 @@ def _build_block(block):
         return block.get("raw_oembed", {}).get("html", "")
     elif typename == "custom_embed":
         return block.get("embed", {}).get("config", {}).get("html", "")
+    elif typename == "divider":
+        return "<hr>"
     
     sentry_block_error(typename)
     return ""
