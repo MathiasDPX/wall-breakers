@@ -20,7 +20,8 @@ class LesEchosArticle(Article):
     def __init__(self, article_id: str):
         data = LesEchosArticle.get_data(article_id)
 
-        soup = BeautifulSoup(data["description"], features="html.parser")
+        # Dossiers come without a description
+        soup = BeautifulSoup(data.get("description") or "", features="html.parser")
 
         # Remove See Also
         for container in soup.select("div.encadre-lire-aussi"):
