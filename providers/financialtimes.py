@@ -14,6 +14,15 @@ _URL_ID_PATTERN = re.compile(
 
 _FLOURISH_ID_PATTERN = re.compile(r"flourish\.studio(?:%2F|/)visualisation(?:%2F|/)(\d+)")
 
+def _picture_url(picture):
+    image = picture["images"][0]
+    source_set = image.get("sourceSet")
+
+    if source_set:
+        return source_set[len(source_set) // 2]["url"]
+
+    return image.get("url") or picture["fallbackImage"]["url"]
+
 def _build_block(block, references):
     # All subblocks are build with unsafe set to True cuz the body blocks will be builds safely
     typename = block["type"]
@@ -36,9 +45,7 @@ def _build_block(block, references):
     elif typename == "image-set":
         ref = references[block["data"]["referenceIndex"]]
         picture = ref["picture"]
-        image = picture["images"][0]
-        url = image["sourceSet"][len(image["sourceSet"]) // 2]["url"]
-        return add_figure(url, make_figcaption(picture["caption"], picture["credit"]))
+        return add_figure(_picture_url(picture), make_figcaption(picture["caption"], picture["credit"]))
     elif typename == "video":
         ref = references[block["data"]["referenceIndex"]]
         
