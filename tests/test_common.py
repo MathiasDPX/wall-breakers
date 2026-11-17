@@ -128,7 +128,7 @@ ARTICLES = [
     (
         SCMPArticle,
         "https://www.scmp.com/news/china/military/article/3365081/mainland-chinas-ship-activity-near-taiwan-hits-record-third-month-row?module=top_story&pgtype=homepage",
-        "46e392c0-adbb-445c-afc6-0ee9645d70cc" # found in the HTML, the UUID of the page
+        "46e392c0-adbb-445c-afc6-0ee9645d70cc" # entityUuid returned by the search API for the article id
     ),
     (
         CanardEnchaineArticle,

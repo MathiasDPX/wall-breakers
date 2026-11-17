@@ -14,11 +14,6 @@ _URL_ID_PATTERN = re.compile(
     r"https:\/\/www\.scmp\.com\/.+\/article\/(\d+)\/.+"
 )
 
-def _build_uuid_pattern(article_id: str):
-    return re.compile(
-        r'"entityId":"' + re.escape(article_id) + r'","entityUuid":"([a-z0-9]{8}-[a-z0-9]{4}-[a-z0-9]{4}-[a-z0-9]{4}-[a-z0-9]{12})"'
-    )
-
 _HEADERS = {
     "User-Agent": "SCMP-V5/7.2.1(2000386) (Android 9; HD1900)",
     "Accept": "application/json",
@@ -96,23 +91,43 @@ class SCMPArticle(Article):
         )
         
     @lru_cache()
-    def _get_uuid(url:str, article_id:str):
-        r = requests.get(url, headers={
-            "User-Agent": "Mozilla/5.0 (X11; Linux x86_64; rv:156.0) Gecko/20100101 Firefox/156.0"
-        })
-                
-        match = _build_uuid_pattern(article_id).search(r.content.decode())
-        if match is None:
-            return None
-                
-        return match.group(1)
+    def _get_uuid(article_id: str):
+        url = "https://apigw.scmp.com/content-delivery/v2"
+
+        params = {
+            "operationName": "Search",
+            "variables": json.dumps({
+                "keywords": article_id,
+                "orderByField": "RELEVANCE",
+                "limit": 20
+            }, separators=(",", ":")),
+            "extensions": json.dumps({
+                "persistedQuery": {
+                    "version": 1,
+                    "sha256Hash": "626c745700484c1c945ba9f44c36ce66da51dadf59cb8353abe86e4d96b29f7b"
+                },
+                "clientLibrary": {
+                    "name": "apollo-kotlin",
+                    "version": "5.0.1"
+                }
+            }, separators=(",", ":"))
+        }
+        r = requests.get(url, params=params, headers=_HEADERS, timeout=30)
+        r.raise_for_status()
+
+        for edge in r.json()["data"]["articleSearch"]["edges"]:
+            content = edge["node"]["articleContent"] or {}
+            if content.get("entityId") == article_id:
+                return content["entityUuid"]
+
+        return None
     
     def get_id_from_url(url: str):
         match = _URL_ID_PATTERN.search(url)
         if match is None:
             return None
         
-        return SCMPArticle._get_uuid(url, match.group(1))
+        return SCMPArticle._get_uuid(match.group(1))
     
     @classmethod
     @upstream_request_timer
