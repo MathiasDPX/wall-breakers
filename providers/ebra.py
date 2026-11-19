@@ -8,6 +8,7 @@ import requests
 from bs4 import BeautifulSoup
 
 from .common import Article, add_figure, fix_links
+from .exceptions import ArticleNotFoundError
 from metrics import upstream_request_timer
 
 _ID_PATTERN = re.compile(
@@ -106,7 +107,13 @@ class EbraArticle(Article):
     def get_data(cls, article_id: str):
         content_response = requests.get(f"https://{cls.DOMAIN}/services/grdc/detail?key={article_id}")
         content_response.raise_for_status()
-        content_data = content_response.json()["html"]
+
+        # Unknown articles come with a null body
+        body = content_response.json()
+        if body is None:
+            raise ArticleNotFoundError(f"{cls.PROVIDER} has no article for `{article_id}`")
+
+        content_data = body["html"]
         
         match = _URL_IN_CONTENT_PATTERN.search(content_data)
         
