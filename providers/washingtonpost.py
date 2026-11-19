@@ -152,7 +152,7 @@ class WashingtonPostArticle(Article):
     @upstream_request_timer
     def get_data(cls, id):
         article_path = decode_id(id)
-        r = requests.get("https://rainbowapi-a.wpdigital.net/rainbow-data-service/rainbow/content-by-url.json", params={"url": article_path+"&platform=iphoneclassic&followLinks=false"})
+        r = requests.get("https://rainbowapi-a.wpdigital.net/rainbow-data-service/rainbow/content-by-url.json", params={"url": article_path+"&platform=iphoneclassic&followLinks=false"}, timeout=30)
         
         r.raise_for_status()
         return r.json()
