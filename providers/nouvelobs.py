@@ -73,7 +73,7 @@ class NouvelObsArticle(Article):
         super().__init__(
             id=article_id,
             headline=data["element"]["title"],
-            subheadline=data["element"]["subtitle"],
+            subheadline=data["element"].get("subtitle", ""),
             content=content,
             url=data["sharing"]["configurations"]["default"]["url"],
             image=image,
