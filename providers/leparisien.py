@@ -66,8 +66,10 @@ class LeParisienArticle(Article):
         content = soup.decode_contents()
 
         # Add image, the promo item isn't always a resolved image (can be an
-        # unresolved reference without a url, e.g. for video-led articles)
-        promo_image = data.get("promo_items", {}).get("basic", {})
+        # unresolved reference without a url, e.g. for video-led articles) and
+        # promo_items is an empty list when there's none
+        promo_items = data.get("promo_items") or {}
+        promo_image = promo_items.get("basic") or {}
         image = promo_image.get("url")
 
         if image:
