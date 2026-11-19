@@ -141,10 +141,15 @@ class LiberationArticle(Article):
 
             
         image = "static/images/thumbnail.jpg"
-        if "promo_items" in data:
-            image = data["promo_items"]["basic"]["additional_properties"]["originalUrl"]
-            copyright = data["promo_items"]["basic"].get("copyright")
-            caption = data["promo_items"]["basic"].get("caption")
+        # Some articles come with a lead art instead of a basic promo item
+        promo_items = data.get("promo_items") or {}
+        promo_item = promo_items.get("basic") or promo_items.get("lead_art") or {}
+        promo_url = (promo_item.get("additional_properties") or {}).get("originalUrl")
+
+        if promo_url:
+            image = promo_url
+            copyright = promo_item.get("copyright")
+            caption = promo_item.get("caption")
             
             content = (
                 add_figure(image, make_figcaption(caption, copyright))
