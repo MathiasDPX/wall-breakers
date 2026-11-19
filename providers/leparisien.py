@@ -4,7 +4,7 @@ from datetime import datetime
 import requests
 from bs4 import BeautifulSoup
 
-from .exceptions import UpstreamResponseError
+from .exceptions import ArticleNotFoundError, UpstreamResponseError
 from .common import Article, add_figure, fix_links
 from metrics import upstream_request_timer
 
@@ -108,6 +108,10 @@ class LeParisienArticle(Article):
         body = r.json()
         if not isinstance(body, dict) or "story" not in body:
             raise UpstreamResponseError(f"Le Parisien returned no story for `{id}`")
+
+        # Unknown articles come with an empty story
+        if not body["story"]:
+            raise ArticleNotFoundError(f"Le Parisien has no article for `{id}`")
 
         return body["story"]
 
