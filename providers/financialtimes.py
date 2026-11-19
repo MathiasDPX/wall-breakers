@@ -185,7 +185,8 @@ def _add_clip_set(ref):
     if not sources:
         return ""
 
-    best = max(sources, key=lambda source: source.get("pixelWidth", 0) * source.get("pixelHeight", 0))
+    # Audio sources come with null dimensions
+    best = max(sources, key=lambda source: (source.get("pixelWidth") or 0) * (source.get("pixelHeight") or 0))
 
     return add_figure(best["binaryUrl"], make_figcaption(ref.get("caption"), ref.get("credits")))
 
