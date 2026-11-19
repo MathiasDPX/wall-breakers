@@ -49,7 +49,7 @@ def _build_video(block):
 
 def _build_list(block):
     tag = "ol" if block.get("subtype") == "ordered" else "ul"
-    items = "".join(f"<li>{_sanitize_html(item)}</li>" for item in block.get("content", []))
+    items = "".join(f"<li>{_sanitize_html(item)}</li>" for item in block.get("content", []) if item)
 
     return f"<{tag}>{items}</{tag}>"
 
