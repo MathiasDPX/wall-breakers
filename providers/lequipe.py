@@ -31,13 +31,19 @@ def _build_block(block):
 
         return add_figure(_build_media(media, 1000), media.get("legende"))
     elif typename == "article_paragraph_citation":
+        content = block.get("content")
+
+        # Some citations come without any text
+        if not content:
+            return ""
+
         caption = block.get('caption')
         if caption is None:
             caption = ""
         else:
             caption = f"<br>- {caption}"
             
-        return f"<blockquote>{block['content']}{caption}</blockquote>"
+        return f"<blockquote>{content}{caption}</blockquote>"
     elif typename == "article_paragraph_focus":
         return f"<blockquote><h3>{block.get('subtitle', '')}</h3><p>{block.get('content', '')}</p></blockquote>"
     elif typename == "article_paragraph_note":
