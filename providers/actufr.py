@@ -44,7 +44,7 @@ class ActuArticle(Article):
         
         content = soup.decode_contents()
         
-        content = add_figure(data["photo"]["file"], data["photo"]["caption"]) + content
+        content = add_figure(data["photo"].get("file", ""), data["photo"].get("file", "")) + content
         isodate = data.get("dateIso")
         
         super().__init__(
@@ -53,7 +53,7 @@ class ActuArticle(Article):
             subheadline=data["chapo"],
             content=content,
             url=data["permalink"],
-            image=data["photo"]["file"],
+            image=data["photo"].get("file", ""),
             publication_date=datetime.fromisoformat(isodate) if isodate else None
         )
     
