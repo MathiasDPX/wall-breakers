@@ -24,11 +24,7 @@ _HEADERS = {
 def _build_block(block):
     typename = block["type"]
     
-    if typename == "p":
-        return "<p>" + _build_blocks(block["children"]) + "</p>"
-    elif typename == "div":
-        return "<div>" + _build_blocks(block.get("children", [])) + "</div>"
-    elif typename == "text":
+    if typename == "text":
         return block["data"]
     elif typename == "a":
         attrs = " ".join([f"{k}=\"{v}\"" for k,v in block.get("attribs", {}).items()])
@@ -43,6 +39,8 @@ def _build_block(block):
     elif typename == "blockquote-quote":
         subchildren = "<br>".join([_build_block(subblock) for subblock in block["children"]])
         return f"<blockquote>{subchildren}</blockquote>"
+    elif typename in ["strong", "h3", "span", "h4", "em", "ul", "li", "div", "p"]:
+        return f"<{typename}>" + _build_blocks(block["children"]) + f"</{typename}>"
     
     sentry_block_error(typename)
     
