@@ -69,7 +69,7 @@ class NikkeiAsiaArticle(Article):
             subheadline=data["subhead"],
             content=content,
             url=data["url"],
-            image=data["image"]["imageUrl"],
+            image=data["image"]["imageUrl"] if data.get("image") else "",
             publication_date=datetime.fromtimestamp(unixts) if unixts else None
         )
 
