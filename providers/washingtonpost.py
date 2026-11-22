@@ -103,6 +103,9 @@ def _build_block(block):
     elif typename == "link":
         # Anchors and the comments section carry no readable content
         return ""
+    elif typename == "pdf":
+        url = block.get("url", "")
+        return f"<a href=\"{url}\" target=\"_blank\">Read PDF</a>"
     
     sentry_block_error(typename)
     
