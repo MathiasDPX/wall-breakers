@@ -127,6 +127,9 @@ def _build_block(block, references):
         if picture is None:
             return None
         return add_figure(_picture_url(picture), make_figcaption(picture["caption"], picture["credit"]))
+    elif typename == "youtube-video":
+        ytb_id = block["url"].split("?v=")[-1]
+        return f'<div style="left: 0; width: 100%; height: 0; position: relative; padding-bottom: 56.25%;"><iframe src="https://www.youtube.com/embed/{ytb_id}?rel=0" style="top: 0; left: 0; width: 100%; height: 100%; position: absolute; border: 0;" allowfullscreen scrolling="no" allow="accelerometer *; clipboard-write *; encrypted-media *; gyroscope *; picture-in-picture *; web-share *;" referrerpolicy="strict-origin"></iframe></div>'
     
     sentry_block_error(typename)
     
