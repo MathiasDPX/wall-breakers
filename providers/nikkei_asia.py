@@ -4,6 +4,7 @@ import json
 import base64
 
 from bs4 import BeautifulSoup
+from flask import abort
 import requests
 
 from .common import Article, decode_id, fix_links, add_figure
@@ -107,6 +108,10 @@ class NikkeiAsiaArticle(Article):
         )
         
         r.raise_for_status()
+        
+        if len(r.json().get("errors", [])):
+            return abort(404)
+        
         return r.json()["data"]["getPage"]
 
 
