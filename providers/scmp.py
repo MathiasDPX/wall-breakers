@@ -27,7 +27,7 @@ def _build_block(block):
     if typename == "p":
         return "<p>" + _build_blocks(block["children"]) + "</p>"
     elif typename == "div":
-        return "<div>" + _build_blocks(block["children"]) + "</div>"
+        return "<div>" + _build_blocks(block.get("children", [])) + "</div>"
     elif typename == "text":
         return block["data"]
     elif typename == "a":
