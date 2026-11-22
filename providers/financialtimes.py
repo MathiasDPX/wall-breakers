@@ -45,6 +45,9 @@ def _build_block(block, references):
     elif typename == "image-set":
         ref = references[block["data"]["referenceIndex"]]
         picture = ref["picture"]
+        if picture is None:
+            return ""
+        
         return add_figure(_picture_url(picture), make_figcaption(picture["caption"], picture["credit"]))
     elif typename == "video":
         ref = references[block["data"]["referenceIndex"]]
@@ -121,6 +124,8 @@ def _build_block(block, references):
         return _build_blocks(block["children"], unsafe=True, references=references)
     elif typename == "scrolly-image":
         picture = references[block["data"]["referenceIndex"]]["picture"]
+        if picture is None:
+            return None
         return add_figure(_picture_url(picture), make_figcaption(picture["caption"], picture["credit"]))
     
     sentry_block_error(typename)
