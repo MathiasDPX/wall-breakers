@@ -318,6 +318,8 @@ components:
           title: Vosges Matin
         - const: "wp"
           title: Washington Post
+        - const: "cap"
+          title: Capital
 
     ProviderRef:
       type: object

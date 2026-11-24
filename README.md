@@ -41,6 +41,7 @@
 - [South China Morning Post](https://www.scmp.com/)
 - [EBRA Médias](https://www.ebra.fr/ebra-medias)
 - [Science et Vie](https://www.science-et-vie.com/)
+- [Capital](https://www.capital.bg/)
 <!-- - [The Athletic](https://www.nytimes.com/athletic/)-->
 </details>
 

@@ -47,6 +47,7 @@ URLS = [
     "https://www.larepubliquedespyrenees.fr/economie/transports/train/pyrenees-atlantiques-panne-d-electricite-geante-a-la-sncf-la-galere-des-usagers-video-30653617.php",
     "https://www.lemonde.fr/en/france/article/2026/10/02/high-school-student-protests-spread-across-france-as-tensions-escalate_6758168_7.html",
     "https://www.socialter.fr/article/christophe-cassou-pourquoi-il-faut-politiser-les-canicules-climat-ete-rassurisme-adaptation",
+    "https://www.capital.bg/politika_i_ikonomika/bulgaria/2026/11/24/4983801_koaliciiata_zad_prevrata_sreshtu_blagomir_kocev/",
     
     # Groupe Rossel
     "https://www.lavoixdunord.fr/1743127/article/2026-10-04/il-faut-compter-deux-heures-pour-faire-nos-courses-mais-au-moins-fait-des",

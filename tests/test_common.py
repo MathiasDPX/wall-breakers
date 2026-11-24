@@ -219,6 +219,11 @@ ARTICLES = [
         UnionArticle,
         "https://www.lunion.fr/id831720/article/2026-10-04/curieux-de-voir-comment-ca-va-se-passer-ils-sont-prets-pour-le-premier",
         "831720"
+    ),
+    (
+        CapitalArticle,
+        "https://www.capital.bg/politika_i_ikonomika/bulgaria/2026/11/24/4983801_koaliciiata_zad_prevrata_sreshtu_blagomir_kocev/",
+        "4983801"
     )
 ]
 

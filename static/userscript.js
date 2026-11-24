@@ -58,6 +58,7 @@
 // @match        https://*.lest-eclair.fr/*
 // @match        https://*.liberation-champagne.fr/*
 // @match        https://*.lunion.fr/*
+// @match        https://*.capital.bg/*
 // ==/UserScript==
 
 const BASE_URL = "https://news.mathiasd.fr";

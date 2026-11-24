@@ -32,6 +32,7 @@ from .charliehebdo import CharlieHebdoArticle
 from .lequipe_video import EquipeVideoArticle
 from .socialter import SocialterArticle
 from .rossel import VDNArticle, LeMessagerArticle, LeSoirArticle, NordLittArticle, ParisNormandieArticle, SudInfoArticle, CourrierPicardArticle, AisneNouvelleArticle, ArdennaisArticle, EstEclairArticle, LibChampagneArticle, UnionArticle
+from .capital import CapitalArticle
 
 PROVIDERS:list[Article] = [
     LeParisienArticle,
@@ -85,7 +86,8 @@ PROVIDERS:list[Article] = [
     ArdennaisArticle,
     EstEclairArticle,
     LibChampagneArticle,
-    UnionArticle
+    UnionArticle,
+    CapitalArticle
 ]
 
 ARTICLES:dict[str, Article] = {provider.SLUG: provider for provider in PROVIDERS}
