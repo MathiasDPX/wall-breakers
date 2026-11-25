@@ -53,6 +53,10 @@ def favicon_route():
 def userscript_route():
     return send_file(os.path.join("static", "userscript.js"))
 
+@app.route("/robots.txt")
+def robots_route():
+    return send_file(os.path.join("static", "robots.txt"))
+
 @app.route("/openapi.yml")
 def openapi_route():
     return send_file(
