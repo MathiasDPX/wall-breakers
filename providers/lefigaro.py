@@ -89,6 +89,8 @@ def _build_block(block):
         return f"<table>{_sanitize_html(block.get('text', ''))}</table>"
     elif typename == "VideoIframe":
         return f'<figure><iframe src="{block["src"]}" allowfullscreen frameborder="0" loading="lazy"></iframe></figure>'
+    elif typename in ["ProductBlock", "Quiz"]:
+        return ""
     
     sentry_block_error(typename)
     

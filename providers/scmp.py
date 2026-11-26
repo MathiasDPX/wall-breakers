@@ -39,8 +39,10 @@ def _build_block(block):
     elif typename == "blockquote-quote":
         subchildren = "<br>".join([_build_block(subblock) for subblock in block["children"]])
         return f"<blockquote>{subchildren}</blockquote>"
-    elif typename in ["strong", "h3", "span", "h4", "em", "ul", "li", "div", "p"]:
-        return f"<{typename}>" + _build_blocks(block["children"]) + f"</{typename}>"
+    elif typename in ["strong", "h3", "span", "h4", "em", "ul", "li", "div", "p", "h2", "u", "h5", "hr", "b", "i", "br", "ul", "li", "blockquote"]:
+        return f"<{typename}>" + _build_blocks(block.get("children", [])) + f"</{typename}>"
+    elif typename in ["meta", "script"]:
+        return ""
     
     sentry_block_error(typename)
     

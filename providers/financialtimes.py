@@ -98,6 +98,8 @@ def _build_block(block, references):
             "<table>" + _build_blocks(rows, unsafe=True, references=references) + "</table>"
             + _build_blocks(footers, unsafe=True, references=references)
         )
+    elif typename == "table-header":
+        return "<th>" + _build_blocks(block["children"], unsafe=True, references=references) + "</th>"
     elif typename == "table-caption":
         return "<caption>" + _build_blocks(block["children"], unsafe=True, references=references) + "</caption>"
     elif typename == "table-body":
@@ -118,6 +120,8 @@ def _build_block(block, references):
         title = block.get("title")
         heading = f"<h3>{title}</h3>" if title else ""
         return "<aside>" + heading + "<dl>" + _build_blocks(block["children"], unsafe=True, references=references) + "</dl></aside>"
+    elif typename == "strikethrough":
+        return "<s>" + _build_blocks(block["children"], unsafe=True, references=references) + "</s>"
     elif typename == "definition":
         return f"<dt>{block.get('term', '')}</dt><dd>{block.get('description', '')}</dd>"
     elif typename in ["scrolly-block", "scrolly-section", "scrolly-copy"]:
@@ -130,6 +134,11 @@ def _build_block(block, references):
     elif typename == "youtube-video":
         ytb_id = block["url"].split("?v=")[-1]
         return f'<div style="left: 0; width: 100%; height: 0; position: relative; padding-bottom: 56.25%;"><iframe src="https://www.youtube.com/embed/{ytb_id}?rel=0" style="top: 0; left: 0; width: 100%; height: 100%; position: absolute; border: 0;" allowfullscreen scrolling="no" allow="accelerometer *; clipboard-write *; encrypted-media *; gyroscope *; picture-in-picture *; web-share *;" referrerpolicy="strict-origin"></iframe></div>'
+    elif typename == "timeline":
+        return "<h2>" + block.get("title", "") + "</h2>" + _build_blocks(block.get("children", []), unsafe=True, references=references)
+    elif typename == "timeline-event":
+        return "<h4>" + block.get("title", "") + "</h4>" + _build_blocks(block.get("children", []), unsafe=True, references=references)
+    
     
     sentry_block_error(typename)
     
